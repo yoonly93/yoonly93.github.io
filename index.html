@@ -1,1 +1,99 @@
-<\!DOCTYPE html><html><head><meta charset="utf-8"><title>Eyeday</title></head><body><h1>Eyeday - Eye Drop Reminder</h1></body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eyeday - 안약 알람 & 점안 기록</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #DBEAFE 0%, #F8FAFC 50%, #EFF6FF 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1E293B;
+    }
+    .container {
+      text-align: center;
+      padding: 40px 24px;
+      max-width: 480px;
+    }
+    .icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      background: #3B82F6;
+      margin: 0 auto 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(59,130,246,0.3);
+    }
+    .icon svg { width: 64px; height: 64px; }
+    h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { font-size: 16px; color: #64748B; margin-bottom: 32px; }
+    .features {
+      text-align: left;
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .features h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      font-size: 15px;
+      color: #334155;
+    }
+    .feature-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #3B82F6;
+      flex-shrink: 0;
+    }
+    .badge {
+      display: inline-block;
+      margin-top: 8px;
+    }
+    .badge img { height: 48px; }
+    .contact {
+      margin-top: 24px;
+      font-size: 13px;
+      color: #94A3B8;
+    }
+    .contact a { color: #64748B; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>
+      </svg>
+    </div>
+    <h1>Eyeday</h1>
+    <p class="subtitle">안약 알람 & 점안 기록</p>
+    <div class="features">
+      <h2>주요 기능</h2>
+      <div class="feature"><span class="feature-dot"></span>맞춤 안약 점안 스케줄 설정</div>
+      <div class="feature"><span class="feature-dot"></span>푸시 알림으로 점안 시간 알림</div>
+      <div class="feature"><span class="feature-dot"></span>점안 기록 및 달력 관리</div>
+      <div class="feature"><span class="feature-dot"></span>안약 간 최소 간격 충돌 감지</div>
+      <div class="feature"><span class="feature-dot"></span>올바른 점안 방법 가이드</div>
+      <div class="feature"><span class="feature-dot"></span>6개 언어 지원 (한/영/일/불/서/러)</div>
+    </div>
+    <a class="badge" href="https://apps.apple.com/app/id6746387741">
+      <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ko-kr?size=250x83" alt="Download on the App Store">
+    </a>
+    <div class="contact">
+      <p>문의: <a href="mailto:yoonly93@gmail.com">yoonly93@gmail.com</a></p>
+    </div>
+  </div>
+</body>
+</html>
