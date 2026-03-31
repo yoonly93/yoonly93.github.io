@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>바른 키보드 - 욕설 감지 키보드</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #E0F2FE 0%, #F8FAFC 50%, #F0FDF4 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1E293B;
+    }
+    .container {
+      text-align: center;
+      padding: 40px 24px;
+      max-width: 480px;
+    }
+    .icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      margin: 0 auto 32px;
+      box-shadow: 0 8px 32px rgba(34,197,94,0.25);
+      overflow: hidden;
+    }
+    .icon img { width: 100%; height: 100%; object-fit: cover; }
+    h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { font-size: 16px; color: #64748B; margin-bottom: 32px; }
+    .features {
+      text-align: left;
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .features h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      font-size: 15px;
+      color: #334155;
+    }
+    .feature-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #22C55E;
+      flex-shrink: 0;
+    }
+    .privacy {
+      text-align: left;
+      background: #F0FDF4;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+      border: 1px solid #BBF7D0;
+    }
+    .privacy h2 { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: #166534; }
+    .privacy p { font-size: 14px; color: #334155; line-height: 1.6; }
+    .badge {
+      display: inline-block;
+      margin-top: 8px;
+    }
+    .badge img { height: 48px; }
+    .links {
+      margin-top: 24px;
+      font-size: 13px;
+      color: #94A3B8;
+    }
+    .links a { color: #64748B; margin: 0 8px; }
+    .contact {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #94A3B8;
+    }
+    .contact a { color: #64748B; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">
+      <img src="icon.png" alt="바른 키보드 앱 아이콘">
+    </div>
+    <h1>바른 키보드</h1>
+    <p class="subtitle">욕설을 쓰려는 순간, 바른 키보드가 알려줍니다</p>
+    <div class="features">
+      <h2>주요 기능</h2>
+      <div class="feature"><span class="feature-dot"></span>한국어 욕설 실시간 감지 및 경고</div>
+      <div class="feature"><span class="feature-dot"></span>자음 축약형(ㅅㅂ, ㅆㅂ 등) 감지</div>
+      <div class="feature"><span class="feature-dot"></span>붙여쓰기, 특수문자 우회 표현 감지</div>
+      <div class="feature"><span class="feature-dot"></span>오탐지 단어 화이트리스트 설정</div>
+      <div class="feature"><span class="feature-dot"></span>감지 통계 확인</div>
+    </div>
+    <div class="privacy">
+      <h2>개인정보 보호</h2>
+      <p>모든 감지는 기기 내에서 처리됩니다. 입력 내용은 서버로 전송되지 않으며, 원문은 저장되지 않습니다.</p>
+    </div>
+    <a class="badge" href="#">
+      <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ko-kr?size=250x83" alt="App Store에서 다운로드">
+    </a>
+    <div class="links">
+      <a href="https://nanokit.work/legal/YQdFO4GolVPsCRR1ioKNhNexJD62/bareun-kibodeu-dca716c4/privacy/ko">개인정보처리방침</a>
+      <a href="https://nanokit.work/legal/YQdFO4GolVPsCRR1ioKNhNexJD62/bareun-kibodeu-dca716c4/terms/ko">이용약관</a>
+    </div>
+    <div class="contact">
+      <p>문의: <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+    </div>
+  </div>
+</body>
+</html>
