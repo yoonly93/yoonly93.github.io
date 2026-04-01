@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BitCal - BTC出金計算機 & DCAシミュレーター</title>
+  <title>BitCal</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -66,6 +66,51 @@
     }
     .contact a { color: #94A3B8; }
   </style>
+  <script>
+    const i18n = {
+      ko: {
+        subtitle: 'BTC 도달량 계산기 & DCA 시뮬레이터',
+        heading: '주요 기능',
+        features: [
+          '실시간 BTC 시세로 실수령량 즉시 계산',
+          '국내·해외 거래소 수수료 자동 반영',
+          'DCA 목표 시뮬레이션 (목표 BTC까지 몇 개월?)',
+          'DCA 적립 시뮬레이션 (10년 후 자산 예측)',
+        ],
+        badgeLang: 'ko-kr',
+        contact: '문의하기',
+      },
+      ja: {
+        subtitle: 'BTC出金計算機 & DCAシミュレーター',
+        heading: '主な機能',
+        features: [
+          'リアルタイムBTC価格で出金額を即計算',
+          '国内・海外取引所の手数料を自動反映',
+          'DCA目標シミュレーション（目標BTCまで何ヶ月？）',
+          'DCA積立シミュレーション（10年後の資産予測）',
+        ],
+        badgeLang: 'ja-jp',
+        contact: 'お問い合わせ',
+      },
+    };
+
+    function render() {
+      const lang = (navigator.language || '').startsWith('ko') ? 'ko' : 'ja';
+      const t = i18n[lang];
+      document.documentElement.lang = lang;
+      document.getElementById('subtitle').textContent = t.subtitle;
+      document.getElementById('heading').textContent = t.heading;
+      const list = document.getElementById('features');
+      list.innerHTML = t.features.map(f =>
+        '<div class="feature"><span class="feature-dot"></span>' + f + '</div>'
+      ).join('');
+      document.getElementById('badge-img').src =
+        'https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/' + t.badgeLang + '?size=250x83';
+      document.getElementById('contact-link').textContent = t.contact;
+    }
+
+    document.addEventListener('DOMContentLoaded', render);
+  </script>
 </head>
 <body>
   <div class="container">
@@ -73,20 +118,16 @@
       <img src="icon.png" alt="BitCal App Icon">
     </div>
     <h1>BitCal</h1>
-    <p class="subtitle">BTC出金計算機 & DCAシミュレーター</p>
+    <p class="subtitle" id="subtitle"></p>
     <div class="features">
-      <h2>主な機能</h2>
-      <div class="feature"><span class="feature-dot"></span>リアルタイムBTC価格で出金額を即計算</div>
-      <div class="feature"><span class="feature-dot"></span>国内・海外取引所の手数料を自動反映</div>
-      <div class="feature"><span class="feature-dot"></span>DCA目標シミュレーション（目標BTCまで何ヶ月？）</div>
-      <div class="feature"><span class="feature-dot"></span>DCA積立シミュレーション（10年後の資産予測）</div>
-      <div class="feature"><span class="feature-dot"></span>日本語・韓国語対応</div>
+      <h2 id="heading"></h2>
+      <div id="features"></div>
     </div>
     <a class="badge" href="https://apps.apple.com/app/bitcal/id6761324597">
-      <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ja-jp?size=250x83" alt="Download on the App Store">
+      <img id="badge-img" src="" alt="Download on the App Store">
     </a>
     <div class="contact">
-      <p><a href="https://nanokit.work/?form=vh2siZp9XxHF2RXfDUHg">お問い合わせ</a></p>
+      <p><a id="contact-link" href="https://nanokit.work/?form=vh2siZp9XxHF2RXfDUHg"></a></p>
     </div>
   </div>
 </body>
