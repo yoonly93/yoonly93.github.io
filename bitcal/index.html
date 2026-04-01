@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BitCal - BTC出金計算機 & DCAシミュレーター</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #E2E8F0;
+    }
+    .container {
+      text-align: center;
+      padding: 40px 24px;
+      max-width: 480px;
+    }
+    .icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      margin: 0 auto 32px;
+      box-shadow: 0 8px 32px rgba(245,158,11,0.3);
+      overflow: hidden;
+    }
+    .icon img { width: 100%; height: 100%; object-fit: cover; }
+    h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #F5A623; }
+    .subtitle { font-size: 16px; color: #94A3B8; margin-bottom: 32px; }
+    .features {
+      text-align: left;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .features h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; color: #E2E8F0; }
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      font-size: 15px;
+      color: #CBD5E1;
+    }
+    .feature-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #F5A623;
+      flex-shrink: 0;
+    }
+    .badge {
+      display: inline-block;
+      margin-top: 8px;
+    }
+    .badge img { height: 48px; }
+    .contact {
+      margin-top: 24px;
+      font-size: 13px;
+      color: #64748B;
+    }
+    .contact a { color: #94A3B8; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">
+      <img src="icon.png" alt="BitCal App Icon">
+    </div>
+    <h1>BitCal</h1>
+    <p class="subtitle">BTC出金計算機 & DCAシミュレーター</p>
+    <div class="features">
+      <h2>主な機能</h2>
+      <div class="feature"><span class="feature-dot"></span>リアルタイムBTC価格で出金額を即計算</div>
+      <div class="feature"><span class="feature-dot"></span>国内・海外取引所の手数料を自動反映</div>
+      <div class="feature"><span class="feature-dot"></span>DCA目標シミュレーション（目標BTCまで何ヶ月？）</div>
+      <div class="feature"><span class="feature-dot"></span>DCA積立シミュレーション（10年後の資産予測）</div>
+      <div class="feature"><span class="feature-dot"></span>日本語・韓国語対応</div>
+    </div>
+    <a class="badge" href="https://apps.apple.com/app/bitcal/id6744135498">
+      <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ja-jp?size=250x83" alt="Download on the App Store">
+    </a>
+    <div class="contact">
+      <p><a href="https://nanokit.work/?form=vh2siZp9XxHF2RXfDUHg">お問い合わせ</a></p>
+    </div>
+  </div>
+</body>
+</html>
