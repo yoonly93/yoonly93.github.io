@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloom — Coffee Journal</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #fafafa;
+      color: #09090b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+    .container { max-width: 480px; text-align: center; }
+    .icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      margin-bottom: 32px;
+    }
+    h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { font-size: 18px; color: #71717a; margin-bottom: 32px; }
+    .desc { font-size: 16px; line-height: 1.7; color: #3f3f46; margin-bottom: 40px; text-align: left; }
+    .features { text-align: left; margin-bottom: 40px; }
+    .feature {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #3f3f46;
+    }
+    .feature-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      background: #09090b;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .badge {
+      display: inline-block;
+      margin-top: 8px;
+    }
+    .badge img { height: 52px; }
+    .privacy {
+      margin-top: 48px;
+      font-size: 13px;
+      color: #a1a1aa;
+    }
+    .privacy a { color: #71717a; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Bloom</h1>
+    <p class="subtitle">Coffee Journal</p>
+
+    <p class="desc">
+      스페셜티 커피 좋아하세요?<br>
+      새 원두를 살 때마다, 한 잔 마실 때마다 기록해보세요.<br><br>
+      Bloom은 원두 정보를 사진 찍어 스캔하면 자동으로 기록하고 멋진 카드로 만들어줍니다.
+      바리스타 챔피언들의 레시피로 정확하게 추출할 수 있는 커피 도구입니다.
+    </p>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-num">1</div>
+        <div>카메라로 패키지를 찍으면 국가, 지역, 농장, 품종, 가공법을 자동으로 입력합니다. 타이핑 필요 없습니다.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-num">2</div>
+        <div>각 원두는 컵노트의 풍미에 따라 고유한 색감의 카드가 됩니다. 뒤집으면 사진, 평점, 테이스팅 노트를 확인할 수 있습니다.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-num">3</div>
+        <div>테츠 카츠야, 정인성 등 바리스타 챔피언들의 레시피나 나만의 레시피를 단계별 타이머를 통해 쉽게 내려보세요.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-num">4</div>
+        <div>내가 마셔온 커피들을 산지, 품종, 가공법, 컵노트, 평점별로 필터링해서 나의 커피 취향을 한눈에 파악하세요.</div>
+      </div>
+    </div>
+
+    <div class="privacy">
+      <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a>
+    </div>
+  </div>
+</body>
+</html>
