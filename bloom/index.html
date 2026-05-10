@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bloom — Coffee Journal</title>
+  <title>Pourist — Coffee Journal</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -54,7 +54,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Bloom</h1>
+    <h1>Pourist</h1>
     <p class="subtitle">Coffee Journal</p>
     <p class="desc" id="desc"></p>
     <div class="features" id="features"></div>
@@ -65,7 +65,7 @@
   <script>
     var i18n = {
       ko: {
-        desc: '스페셜티 커피 좋아하세요?<br>새 원두를 살 때마다, 한 잔 마실 때마다 기록해보세요.<br><br>Bloom은 원두 정보를 사진 찍어 스캔하면 자동으로 기록하고 멋진 카드로 만들어줍니다. 바리스타 챔피언들의 레시피로 정확하게 추출할 수 있는 커피 도구입니다.',
+        desc: '스페셜티 커피 좋아하세요?<br>새 원두를 살 때마다, 한 잔 마실 때마다 기록해보세요.<br><br>Pourist은 원두 정보를 사진 찍어 스캔하면 자동으로 기록하고 멋진 카드로 만들어줍니다. 바리스타 챔피언들의 레시피로 정확하게 추출할 수 있는 커피 도구입니다.',
         features: [
           '카메라로 패키지를 찍으면 국가, 지역, 농장, 품종, 가공법을 자동으로 입력합니다. 타이핑 필요 없습니다.',
           '각 원두는 컵노트의 풍미에 따라 고유한 색감의 카드가 됩니다. 뒤집으면 사진, 평점, 테이스팅 노트를 확인할 수 있습니다.',
@@ -74,7 +74,7 @@
         ]
       },
       en: {
-        desc: 'Love specialty coffee?<br>Start logging every new bag, every single cup.<br><br>Bloom scans your coffee bag and automatically turns the details into a beautiful card. Brew with precision using recipes from champion baristas.',
+        desc: 'Love specialty coffee?<br>Start logging every new bag, every single cup.<br><br>Pourist scans your coffee bag and automatically turns the details into a beautiful card. Brew with precision using recipes from champion baristas.',
         features: [
           'Snap a photo of the package \u2014 origin, region, farm, variety, and process are filled in automatically. No typing required.',
           'Each bean becomes a unique card colored by its flavor notes. Flip it over to see your photo, rating, and tasting notes.',
@@ -83,7 +83,7 @@
         ]
       },
       ja: {
-        desc: '\u30b9\u30da\u30b7\u30e3\u30eb\u30c6\u30a3\u30b3\u30fc\u30d2\u30fc\u3001\u597d\u304d\u3067\u3059\u304b\uff1f<br>\u65b0\u3057\u3044\u8c46\u3092\u8cb7\u3046\u305f\u3073\u3001\u4e00\u676f\u6dc9\u308c\u308b\u305f\u3073\u306b\u8a18\u9332\u3057\u3066\u307f\u307e\u305b\u3093\u304b\u3002<br><br>Bloom\u306f\u30b3\u30fc\u30d2\u30fc\u8c46\u306e\u30d1\u30c3\u30b1\u30fc\u30b8\u3092\u64ae\u308b\u3060\u3051\u3067\u60c5\u5831\u3092\u81ea\u52d5\u3067\u8aad\u307f\u53d6\u308a\u3001\u7f8e\u3057\u3044\u30ab\u30fc\u30c9\u306b\u4ed5\u4e0a\u3052\u307e\u3059\u3002\u30d0\u30ea\u30b9\u30bf\u30c1\u30e3\u30f3\u30d4\u30aa\u30f3\u306e\u30ec\u30b7\u30d4\u3067\u3001\u6b63\u78ba\u306b\u4e00\u676f\u3092\u3002',
+        desc: '\u30b9\u30da\u30b7\u30e3\u30eb\u30c6\u30a3\u30b3\u30fc\u30d2\u30fc\u3001\u597d\u304d\u3067\u3059\u304b\uff1f<br>\u65b0\u3057\u3044\u8c46\u3092\u8cb7\u3046\u305f\u3073\u3001\u4e00\u676f\u6dc9\u308c\u308b\u305f\u3073\u306b\u8a18\u9332\u3057\u3066\u307f\u307e\u305b\u3093\u304b\u3002<br><br>Pourist\u306f\u30b3\u30fc\u30d2\u30fc\u8c46\u306e\u30d1\u30c3\u30b1\u30fc\u30b8\u3092\u64ae\u308b\u3060\u3051\u3067\u60c5\u5831\u3092\u81ea\u52d5\u3067\u8aad\u307f\u53d6\u308a\u3001\u7f8e\u3057\u3044\u30ab\u30fc\u30c9\u306b\u4ed5\u4e0a\u3052\u307e\u3059\u3002\u30d0\u30ea\u30b9\u30bf\u30c1\u30e3\u30f3\u30d4\u30aa\u30f3\u306e\u30ec\u30b7\u30d4\u3067\u3001\u6b63\u78ba\u306b\u4e00\u676f\u3092\u3002',
         features: [
           '\u30d1\u30c3\u30b1\u30fc\u30b8\u3092\u30ab\u30e1\u30e9\u3067\u64ae\u308b\u3060\u3051\u3002\u56fd\u3001\u5730\u57df\u3001\u8fb2\u5712\u3001\u54c1\u7a2e\u3001\u7cbe\u88fd\u65b9\u6cd5\u304c\u81ea\u52d5\u5165\u529b\u3055\u308c\u307e\u3059\u3002\u30bf\u30a4\u30d4\u30f3\u30b0\u306f\u4e0d\u8981\u3067\u3059\u3002',
           '\u305d\u308c\u305e\u308c\u306e\u8c46\u306f\u30ab\u30c3\u30d7\u30ce\u30fc\u30c8\u306e\u98a8\u5473\u306b\u5408\u308f\u305b\u305f\u8272\u5408\u3044\u306e\u30ab\u30fc\u30c9\u306b\u306a\u308a\u307e\u3059\u3002\u88cf\u8fd4\u3059\u3068\u5199\u771f\u30fb\u8a55\u4fa1\u30fb\u30c6\u30a4\u30b9\u30c6\u30a3\u30f3\u30b0\u30ce\u30fc\u30c8\u304c\u78ba\u8a8d\u3067\u304d\u307e\u3059\u3002',
