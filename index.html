@@ -3,11 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eyeday - 안약 알람 & 점안 기록</title>
+  <title>eyeday - 안약 알람 & 점안 기록</title>
   <style>
+    @font-face {
+      font-family: 'LINESeedJP';
+      src: url('fonts/LINESeedJP-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LINESeedJP';
+      src: url('fonts/LINESeedJP-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'LINESeedJP', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #DBEAFE 0%, #F8FAFC 50%, #EFF6FF 100%);
       min-height: 100vh;
       display: flex;
@@ -29,7 +43,14 @@
       overflow: hidden;
     }
     .icon img { width: 100%; height: 100%; object-fit: cover; }
-    h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    h1 {
+      font-family: 'LINESeedJP', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: #3B82F6;
+      letter-spacing: 0.2px;
+      margin-bottom: 8px;
+    }
     .subtitle { font-size: 16px; color: #64748B; margin-bottom: 32px; }
     .features {
       text-align: left;
@@ -72,7 +93,7 @@
     <div class="icon">
       <img src="icon.png" alt="Eyeday App Icon">
     </div>
-    <h1>Eyeday</h1>
+    <h1>eyeday</h1>
     <p class="subtitle">안약 알람 & 점안 기록</p>
     <div class="features">
       <h2>주요 기능</h2>
@@ -83,7 +104,7 @@
       <div class="feature"><span class="feature-dot"></span>올바른 점안 방법 가이드</div>
       <div class="feature"><span class="feature-dot"></span>6개 언어 지원 (한/영/일/불/서/러)</div>
     </div>
-    <a class="badge" href="https://apps.apple.com/app/id6746387741">
+    <a class="badge" href="https://apps.apple.com/kr/app/eyeday-%EC%95%88%EC%95%BD-%EC%95%8C%EB%9E%8C-%EC%A0%90%EC%95%88-%EA%B8%B0%EB%A1%9D/id6759497954">
       <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ko-kr?size=250x83" alt="Download on the App Store">
     </a>
     <div class="contact">
