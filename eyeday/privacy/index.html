@@ -103,6 +103,7 @@
       <div class="version-select">
         <label id="verLabel" for="versionSelect">Version</label>
         <select id="versionSelect">
+          <option value="v3">v3 — 2026-05-25</option>
           <option value="v2">v2 — 2026-05-24</option>
           <option value="v1">v1 — 2026-05-10</option>
         </select>
@@ -193,6 +194,40 @@
             <h2>10. 문의</h2>
             <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
           `
+        },
+        v3: {
+          effective: "시행일: 2026년 5월 25일",
+          html: `
+            <h2>1. 수집하는 정보</h2>
+            <p><strong>(가) 사용자가 입력·생성하는 정보</strong>: 안약 이름, 점안 시간/주기, 점안 기록. 이 정보는 사용자의 기기에 저장되며, 일부 항목(안약 이름, 약 등록·수정·점안 완료 이벤트)은 분석 목적으로 Firebase Analytics에 전송됩니다.</p>
+            <p>사용자 메모(자유 입력 텍스트, 증상·치료 관련 내용 포함 가능)와 안압 기록(좌·우 mmHg 값, 측정 병원 이름 옵션)은 기기 안에만 저장되며 Firebase Analytics 등 외부로 전송되지 않습니다.</p>
+            <p><strong>(나) 자동 수집 정보</strong>: 기기 식별자(Firebase 자동 생성 user_pseudo_id, iOS의 IDFV / Android의 Firebase Installation ID), 앱 사용 통계(화면 조회, 충돌 경고 등 이벤트), 언어/지역 설정, 기기 정보(모델, OS 버전), IP 기반 대략적 위치(국가 단위), 광고 식별자(iOS의 IDFA / Android의 GAID, 사용자 동의 시에만).</p>
+            <h2>2. 이용 목적</h2>
+            <p>점안 알림 스케줄링 등 서비스 제공, 안약 사용 패턴 분석을 통한 앱 개선, 광고 송출(무료 버전).</p>
+            <h2>3. 기기 권한</h2>
+            <p>알림(점안 시간 안내 — Android 13 이상에서는 별도 런타임 권한으로 요청), 추적 권한(iOS 전용 — 거부 시 비개인화 광고만 노출).</p>
+            <h2>4. 제3자 제공 및 처리위탁</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: 사용자 행동 분석 위탁</li>
+              <li><strong>Google LLC – AdMob</strong>: 광고 송출 위탁</li>
+            </ul>
+            <h2>5. 국외이전</h2>
+            <p>위 항목 데이터는 Google LLC가 운영하는 미국 서버로 전송·보관됩니다. 이전 항목·목적·보관 기간은 본 방침에 명시된 바와 같습니다.</p>
+            <h2>6. 보유 및 이용기간</h2>
+            <ul>
+              <li>기기 내 저장 데이터(안약·점안 기록): 앱 삭제 시 함께 삭제</li>
+              <li>Firebase Analytics 데이터: Google 보유정책에 따라 최대 14개월</li>
+              <li>광고 식별자: iOS는 "설정 > 개인정보 보호 및 보안 > 추적", Android는 "설정 > 개인 정보 보호 > 광고"에서 언제든 재설정·삭제 가능</li>
+            </ul>
+            <h2>7. 이용자 권리</h2>
+            <p>앱 내 안약 삭제 시 로컬 데이터 즉시 삭제. Firebase에 저장된 자신의 데이터 삭제 요청은 아래 이메일로 문의. 광고 추적 거부는 iOS "설정 > 개인정보 보호 및 보안 > 추적" 또는 Android "설정 > 개인 정보 보호 > 광고 > 광고 ID 삭제"에서 가능.</p>
+            <h2>8. 아동 개인정보</h2>
+            <p>만 14세 미만 아동의 개인정보를 의도적으로 수집하지 않습니다.</p>
+            <h2>9. 정책 변경</h2>
+            <p>변경 시 앱 또는 본 페이지를 통해 공지합니다.</p>
+            <h2>10. 문의</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+                    `
         }
       },
       en: {
@@ -261,6 +296,40 @@
             <h2>10. Contact</h2>
             <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
           `
+        },
+        v3: {
+          effective: "Effective Date: May 25, 2026",
+          html: `
+            <h2>1. Information We Collect</h2>
+            <p><strong>(a) Information you provide</strong>: Eye drop names, dosing schedules, and completion records. This data is stored on your device. Selected items (eye drop names, add/edit/dose-completion events) are also transmitted to Firebase Analytics for analysis.</p>
+            <p>User notes (free-text entries that may include symptom or treatment details) and IOP records (left/right mmHg values, optional hospital name) are stored only on this device and never transmitted to Firebase Analytics or any external service.</p>
+            <p><strong>(b) Automatically collected</strong>: Device identifiers (Firebase-generated user_pseudo_id, IDFV on iOS / Firebase Installation ID on Android), in-app usage events (screen views, conflict warnings, etc.), language/region, device model and OS version, approximate location at country level (IP-based), and the advertising identifier (IDFA on iOS / GAID on Android — only when you consent).</p>
+            <h2>2. Purpose</h2>
+            <p>To deliver scheduled reminders, analyze usage patterns to improve the app, and serve ads in the free version.</p>
+            <h2>3. Device Permissions</h2>
+            <p>Notifications (for dosing reminders — Android 13+ requires runtime permission), Tracking (iOS only — declining limits ads to non-personalized).</p>
+            <h2>4. Third-Party Sharing / Processors</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: User behavior analytics</li>
+              <li><strong>Google LLC – AdMob</strong>: Ad serving</li>
+            </ul>
+            <h2>5. International Transfer</h2>
+            <p>The above data is transmitted to and stored on Google LLC servers in the United States.</p>
+            <h2>6. Retention</h2>
+            <ul>
+              <li>On-device data (medicine info, dosing records): deleted when the app is uninstalled</li>
+              <li>Firebase Analytics: up to 14 months per Google's retention policy</li>
+              <li>Advertising identifier: resettable/disable-able anytime via iOS "Settings > Privacy & Security > Tracking" or Android "Settings > Privacy > Ads"</li>
+            </ul>
+            <h2>7. Your Rights</h2>
+            <p>Deleting a medicine in the app removes the local data immediately. To request deletion of data stored in Firebase, contact us at the email below. You can disable ad tracking via iOS "Settings > Privacy & Security > Tracking" or Android "Settings > Privacy > Ads > Delete advertising ID".</p>
+            <h2>8. Children's Privacy</h2>
+            <p>This App does not knowingly collect personal information from children under 14.</p>
+            <h2>9. Policy Changes</h2>
+            <p>We will notify you of any changes via the app or this page.</p>
+            <h2>10. Contact</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+                    `
         }
       },
       ja: {
@@ -329,6 +398,40 @@
             <h2>10. お問い合わせ</h2>
             <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
           `
+        },
+        v3: {
+          effective: "施行日: 2026年5月25日",
+          html: `
+            <h2>1. 収集する情報</h2>
+            <p><strong>(a) ユーザーが入力・作成する情報</strong>: 点眼薬名、点眼時刻・周期、点眼記録。これらのデータは端末に保存され、一部項目（点眼薬名、薬の追加・編集・点眼完了イベント）は分析目的で Firebase Analytics に送信されます。</p>
+            <p>ユーザーメモ（自由入力テキスト、症状・治療に関する内容を含む可能性あり）および眼圧記録（左右の mmHg 値、測定病院名は任意）は端末内にのみ保存され、Firebase Analytics などへ外部送信されません。</p>
+            <p><strong>(b) 自動的に収集される情報</strong>: 端末識別子（Firebase が自動生成する user_pseudo_id、iOS の IDFV / Android の Firebase Installation ID）、アプリ利用イベント（画面表示、競合警告など）、言語・地域設定、機種・OS バージョン、IP に基づく国単位の概算位置、広告識別子（iOS の IDFA / Android の GAID、ユーザーの同意がある場合のみ）。</p>
+            <h2>2. 利用目的</h2>
+            <p>点眼リマインダーの提供、利用傾向の分析によるアプリ改善、無料版での広告配信。</p>
+            <h2>3. 端末権限</h2>
+            <p>通知（点眼時刻の案内 — Android 13 以降では別途ランタイム権限を要求）、トラッキング（iOS のみ — 拒否した場合は非パーソナライズ広告のみ表示）。</p>
+            <h2>4. 第三者提供および処理委託</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: ユーザー行動分析の委託</li>
+              <li><strong>Google LLC – AdMob</strong>: 広告配信の委託</li>
+            </ul>
+            <h2>5. 国外移転</h2>
+            <p>上記データは Google LLC が運営する米国サーバーに送信・保存されます。</p>
+            <h2>6. 保存・利用期間</h2>
+            <ul>
+              <li>端末内データ: アプリ削除時に消去</li>
+              <li>Firebase Analytics: Google の保存ポリシーに基づき最大 14 か月</li>
+              <li>広告識別子: iOS は「設定 > プライバシーとセキュリティ > トラッキング」、Android は「設定 > プライバシー > 広告」からいつでもリセット・無効化可能</li>
+            </ul>
+            <h2>7. ユーザーの権利</h2>
+            <p>アプリ内で薬を削除するとローカルデータは即座に削除されます。Firebase に保存されているご自身のデータの削除をご希望の場合は下記メールまでご連絡ください。広告トラッキングの拒否は iOS「設定 > プライバシーとセキュリティ > トラッキング」または Android「設定 > プライバシー > 広告 > 広告 ID を削除」で可能です。</p>
+            <h2>8. お子様のプライバシー</h2>
+            <p>14歳未満のお子様の個人情報を意図的に収集することはありません。</p>
+            <h2>9. ポリシー変更</h2>
+            <p>変更がある場合はアプリまたは本ページで通知します。</p>
+            <h2>10. お問い合わせ</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+                    `
         }
       },
       fr: {
@@ -397,6 +500,40 @@
             <h2>10. Contact</h2>
             <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
           `
+        },
+        v3: {
+          effective: "Date d'effet : 25 mai 2026",
+          html: `
+            <h2>1. Informations collectées</h2>
+            <p><strong>(a) Informations fournies par l'utilisateur</strong> : noms des collyres, horaires et fréquences d'instillation, historique d'instillation. Ces données sont stockées sur votre appareil. Certaines (nom du collyre, événements d'ajout/modification/instillation) sont également transmises à Firebase Analytics à des fins d'analyse.</p>
+            <p>Les notes de l'utilisateur (texte libre pouvant contenir des informations sur les symptômes ou les traitements) et les mesures de TIO (valeurs gauche/droite en mmHg, nom de l'hôpital facultatif) sont stockées uniquement sur l'appareil et ne sont jamais transmises à Firebase Analytics ni à un service externe.</p>
+            <p><strong>(b) Collectées automatiquement</strong> : identifiants d'appareil (user_pseudo_id généré par Firebase, IDFV sur iOS / Firebase Installation ID sur Android), événements d'utilisation (vues d'écran, avertissements de conflit, etc.), langue/région, modèle et version OS, localisation approximative au niveau du pays (basée sur IP), identifiant publicitaire (IDFA sur iOS / GAID sur Android, uniquement avec votre consentement).</p>
+            <h2>2. Finalités</h2>
+            <p>Fournir les rappels programmés, analyser les schémas d'utilisation pour améliorer l'application, diffuser des publicités (version gratuite).</p>
+            <h2>3. Autorisations</h2>
+            <p>Notifications (rappels d'instillation — Android 13+ requiert une autorisation à l'exécution), Suivi (iOS uniquement — le refus limite les annonces à des annonces non personnalisées).</p>
+            <h2>4. Partage avec des tiers / Sous-traitants</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong> : analyse du comportement</li>
+              <li><strong>Google LLC – AdMob</strong> : diffusion publicitaire</li>
+            </ul>
+            <h2>5. Transfert international</h2>
+            <p>Les données ci-dessus sont transmises et stockées sur les serveurs Google LLC aux États-Unis.</p>
+            <h2>6. Conservation</h2>
+            <ul>
+              <li>Données sur l'appareil : supprimées lors de la désinstallation</li>
+              <li>Firebase Analytics : jusqu'à 14 mois selon la politique de Google</li>
+              <li>Identifiant publicitaire : réinitialisable à tout moment via iOS « Réglages > Confidentialité et sécurité > Suivi » ou Android « Paramètres > Confidentialité > Annonces »</li>
+            </ul>
+            <h2>7. Vos droits</h2>
+            <p>La suppression d'un collyre dans l'application supprime immédiatement les données locales. Pour demander la suppression des données stockées chez Firebase, contactez-nous par e-mail. Vous pouvez désactiver le suivi publicitaire dans iOS « Réglages > Confidentialité et sécurité > Suivi » ou Android « Paramètres > Confidentialité > Annonces > Supprimer l'identifiant publicitaire ».</p>
+            <h2>8. Enfants</h2>
+            <p>Aucune collecte intentionnelle de données concernant les enfants de moins de 14 ans.</p>
+            <h2>9. Modifications</h2>
+            <p>Toute modification sera notifiée via l'application ou cette page.</p>
+            <h2>10. Contact</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+                    `
         }
       },
       es: {
@@ -465,6 +602,40 @@
             <h2>10. Contacto</h2>
             <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
           `
+        },
+        v3: {
+          effective: "Fecha de vigencia: 25 de mayo de 2026",
+          html: `
+            <h2>1. Información que recopilamos</h2>
+            <p><strong>(a) Información proporcionada por el usuario</strong>: nombres de las gotas, horarios y frecuencia de instilación, registros de uso. Esta información se almacena en su dispositivo. Algunos elementos (nombres de las gotas, eventos de adición/edición/instilación) también se transmiten a Firebase Analytics con fines analíticos.</p>
+            <p>Las notas del usuario (texto libre que puede incluir información sobre síntomas o tratamientos) y las mediciones de PIO (valores izquierdo/derecho en mmHg, nombre del hospital opcional) se guardan solo en este dispositivo y nunca se transmiten a Firebase Analytics ni a ningún servicio externo.</p>
+            <p><strong>(b) Información recopilada automáticamente</strong>: identificadores del dispositivo (user_pseudo_id generado por Firebase, IDFV en iOS / Firebase Installation ID en Android), eventos de uso (vistas de pantalla, avisos de conflicto, etc.), idioma/región, modelo y versión del SO, ubicación aproximada a nivel de país (basada en IP), identificador publicitario (IDFA en iOS / GAID en Android, solo con su consentimiento).</p>
+            <h2>2. Finalidad</h2>
+            <p>Prestar recordatorios programados, analizar patrones de uso para mejorar la aplicación y servir anuncios (versión gratuita).</p>
+            <h2>3. Permisos</h2>
+            <p>Notificaciones (recordatorios — en Android 13+ se solicita un permiso en tiempo de ejecución), Seguimiento (solo iOS — al rechazar, los anuncios serán no personalizados).</p>
+            <h2>4. Compartición con terceros / Encargados del tratamiento</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: análisis del comportamiento</li>
+              <li><strong>Google LLC – AdMob</strong>: publicidad</li>
+            </ul>
+            <h2>5. Transferencia internacional</h2>
+            <p>Los datos anteriores se transmiten y almacenan en servidores de Google LLC en Estados Unidos.</p>
+            <h2>6. Conservación</h2>
+            <ul>
+              <li>Datos en el dispositivo: se eliminan al desinstalar</li>
+              <li>Firebase Analytics: hasta 14 meses según la política de Google</li>
+              <li>Identificador publicitario: restablecible/desactivable en cualquier momento en iOS «Ajustes > Privacidad y seguridad > Seguimiento» o Android «Ajustes > Privacidad > Anuncios»</li>
+            </ul>
+            <h2>7. Sus derechos</h2>
+            <p>Eliminar una medicación en la app borra inmediatamente los datos locales. Para solicitar la eliminación de datos en Firebase, contáctenos por correo electrónico. Puede desactivar el seguimiento publicitario en iOS «Ajustes > Privacidad y seguridad > Seguimiento» o Android «Ajustes > Privacidad > Anuncios > Eliminar ID de publicidad».</p>
+            <h2>8. Privacidad infantil</h2>
+            <p>No se recopila intencionadamente información de menores de 14 años.</p>
+            <h2>9. Cambios</h2>
+            <p>Cualquier cambio se notificará a través de la app o esta página.</p>
+            <h2>10. Contacto</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+                    `
         }
       },
       ru: {
@@ -533,6 +704,40 @@
             <h2>10. Контакт</h2>
             <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
           `
+        },
+        v3: {
+          effective: "Дата вступления в силу: 25 мая 2026 г.",
+          html: `
+            <h2>1. Сбор информации</h2>
+            <p><strong>(а) Информация, вводимая пользователем</strong>: названия глазных капель, расписание и частота применения, записи об использовании. Эти данные хранятся на вашем устройстве. Часть из них (названия капель, события добавления/изменения/закапывания) также передаётся в Firebase Analytics для аналитики.</p>
+            <p>Заметки пользователя (свободный текст, может содержать сведения о симптомах или лечении) и записи ВГД (значения для левого/правого глаза в мм рт. ст., название клиники по желанию) хранятся только на этом устройстве и не передаются в Firebase Analytics или другие внешние сервисы.</p>
+            <p><strong>(б) Автоматически собираемые данные</strong>: идентификаторы устройства (генерируемый Firebase user_pseudo_id, IDFV на iOS / Firebase Installation ID на Android), события использования (просмотры экранов, предупреждения о конфликте и т. д.), язык/регион, модель и версия ОС, приблизительное местоположение на уровне страны (по IP), рекламный идентификатор (IDFA на iOS / GAID на Android, только с вашего согласия).</p>
+            <h2>2. Цели обработки</h2>
+            <p>Предоставление напоминаний, анализ паттернов использования для улучшения приложения, показ рекламы (в бесплатной версии).</p>
+            <h2>3. Разрешения</h2>
+            <p>Уведомления (напоминания о закапывании — для Android 13+ требуется разрешение в режиме выполнения), Отслеживание (только iOS — при отказе показывается только неперсонализированная реклама).</p>
+            <h2>4. Передача третьим лицам / обработчики</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: аналитика поведения пользователей</li>
+              <li><strong>Google LLC – AdMob</strong>: показ рекламы</li>
+            </ul>
+            <h2>5. Международная передача</h2>
+            <p>Указанные данные передаются и хранятся на серверах Google LLC в США.</p>
+            <h2>6. Сроки хранения</h2>
+            <ul>
+              <li>Данные на устройстве: удаляются при удалении приложения</li>
+              <li>Firebase Analytics: до 14 месяцев согласно политике Google</li>
+              <li>Рекламный идентификатор: можно сбросить или отключить в любое время в iOS «Настройки > Конфиденциальность и безопасность > Отслеживание» или в Android «Настройки > Конфиденциальность > Реклама»</li>
+            </ul>
+            <h2>7. Ваши права</h2>
+            <p>При удалении препарата в приложении локальные данные удаляются немедленно. Для удаления данных, хранящихся в Firebase, свяжитесь с нами по электронной почте. Отключить рекламное отслеживание можно в iOS «Настройки > Конфиденциальность и безопасность > Отслеживание» или Android «Настройки > Конфиденциальность > Реклама > Удалить рекламный идентификатор».</p>
+            <h2>8. Конфиденциальность детей</h2>
+            <p>Мы не собираем намеренно данные детей младше 14 лет.</p>
+            <h2>9. Изменения</h2>
+            <p>Об изменениях будет сообщено через приложение или эту страницу.</p>
+            <h2>10. Контакт</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+                    `
         }
       },
       de: {
@@ -601,6 +806,40 @@
             <h2>10. Kontakt</h2>
             <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
           `
+        },
+        v3: {
+          effective: "Inkrafttreten: 25. Mai 2026",
+          html: `
+            <h2>1. Erhobene Daten</h2>
+            <p><strong>(a) Vom Nutzer eingegebene Informationen</strong>: Namen der Augentropfen, Dosierzeiten/-rhythmen, Dosierungsprotokolle. Diese Daten werden auf Ihrem Gerät gespeichert. Ausgewählte Elemente (Name des Augentropfens, Hinzufügen-/Bearbeiten-/Dosierungs-Ereignisse) werden zu Analysezwecken an Firebase Analytics übermittelt.</p>
+            <p>Benutzernotizen (Freitexteingabe, kann Angaben zu Symptomen oder Behandlungen enthalten) und IOD-Einträge (Werte links/rechts in mmHg, Klinikname optional) werden ausschließlich auf diesem Gerät gespeichert und nicht an Firebase Analytics oder andere externe Dienste übermittelt.</p>
+            <p><strong>(b) Automatisch erhobene Daten</strong>: Gerätekennungen (von Firebase erzeugte user_pseudo_id, IDFV auf iOS / Firebase Installation ID auf Android), In-App-Nutzungsereignisse (Bildschirmaufrufe, Konflikthinweise usw.), Sprache/Region, Modell und Betriebssystemversion, grobe IP-basierte Standortinformationen (Landesebene), Werbe-Identifier (IDFA auf iOS / GAID auf Android — nur mit Ihrer Einwilligung).</p>
+            <h2>2. Zwecke</h2>
+            <p>Bereitstellung geplanter Erinnerungen, Analyse von Nutzungsmustern zur Verbesserung der App, Anzeigenauslieferung (kostenlose Version).</p>
+            <h2>3. Geräteberechtigungen</h2>
+            <p>Benachrichtigungen (für Dosierungserinnerungen — Android 13+ erfordert eine Laufzeitberechtigung), Tracking (nur iOS — bei Ablehnung werden nur nicht personalisierte Anzeigen ausgespielt).</p>
+            <h2>4. Weitergabe an Dritte / Auftragsverarbeiter</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: Verhaltensanalyse</li>
+              <li><strong>Google LLC – AdMob</strong>: Anzeigenauslieferung</li>
+            </ul>
+            <h2>5. Internationale Übermittlung</h2>
+            <p>Die oben genannten Daten werden an Server von Google LLC in den USA übermittelt und dort gespeichert.</p>
+            <h2>6. Speicherung</h2>
+            <ul>
+              <li>Daten auf dem Gerät (Medikamenten-Infos, Dosierungsprotokolle): werden beim Deinstallieren der App gelöscht</li>
+              <li>Firebase Analytics: bis zu 14 Monate gemäß Googles Speicherrichtlinie</li>
+              <li>Werbe-Identifier: jederzeit über iOS „Einstellungen > Datenschutz & Sicherheit > Tracking" oder Android „Einstellungen > Datenschutz > Werbung" zurücksetzbar/deaktivierbar</li>
+            </ul>
+            <h2>7. Ihre Rechte</h2>
+            <p>Das Löschen eines Medikaments in der App entfernt die lokalen Daten sofort. Für eine Löschung von in Firebase gespeicherten Daten kontaktieren Sie uns bitte per E-Mail. Das Werbe-Tracking lässt sich über iOS „Einstellungen > Datenschutz & Sicherheit > Tracking" oder Android „Einstellungen > Datenschutz > Werbung > Werbe-ID löschen" deaktivieren.</p>
+            <h2>8. Daten von Kindern</h2>
+            <p>Diese App erhebt nicht wissentlich personenbezogene Daten von Kindern unter 14 Jahren.</p>
+            <h2>9. Änderungen</h2>
+            <p>Wir informieren Sie über Änderungen via App oder auf dieser Seite.</p>
+            <h2>10. Kontakt</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+                    `
         }
       },
       it: {
@@ -669,6 +908,40 @@
             <h2>10. Contatto</h2>
             <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
           `
+        },
+        v3: {
+          effective: "Data di entrata in vigore: 25 maggio 2026",
+          html: `
+            <h2>1. Informazioni raccolte</h2>
+            <p><strong>(a) Informazioni fornite dall'utente</strong>: nomi dei colliri, orari e frequenza di applicazione, registri delle dosi. Questi dati sono memorizzati sul tuo dispositivo. Alcuni elementi (nome del collirio, eventi di aggiunta/modifica/applicazione) vengono inoltre trasmessi a Firebase Analytics a scopo analitico.</p>
+            <p>Le note dell'utente (testo libero che può contenere informazioni su sintomi o trattamenti) e i registri PIO (valori sinistro/destro in mmHg, nome dell'ospedale facoltativo) vengono salvati solo su questo dispositivo e non vengono mai trasmessi a Firebase Analytics o ad altri servizi esterni.</p>
+            <p><strong>(b) Raccolte automaticamente</strong>: identificatori del dispositivo (user_pseudo_id generato da Firebase, IDFV su iOS / Firebase Installation ID su Android), eventi d'uso (visualizzazioni di schermate, avvisi di conflitto ecc.), lingua/regione, modello e versione del SO, posizione approssimativa a livello paese (basata su IP), identificatore pubblicitario (IDFA su iOS / GAID su Android, solo con il tuo consenso).</p>
+            <h2>2. Finalità</h2>
+            <p>Fornire promemoria pianificati, analizzare i modelli d'uso per migliorare l'app, erogare pubblicità (versione gratuita).</p>
+            <h2>3. Autorizzazioni del dispositivo</h2>
+            <p>Notifiche (per i promemoria — Android 13+ richiede un'autorizzazione runtime), Tracciamento (solo iOS — il rifiuto limita gli annunci a non personalizzati).</p>
+            <h2>4. Condivisione con terzi / Responsabili del trattamento</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: analisi del comportamento</li>
+              <li><strong>Google LLC – AdMob</strong>: erogazione pubblicitaria</li>
+            </ul>
+            <h2>5. Trasferimento internazionale</h2>
+            <p>I dati di cui sopra vengono trasmessi e archiviati sui server Google LLC negli Stati Uniti.</p>
+            <h2>6. Conservazione</h2>
+            <ul>
+              <li>Dati sul dispositivo: eliminati alla disinstallazione</li>
+              <li>Firebase Analytics: fino a 14 mesi secondo la politica di Google</li>
+              <li>Identificatore pubblicitario: reimpostabile/disattivabile in qualunque momento da iOS «Impostazioni > Privacy e sicurezza > Tracciamento» o Android «Impostazioni > Privacy > Annunci»</li>
+            </ul>
+            <h2>7. I tuoi diritti</h2>
+            <p>Eliminando un farmaco nell'app i dati locali vengono rimossi immediatamente. Per richiedere la cancellazione dei dati conservati in Firebase, contattaci via e-mail. Puoi disattivare il tracciamento pubblicitario in iOS «Impostazioni > Privacy e sicurezza > Tracciamento» o Android «Impostazioni > Privacy > Annunci > Elimina ID pubblicità».</p>
+            <h2>8. Privacy dei minori</h2>
+            <p>Questa app non raccoglie consapevolmente dati personali di minori di 14 anni.</p>
+            <h2>9. Modifiche</h2>
+            <p>Comunicheremo eventuali modifiche tramite l'app o questa pagina.</p>
+            <h2>10. Contatto</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+                    `
         }
       },
       pt: {
@@ -737,13 +1010,47 @@
             <h2>10. Contato</h2>
             <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
           `
+        },
+        v3: {
+          effective: "Data de vigência: 25 de maio de 2026",
+          html: `
+            <h2>1. Informações coletadas</h2>
+            <p><strong>(a) Informações fornecidas pelo usuário</strong>: nomes dos colírios, horários e frequência de aplicação, registros de aplicação. Esses dados ficam armazenados no seu dispositivo. Itens selecionados (nome do colírio, eventos de adicionar/editar/aplicar) também são transmitidos ao Firebase Analytics para análise.</p>
+            <p>As anotações do usuário (texto livre que pode conter informações sobre sintomas ou tratamentos) e os registros de PIO (valores esquerdo/direito em mmHg, nome do hospital opcional) são guardados apenas neste dispositivo e nunca são transmitidos para o Firebase Analytics ou outros serviços externos.</p>
+            <p><strong>(b) Coletadas automaticamente</strong>: identificadores do dispositivo (user_pseudo_id gerado pelo Firebase, IDFV no iOS / Firebase Installation ID no Android), eventos de uso (visualizações de tela, avisos de conflito etc.), idioma/região, modelo e versão do SO, localização aproximada em nível de país (baseada em IP), identificador de publicidade (IDFA no iOS / GAID no Android, apenas com seu consentimento).</p>
+            <h2>2. Finalidade</h2>
+            <p>Fornecer lembretes programados, analisar padrões de uso para melhorar o aplicativo e exibir anúncios (versão gratuita).</p>
+            <h2>3. Permissões do dispositivo</h2>
+            <p>Notificações (para lembretes — Android 13+ requer permissão em tempo de execução), Rastreamento (apenas iOS — recusar limita os anúncios a não personalizados).</p>
+            <h2>4. Compartilhamento com terceiros / Operadores</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: análise de comportamento</li>
+              <li><strong>Google LLC – AdMob</strong>: veiculação de anúncios</li>
+            </ul>
+            <h2>5. Transferência internacional</h2>
+            <p>Os dados acima são transmitidos e armazenados em servidores do Google LLC nos Estados Unidos.</p>
+            <h2>6. Retenção</h2>
+            <ul>
+              <li>Dados no dispositivo: removidos ao desinstalar</li>
+              <li>Firebase Analytics: até 14 meses, conforme a política do Google</li>
+              <li>Identificador de publicidade: pode ser redefinido/desativado a qualquer momento em iOS «Ajustes > Privacidade e Segurança > Rastreamento» ou Android «Configurações > Privacidade > Anúncios»</li>
+            </ul>
+            <h2>7. Seus direitos</h2>
+            <p>Excluir um medicamento no app remove os dados locais imediatamente. Para solicitar a exclusão de dados armazenados no Firebase, entre em contato pelo e-mail abaixo. É possível desativar o rastreamento publicitário em iOS «Ajustes > Privacidade e Segurança > Rastreamento» ou Android «Configurações > Privacidade > Anúncios > Excluir ID de publicidade».</p>
+            <h2>8. Privacidade infantil</h2>
+            <p>Este app não coleta intencionalmente dados pessoais de menores de 14 anos.</p>
+            <h2>9. Alterações</h2>
+            <p>Comunicaremos quaisquer mudanças pelo aplicativo ou por esta página.</p>
+            <h2>10. Contato</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+                    `
         }
       }
     };
 
     // 기본 언어는 영어. URL ?lang= 로 지정 가능.
     let currentLang = 'en';
-    let currentVersion = 'v2';
+    let currentVersion = 'v3';
 
     function render() {
       const d = DATA[currentLang][currentVersion];
@@ -777,7 +1084,7 @@
     } else {
       document.getElementById('languageSelect').value = currentLang;
     }
-    if (verParam && (verParam === 'v1' || verParam === 'v2')) {
+    if (verParam && (verParam === 'v1' || verParam === 'v2' || verParam === 'v3')) {
       currentVersion = verParam;
       document.getElementById('versionSelect').value = verParam;
     }
