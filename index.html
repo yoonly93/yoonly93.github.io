@@ -22,18 +22,13 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'LINESeedJP', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(180deg, #DBEAFE 0%, #F8FAFC 40%, #EFF6FF 100%);
+      background: linear-gradient(180deg, #EFF6FF 0%, #F8FAFC 30%, #FFFFFF 100%);
       min-height: 100vh;
       color: #1E293B;
       line-height: 1.55;
     }
-
-    /* Top language switch */
     .lang-switch {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      z-index: 50;
+      position: fixed; top: 16px; right: 16px; z-index: 50;
       font-family: inherit;
       background: rgba(255,255,255,0.85);
       border: 1px solid #E2E8F0;
@@ -50,212 +45,499 @@
     .hero {
       max-width: 760px;
       margin: 0 auto;
-      padding: 72px 24px 24px;
+      padding: 80px 24px 32px;
       text-align: center;
     }
-    .icon {
-      width: 104px;
-      height: 104px;
+    .hero .icon {
+      width: 104px; height: 104px;
       border-radius: 24px;
       margin: 0 auto 24px;
       box-shadow: 0 12px 32px rgba(59,130,246,0.28);
       overflow: hidden;
     }
-    .icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    h1 {
-      font-family: 'LINESeedJP', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 44px;
+    .hero .icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero h1 {
+      font-family: 'LINESeedJP', sans-serif;
+      font-size: 48px;
       font-weight: 700;
       color: #3B82F6;
       letter-spacing: 0.2px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
-    .subtitle {
-      font-size: 17px;
+    .hero .subtitle {
+      font-size: 18px;
       color: #475569;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .badge { display: inline-block; }
     .badge img { height: 52px; display: block; }
 
-    /* Mockups */
-    .mockups {
-      max-width: 1040px;
+    /* Section layout */
+    .section {
+      max-width: 1080px;
       margin: 0 auto;
-      padding: 32px 24px 24px;
+      padding: 56px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .section .text .eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #2563EB;
+      background: #DBEAFE;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    .section .text h2 {
+      font-size: 30px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 14px;
+      line-height: 1.3;
+    }
+    .section .text p {
+      font-size: 16px;
+      color: #475569;
+      line-height: 1.65;
+    }
+    .section.reverse .text { order: 2; }
+    .section.reverse .phone-col { order: 1; }
+    .phone-col {
       display: flex;
-      flex-wrap: wrap;
-      gap: 28px;
       justify-content: center;
     }
+
+    /* Phone frame */
     .phone {
-      width: 280px;
+      width: 300px;
       flex-shrink: 0;
       background: #0F172A;
-      border-radius: 40px;
+      border-radius: 44px;
       padding: 8px;
-      box-shadow: 0 24px 48px rgba(15,23,42,0.18), 0 8px 16px rgba(15,23,42,0.10);
+      box-shadow: 0 28px 60px rgba(15,23,42,0.22), 0 10px 20px rgba(15,23,42,0.10);
     }
     .phone-screen {
       background: #FAFAFA;
-      border-radius: 32px;
+      border-radius: 36px;
       overflow: hidden;
       position: relative;
       aspect-ratio: 9 / 19.5;
       display: flex;
       flex-direction: column;
     }
-    /* Status bar */
+    .notch {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 92px; height: 24px;
+      background: #0F172A;
+      border-radius: 14px;
+      z-index: 5;
+    }
     .status-bar {
-      height: 28px;
+      height: 38px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 18px;
-      font-size: 11px;
-      font-weight: 600;
+      padding: 0 22px;
+      font-size: 12px;
+      font-weight: 700;
       color: #1E293B;
-      background: #FAFAFA;
     }
-    .notch {
-      position: absolute;
-      top: 4px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 88px;
-      height: 22px;
-      background: #0F172A;
-      border-radius: 14px;
-      z-index: 2;
+    .status-bar .right { display: flex; gap: 5px; align-items: center; }
+    .sb-wifi { font-size: 11px; }
+    .sb-bat {
+      width: 22px; height: 11px;
+      border: 1px solid #1E293B; border-radius: 3px;
+      position: relative; padding: 1px;
     }
-    .status-bar .right { display: flex; gap: 4px; align-items: center; }
-    .signal { width: 14px; height: 9px; background: #1E293B; border-radius: 1px; }
-    .battery {
-      width: 22px;
-      height: 10px;
-      border: 1px solid #1E293B;
-      border-radius: 2px;
-      position: relative;
-      padding: 1px;
+    .sb-bat::after {
+      content: ''; position: absolute; right: -3px; top: 3px;
+      width: 2px; height: 5px; background: #1E293B; border-radius: 0 1px 1px 0;
     }
-    .battery::after {
-      content: '';
-      position: absolute;
-      right: -3px;
-      top: 3px;
-      width: 2px;
-      height: 4px;
-      background: #1E293B;
-      border-radius: 0 1px 1px 0;
-    }
-    .battery span { display: block; width: 75%; height: 100%; background: #1E293B; border-radius: 1px; }
+    .sb-bat span { display: block; width: 80%; height: 100%; background: #1E293B; border-radius: 1px; }
+    .phone-body { flex: 1; overflow: hidden; }
 
-    /* Phone content shared */
-    .phone-content {
-      flex: 1;
-      overflow: hidden;
-      padding: 0 16px 16px;
+    /* ===== Home / Timeline mockup ===== */
+    .home-header {
+      display: grid;
+      grid-template-columns: 24px 1fr 24px;
+      align-items: center;
+      padding: 4px 16px 10px;
     }
-    .phone-title {
-      font-size: 22px;
+    .home-header .brand {
+      text-align: center;
+      font-family: 'LINESeedJP', sans-serif;
+      font-size: 19px;
       font-weight: 700;
       color: #3B82F6;
-      font-family: 'LINESeedJP', sans-serif;
-      letter-spacing: 0.2px;
-      padding: 4px 0 12px;
+      letter-spacing: 0.3px;
     }
-
-    /* Timeline mockup */
+    .home-header .gear {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid #71717A;
+      justify-self: end;
+      position: relative;
+    }
+    .home-header .gear::after {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      width: 6px; height: 6px;
+      background: #71717A;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
     .weekly {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 14px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      padding: 0 8px 4px;
     }
-    .day {
-      flex: 1;
+    .weekly .cell {
       text-align: center;
       padding: 6px 0;
       font-size: 10px;
-      color: #71717A;
-      border-radius: 10px;
+      color: #A1A1AA;
     }
-    .day .num {
+    .weekly .cell .num {
       display: block;
       font-size: 14px;
       font-weight: 600;
       color: #27272A;
-      margin-top: 2px;
+      margin-top: 4px;
+      width: 26px; height: 26px;
+      line-height: 26px;
+      margin-left: auto; margin-right: auto;
+      border-radius: 50%;
+      position: relative;
     }
-    .day.today {
+    .weekly .cell.has-dot .num::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 50%;
+      transform: translateX(-50%);
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: #3B82F6;
+    }
+    .weekly .cell.today .num {
       background: #3B82F6;
       color: #FFFFFF;
     }
-    .day.today .num { color: #FFFFFF; }
-    .timeline-card {
+    .weekly .cell.today.has-dot .num::after {
+      background: #FFFFFF;
+    }
+    .expand-row {
+      text-align: center;
+      font-size: 11px;
+      color: #71717A;
+      padding: 4px 0 10px;
+    }
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #27272A;
+      padding: 12px 16px 8px;
+    }
+    .section-title .help {
+      display: inline-block;
+      width: 13px; height: 13px;
+      border: 1px solid #A1A1AA;
+      border-radius: 50%;
+      font-size: 9px;
+      line-height: 11px;
+      text-align: center;
+      color: #A1A1AA;
+      margin-left: 4px;
+      vertical-align: 1px;
+    }
+    .med-scroll {
+      display: flex;
+      gap: 8px;
+      padding: 0 16px 8px;
+      overflow: hidden;
+    }
+    .med-card {
+      flex: 1;
       background: #FFFFFF;
       border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-      margin-bottom: 8px;
+      padding: 10px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      border: 1px solid #F1F5F9;
+    }
+    .med-top { display: flex; align-items: center; justify-content: space-between; }
+    .med-name { font-size: 12px; font-weight: 700; color: #27272A; display: flex; align-items: center; gap: 4px; }
+    .med-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .med-actions { display: flex; gap: 6px; }
+    .ico-pen, .ico-trash {
+      width: 12px; height: 12px;
+      display: inline-block;
+    }
+    .ico-pen { border-bottom: 1.5px solid #71717A; transform: rotate(-45deg); }
+    .ico-trash {
+      border: 1px solid #EF4444; border-top: 2px solid #EF4444;
+      border-radius: 1px;
+    }
+    .med-meta { font-size: 9.5px; color: #71717A; margin-top: 4px; line-height: 1.5; }
+    .med-checks { display: flex; gap: 4px; margin-top: 8px; }
+    .mc { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #E4E4E7; flex-shrink: 0; }
+    .mc.done.blue { background: #3B82F6; border-color: #3B82F6; position: relative; }
+    .mc.done.blue::after {
+      content: ''; position: absolute;
+      width: 7px; height: 4px;
+      border-left: 1.5px solid #fff; border-bottom: 1.5px solid #fff;
+      transform: rotate(-45deg); top: 4px; left: 3px;
+    }
+
+    .tl-row {
       display: flex;
       align-items: center;
       gap: 10px;
+      padding: 10px 16px;
+      border-bottom: 1px solid #F4F4F5;
     }
-    .tl-time {
-      font-size: 13px;
-      font-weight: 700;
-      color: #27272A;
-      width: 46px;
-      flex-shrink: 0;
+    .tl-time { font-size: 11px; font-weight: 700; color: #27272A; width: 50px; flex-shrink: 0; }
+    .tl-mid { flex: 1; display: flex; align-items: center; gap: 6px; }
+    .tl-name { font-size: 12px; font-weight: 600; color: #27272A; }
+    .tl-sub { font-size: 10px; color: #71717A; margin-top: 1px; }
+    .tl-check { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid #E4E4E7; flex-shrink: 0; position: relative; }
+    .tl-check.done.blue { background: #3B82F6; border-color: #3B82F6; }
+    .tl-check.done.blue::after {
+      content: ''; position: absolute;
+      width: 9px; height: 5px;
+      border-left: 1.5px solid #fff; border-bottom: 1.5px solid #fff;
+      transform: rotate(-45deg); top: 6px; left: 5px;
     }
-    .tl-info { flex: 1; min-width: 0; }
-    .tl-name { font-size: 13px; font-weight: 600; color: #27272A; }
-    .tl-sub { font-size: 11px; color: #71717A; margin-top: 1px; }
-    .tl-check {
-      width: 26px;
-      height: 26px;
+    .tl-check.green { border-color: #22C55E; }
+
+    .pill-row {
+      display: flex;
+      gap: 8px;
+      padding: 10px 16px;
+    }
+    .pill-row .pill {
+      background: #F4F4F5;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 11px;
+      color: #52525B;
+      font-weight: 600;
+    }
+    .pill-row .pill::before {
+      content: '+ ';
+      color: #71717A;
+    }
+    .fab {
+      position: absolute;
+      right: 18px; bottom: 24px;
+      width: 44px; height: 44px;
       border-radius: 50%;
-      border: 2px solid #E4E4E7;
-      flex-shrink: 0;
+      background: #3B82F6;
+      color: #FFFFFF;
+      font-size: 24px;
+      font-weight: 300;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 16px rgba(59,130,246,0.4);
+    }
+
+    /* ===== Edit medicine form mockup ===== */
+    .form-header {
+      display: grid;
+      grid-template-columns: 30px 1fr 40px;
+      align-items: center;
+      padding: 4px 16px 14px;
+    }
+    .back-arrow {
+      width: 0; height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-right: 8px solid #27272A;
+    }
+    .form-title { text-align: center; font-size: 15px; font-weight: 600; color: #27272A; }
+    .delete-btn { text-align: right; font-size: 12px; color: #EF4444; font-weight: 600; }
+    .form-scroll { padding: 0 16px; overflow-y: auto; }
+    .field { margin-bottom: 14px; }
+    .field-label { font-size: 12px; font-weight: 600; color: #27272A; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
+    .input-row { display: flex; gap: 6px; }
+    .text-input {
+      flex: 1;
+      background: #FFFFFF;
+      border: 1px solid #E4E4E7;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+      color: #27272A;
+      font-weight: 500;
+    }
+    .select-input {
+      background: #FFFFFF;
+      border: 1px solid #E4E4E7;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 11px;
+      color: #71717A;
+      display: flex; align-items: center; gap: 4px;
+      min-width: 56px; justify-content: center;
+    }
+    .chevron-down {
+      width: 0; height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid #71717A;
+    }
+    .chips {
+      display: flex; flex-wrap: wrap; gap: 5px;
+    }
+    .chip {
+      background: #FFFFFF;
+      border: 1px solid #E4E4E7;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 11px;
+      color: #52525B;
+      font-weight: 500;
+    }
+    .chip.active {
+      background: #3B82F6;
+      border-color: #3B82F6;
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+    .chip-block {
+      background: #3B82F6;
+      color: #FFFFFF;
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 6px;
+    }
+    .time-wheel {
+      background: #F4F4F5;
+      border-radius: 10px;
+      height: 78px;
+      position: relative;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 18px;
     }
-    .tl-check.done {
-      background: #3B82F6;
-      border-color: #3B82F6;
-    }
-    .tl-check.done::after {
+    .time-wheel::before, .time-wheel::after {
       content: '';
-      width: 12px;
-      height: 6px;
-      border-left: 2px solid #FFFFFF;
-      border-bottom: 2px solid #FFFFFF;
-      transform: rotate(-45deg) translate(1px, -2px);
+      position: absolute; left: 16px; right: 16px;
+      height: 1px;
+      background: #E4E4E7;
     }
-    .tl-check.green { border-color: #22C55E; }
-    .tl-check.green.done { background: #22C55E; }
-    .dot-medicine {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
+    .time-wheel::before { top: 28px; }
+    .time-wheel::after  { bottom: 28px; }
+    .wheel-col { display: flex; flex-direction: column; align-items: center; line-height: 22px; }
+    .wheel-col span { font-size: 12px; color: #A1A1AA; }
+    .wheel-col span.mid { color: #27272A; font-weight: 700; font-size: 14px; }
+    .form-save {
+      margin: 14px 16px 16px;
+      background: #3B82F6;
+      color: #FFFFFF;
+      border-radius: 10px;
+      padding: 12px 0;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
     }
-    .dot-blue { background: #3B82F6; }
-    .dot-green { background: #22C55E; }
 
-    /* IOP chart mockup */
-    .iop-summary {
-      display: flex;
-      gap: 8px;
+    /* ===== Conflict bottom sheet mockup ===== */
+    .home-dim {
+      position: absolute; inset: 0;
+      background: rgba(15,23,42,0.45);
+      z-index: 3;
+    }
+    .conflict-sheet {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      background: #FFFFFF;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      padding: 16px 20px 24px;
+      z-index: 4;
+      text-align: center;
+    }
+    .conflict-sheet .grabber {
+      width: 36px; height: 4px;
+      background: #E4E4E7;
+      border-radius: 2px;
+      margin: 0 auto 12px;
+    }
+    .conflict-sheet h3 { font-size: 14px; font-weight: 700; color: #27272A; margin-bottom: 10px; }
+    .timer-row {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-bottom: 8px;
+    }
+    .timer-icon {
+      width: 16px; height: 16px;
+      border: 1.6px solid #3B82F6;
+      border-radius: 50%;
+      position: relative;
+    }
+    .timer-icon::before {
+      content: ''; position: absolute;
+      width: 1.4px; height: 5px;
+      background: #3B82F6;
+      top: 3px; left: 50%;
+      transform: translateX(-50%);
+      transform-origin: bottom center;
+    }
+    .timer-icon::after {
+      content: ''; position: absolute;
+      width: 4px; height: 1.4px;
+      background: #3B82F6;
+      top: 50%; left: 50%;
+      transform: translate(0, -50%);
+    }
+    .timer-text {
+      font-size: 22px;
+      font-weight: 700;
+      color: #3B82F6;
+      letter-spacing: 0.4px;
+    }
+    .conflict-sheet p {
+      font-size: 11px;
+      color: #52525B;
+      line-height: 1.55;
       margin-bottom: 14px;
+    }
+    .sheet-btns { display: flex; gap: 8px; }
+    .sheet-btn {
+      flex: 1;
+      padding: 10px 0;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .sheet-btn.ghost { background: #E4E4E7; color: #27272A; }
+    .sheet-btn.primary { background: #3B82F6; color: #FFFFFF; }
+
+    /* ===== IOP mockup ===== */
+    .iop-summary {
+      display: flex; gap: 8px;
+      padding: 4px 16px 12px;
     }
     .iop-pill {
       flex: 1;
       background: #FFFFFF;
       border-radius: 12px;
       padding: 10px 12px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      border: 1px solid #F1F5F9;
     }
     .iop-pill .label { font-size: 10px; color: #71717A; }
     .iop-pill .value {
@@ -264,128 +546,135 @@
       color: #27272A;
       margin-top: 2px;
     }
-    .iop-pill .value small { font-size: 11px; font-weight: 500; color: #71717A; }
+    .iop-pill .value small { font-size: 10px; font-weight: 500; color: #71717A; }
     .iop-chart {
+      margin: 0 16px;
       background: #FFFFFF;
       border-radius: 14px;
-      padding: 14px 12px 12px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      padding: 12px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      border: 1px solid #F1F5F9;
     }
     .iop-legend {
-      display: flex;
-      gap: 12px;
+      display: flex; gap: 12px;
       justify-content: flex-end;
-      font-size: 10px;
-      color: #71717A;
+      font-size: 10px; color: #71717A;
       margin-bottom: 8px;
     }
-    .iop-legend .swatch {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      margin-right: 4px;
-      vertical-align: middle;
+    .iop-legend .sw {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 50%; margin-right: 4px; vertical-align: 0;
     }
     .chart-area {
-      display: flex;
-      align-items: flex-end;
-      gap: 6px;
-      height: 130px;
-      padding-bottom: 18px;
-      position: relative;
+      display: flex; align-items: flex-end; gap: 4px;
+      height: 130px; padding-bottom: 16px; position: relative;
     }
     .chart-area::after {
       content: '';
-      position: absolute;
-      left: 0; right: 0; bottom: 18px;
-      height: 1px;
-      background: #E4E4E7;
+      position: absolute; left: 0; right: 0; bottom: 16px;
+      height: 1px; background: #E4E4E7;
     }
     .chart-col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      height: 100%;
-      justify-content: flex-end;
-      position: relative;
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; height: 100%;
+      justify-content: flex-end; position: relative;
     }
     .chart-bars {
-      display: flex;
-      gap: 2px;
+      display: flex; gap: 2px;
       align-items: flex-end;
-      height: 100%;
-      width: 100%;
+      height: 100%; width: 100%;
       justify-content: center;
     }
-    .bar {
-      width: 6px;
-      border-radius: 3px 3px 0 0;
-    }
+    .bar { width: 5px; border-radius: 2.5px 2.5px 0 0; }
     .bar.right { background: #3B82F6; }
     .bar.left  { background: #8B5CF6; }
     .chart-x {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 9px;
-      color: #71717A;
-      white-space: nowrap;
+      position: absolute; bottom: 0;
+      font-size: 8.5px; color: #71717A;
     }
 
-    /* Features */
-    .features-wrap {
-      max-width: 760px;
-      margin: 24px auto 0;
-      padding: 0 24px;
-    }
-    .features {
-      background: #FFFFFF;
-      border-radius: 20px;
-      padding: 28px 28px 24px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.05);
-    }
-    .features h2 {
-      font-size: 19px;
-      font-weight: 700;
-      margin-bottom: 18px;
-      color: #1E293B;
-    }
-    .feature {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      padding: 10px 0;
-      font-size: 15px;
-      color: #334155;
-      border-top: 1px solid #F1F5F9;
-    }
-    .feature:first-of-type { border-top: 0; padding-top: 4px; }
-    .feature-num {
-      width: 26px;
-      height: 26px;
-      border-radius: 8px;
+    .iop-add {
+      margin: 12px 16px;
       background: #DBEAFE;
-      color: #2563EB;
-      font-weight: 700;
+      color: #1D4ED8;
+      border-radius: 10px;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .iop-add::before { content: '+ '; }
+
+    /* ===== Font size mockup ===== */
+    .slider-block {
+      padding: 28px 24px 16px;
+    }
+    .slider-track {
+      height: 4px;
+      background: #DBEAFE;
+      border-radius: 2px;
+      position: relative;
+    }
+    .slider-fill {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      background: #3B82F6;
+      border-radius: 2px;
+    }
+    .slider-dot {
+      position: absolute;
+      top: 50%;
+      width: 8px; height: 8px;
+      background: #3B82F6;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .slider-thumb {
+      position: absolute;
+      top: 50%;
+      width: 22px; height: 22px;
+      background: #FFFFFF;
+      border: 2px solid #3B82F6;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    }
+    .slider-labels {
+      display: flex; justify-content: space-between;
+      margin-top: 14px;
+      font-size: 12px;
+      color: #71717A;
+    }
+    .slider-labels span.active { color: #3B82F6; font-weight: 700; }
+    .preview-box {
+      margin: 24px 24px 0;
+      background: #FFFFFF;
+      border: 1px solid #E4E4E7;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+      font-size: 14px;
+      color: #27272A;
+      font-weight: 500;
+    }
+    .font-save {
+      position: absolute;
+      left: 16px; right: 16px; bottom: 24px;
+      background: #3B82F6;
+      color: #FFFFFF;
+      border-radius: 10px;
+      padding: 12px 0;
+      text-align: center;
       font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      font-weight: 600;
     }
 
     /* Footer */
     footer {
-      max-width: 760px;
-      margin: 48px auto 0;
-      padding: 32px 24px 56px;
+      max-width: 980px;
+      margin: 32px auto 0;
+      padding: 36px 24px 56px;
       text-align: center;
-      font-size: 13px;
-      color: #94A3B8;
       border-top: 1px solid rgba(148,163,184,0.18);
     }
     footer .links {
@@ -404,14 +693,23 @@
     footer .sep { color: #CBD5E1; }
     footer .copyright { color: #94A3B8; font-size: 12px; }
 
-    @media (max-width: 640px) {
-      h1 { font-size: 36px; }
-      .subtitle { font-size: 15px; }
-      .hero { padding-top: 56px; }
-      .mockups { gap: 20px; padding: 24px 16px 8px; }
-      .phone { width: 248px; }
-      .features-wrap { padding: 0 16px; }
-      .features { padding: 22px 20px; }
+    @media (max-width: 880px) {
+      .section {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 40px 24px;
+      }
+      .section.reverse .text { order: 2; }
+      .section.reverse .phone-col { order: 1; }
+      .section .text { order: 2; text-align: center; }
+      .section .phone-col { order: 1; }
+      .section .text h2 { font-size: 26px; }
+    }
+    @media (max-width: 480px) {
+      .hero { padding-top: 64px; }
+      .hero h1 { font-size: 40px; }
+      .hero .subtitle { font-size: 16px; }
+      .phone { width: 268px; }
     }
   </style>
 </head>
@@ -438,145 +736,253 @@
     </a>
   </section>
 
-  <!-- Phone mockups -->
-  <section class="mockups">
-    <!-- Mockup 1: Today's schedule -->
-    <div class="phone" aria-hidden="true">
-      <div class="phone-screen">
-        <div class="notch"></div>
-        <div class="status-bar">
-          <span>9:41</span>
-          <span class="right">
-            <span class="signal"></span>
-            <span class="battery"><span></span></span>
-          </span>
-        </div>
-        <div class="phone-content">
-          <div class="phone-title">eyeday</div>
-          <div class="weekly">
-            <div class="day">M<span class="num">9</span></div>
-            <div class="day">T<span class="num">10</span></div>
-            <div class="day today" data-i-mock="todayLabel">W<span class="num">11</span></div>
-            <div class="day">T<span class="num">12</span></div>
-            <div class="day">F<span class="num">13</span></div>
-            <div class="day">S<span class="num">14</span></div>
-            <div class="day">S<span class="num">15</span></div>
-          </div>
-          <div class="timeline-card">
-            <span class="tl-time">08:30</span>
-            <span class="dot-medicine dot-blue"></span>
-            <div class="tl-info">
-              <div class="tl-name" data-mock="med1">Cosopt</div>
-              <div class="tl-sub" data-mock="completed">완료</div>
+  <!-- Section 1: Add medicine -->
+  <section class="section">
+    <div class="text">
+      <span class="eyebrow" data-i="s1Eyebrow"></span>
+      <h2 data-i="s1Title"></h2>
+      <p data-i="s1Desc"></p>
+    </div>
+    <div class="phone-col">
+      <!-- Phone: edit medicine form -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="notch"></div>
+          <div class="status-bar"><span>11:07</span><span class="right"><span class="sb-wifi">•••• 🔋</span></span></div>
+          <div class="phone-body">
+            <div class="form-header">
+              <div class="back-arrow"></div>
+              <div class="form-title">안약 수정</div>
+              <div class="delete-btn">삭제</div>
             </div>
-            <div class="tl-check done"></div>
-          </div>
-          <div class="timeline-card">
-            <span class="tl-time">20:30</span>
-            <span class="dot-medicine dot-blue"></span>
-            <div class="tl-info">
-              <div class="tl-name" data-mock="med1">Cosopt</div>
-              <div class="tl-sub" data-mock="upcoming">예정</div>
+            <div class="form-scroll">
+              <div class="field">
+                <div class="field-label">안약 이름</div>
+                <div class="input-row">
+                  <div class="text-input">코솝</div>
+                  <div class="select-input">선택 <span class="chevron-down"></span></div>
+                </div>
+              </div>
+              <div class="field">
+                <div class="field-label">투약 시간 <span class="help-mini">ⓘ</span></div>
+                <div class="chips">
+                  <span class="chip">아침</span>
+                  <span class="chip">점심</span>
+                  <span class="chip">저녁</span>
+                  <span class="chip">자기 전</span>
+                </div>
+                <div class="chip-block">직접 지정할게요</div>
+              </div>
+              <div class="field">
+                <div class="field-label">하루 횟수</div>
+                <div class="chips">
+                  <span class="chip">1회</span>
+                  <span class="chip active">2회</span>
+                  <span class="chip">3회</span>
+                  <span class="chip">4회</span>
+                  <span class="chip">5회</span>
+                  <span class="chip">6회</span>
+                  <span class="chip">7회</span>
+                  <span class="chip">8회</span>
+                  <span class="chip">9회</span>
+                  <span class="chip">10회</span>
+                  <span class="chip">11회</span>
+                  <span class="chip">12회</span>
+                </div>
+              </div>
+              <div class="field">
+                <div class="field-label">투약 간격</div>
+                <div class="chips">
+                  <span class="chip">1시간</span>
+                  <span class="chip">2시간</span>
+                  <span class="chip">3시간</span>
+                  <span class="chip">4시간</span>
+                  <span class="chip">6시간</span>
+                  <span class="chip">8시간</span>
+                  <span class="chip">10시간</span>
+                  <span class="chip active">12시간</span>
+                </div>
+              </div>
+              <div class="field">
+                <div class="field-label">투약 시작 시간</div>
+                <div class="time-wheel">
+                  <div class="wheel-col"><span>5</span><span class="mid">6</span><span>7</span></div>
+                  <div class="wheel-col"><span>27</span><span class="mid">28</span><span>29</span></div>
+                </div>
+              </div>
             </div>
-            <div class="tl-check"></div>
-          </div>
-          <div class="timeline-card">
-            <span class="tl-time">22:00</span>
-            <span class="dot-medicine dot-green"></span>
-            <div class="tl-info">
-              <div class="tl-name" data-mock="med2">Xalatan</div>
-              <div class="tl-sub" data-mock="bedtime">자기 전</div>
-            </div>
-            <div class="tl-check green"></div>
+            <div class="form-save">저장하기</div>
           </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Mockup 2: IOP trend -->
-    <div class="phone" aria-hidden="true">
-      <div class="phone-screen">
-        <div class="notch"></div>
-        <div class="status-bar">
-          <span>9:41</span>
-          <span class="right">
-            <span class="signal"></span>
-            <span class="battery"><span></span></span>
-          </span>
-        </div>
-        <div class="phone-content">
-          <div class="phone-title" data-mock="iopTitle">안압 기록</div>
-          <div class="iop-summary">
-            <div class="iop-pill">
-              <div class="label" data-mock="iopRight">우안 (OD)</div>
-              <div class="value">17 <small>mmHg</small></div>
+  <!-- Section 2: Today's timeline -->
+  <section class="section reverse">
+    <div class="text">
+      <span class="eyebrow" data-i="s2Eyebrow"></span>
+      <h2 data-i="s2Title"></h2>
+      <p data-i="s2Desc"></p>
+    </div>
+    <div class="phone-col">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="notch"></div>
+          <div class="status-bar"><span>11:07</span><span class="right"><span class="sb-wifi">•••• 🔋</span></span></div>
+          <div class="phone-body">
+            <div class="home-header">
+              <div></div>
+              <div class="brand">eyeday</div>
+              <div class="gear"></div>
             </div>
-            <div class="iop-pill">
-              <div class="label" data-mock="iopLeft">좌안 (OS)</div>
-              <div class="value">16 <small>mmHg</small></div>
+            <div class="weekly">
+              <div class="cell"><div>일</div><div class="num">8</div></div>
+              <div class="cell has-dot"><div>월</div><div class="num">9</div></div>
+              <div class="cell has-dot"><div>화</div><div class="num">10</div></div>
+              <div class="cell today has-dot"><div>수</div><div class="num">11</div></div>
+              <div class="cell"><div>목</div><div class="num">12</div></div>
+              <div class="cell"><div>금</div><div class="num">13</div></div>
+              <div class="cell"><div>토</div><div class="num">14</div></div>
             </div>
+            <div class="expand-row">펼치기 ⌄</div>
+            <div class="section-title">점안중인 안약</div>
+            <div class="med-scroll">
+              <div class="med-card">
+                <div class="med-top">
+                  <div class="med-name"><span class="med-dot" style="background:#3B82F6"></span>코솝</div>
+                  <div class="med-actions"><span class="ico-pen"></span><span class="ico-trash"></span></div>
+                </div>
+                <div class="med-meta">08:30부터 | 2회 | 12시간<br>무기한</div>
+                <div class="med-checks">
+                  <div class="mc done blue"></div>
+                  <div class="mc"></div>
+                </div>
+              </div>
+              <div class="med-card">
+                <div class="med-top">
+                  <div class="med-name"><span class="med-dot" style="background:#22C55E"></span>잘라탄</div>
+                  <div class="med-actions"><span class="ico-pen"></span><span class="ico-trash"></span></div>
+                </div>
+                <div class="med-meta">자기 전<br>무기한</div>
+                <div class="med-checks">
+                  <div class="mc"></div>
+                </div>
+              </div>
+            </div>
+            <div class="section-title">오늘의 점안 기록 <span class="help">?</span></div>
+            <div class="tl-row">
+              <div class="tl-time">오전 8:30</div>
+              <div class="tl-mid">
+                <span class="med-dot" style="background:#3B82F6"></span>
+                <div>
+                  <div class="tl-name">코솝</div>
+                  <div class="tl-sub">오전 8:31 1회차 완료</div>
+                </div>
+              </div>
+              <div class="tl-check done blue"></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-time">오후 8:30</div>
+              <div class="tl-mid">
+                <span class="med-dot" style="background:#3B82F6"></span>
+                <div><div class="tl-name">코솝</div></div>
+              </div>
+              <div class="tl-check"></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-time">오후 10:00</div>
+              <div class="tl-mid">
+                <span class="med-dot" style="background:#22C55E"></span>
+                <div><div class="tl-name">잘라탄</div></div>
+              </div>
+              <div class="tl-check green"></div>
+            </div>
+            <div class="pill-row">
+              <div class="pill">추가 점안</div>
+              <div class="pill">메모</div>
+            </div>
+            <div class="fab">+</div>
           </div>
-          <div class="iop-chart">
-            <div class="iop-legend">
-              <span><span class="swatch" style="background:#3B82F6"></span><span data-mock="iopRightShort">OD</span></span>
-              <span><span class="swatch" style="background:#8B5CF6"></span><span data-mock="iopLeftShort">OS</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Conflict warning -->
+  <section class="section">
+    <div class="text">
+      <span class="eyebrow" data-i="s3Eyebrow"></span>
+      <h2 data-i="s3Title"></h2>
+      <p data-i="s3Desc"></p>
+    </div>
+    <div class="phone-col">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="notch"></div>
+          <div class="status-bar"><span>11:07</span><span class="right"><span class="sb-wifi">•••• 🔋</span></span></div>
+          <div class="phone-body">
+            <div class="home-header">
+              <div></div>
+              <div class="brand">eyeday</div>
+              <div class="gear"></div>
             </div>
-            <div class="chart-area">
-              <div class="chart-col">
-                <div class="chart-bars">
-                  <div class="bar right" style="height:88%"></div>
-                  <div class="bar left"  style="height:85%"></div>
+            <div class="weekly">
+              <div class="cell"><div>일</div><div class="num">8</div></div>
+              <div class="cell has-dot"><div>월</div><div class="num">9</div></div>
+              <div class="cell has-dot"><div>화</div><div class="num">10</div></div>
+              <div class="cell today has-dot"><div>수</div><div class="num">11</div></div>
+              <div class="cell"><div>목</div><div class="num">12</div></div>
+              <div class="cell"><div>금</div><div class="num">13</div></div>
+              <div class="cell"><div>토</div><div class="num">14</div></div>
+            </div>
+            <div class="expand-row">펼치기 ⌄</div>
+            <div class="section-title">점안중인 안약</div>
+            <div class="med-scroll">
+              <div class="med-card">
+                <div class="med-top">
+                  <div class="med-name"><span class="med-dot" style="background:#3B82F6"></span>Cosopt</div>
+                  <div class="med-actions"><span class="ico-pen"></span><span class="ico-trash"></span></div>
                 </div>
-                <span class="chart-x">6/2</span>
+                <div class="med-meta">08:30부터 | 2회 | 12시간<br>무기한</div>
+                <div class="med-checks">
+                  <div class="mc done blue"></div>
+                  <div class="mc done blue"></div>
+                </div>
               </div>
-              <div class="chart-col">
-                <div class="chart-bars">
-                  <div class="bar right" style="height:80%"></div>
-                  <div class="bar left"  style="height:80%"></div>
+              <div class="med-card">
+                <div class="med-top">
+                  <div class="med-name"><span class="med-dot" style="background:#22C55E"></span>Xalatan</div>
+                  <div class="med-actions"><span class="ico-pen"></span><span class="ico-trash"></span></div>
                 </div>
-                <span class="chart-x">6/30</span>
+                <div class="med-meta">자기 전<br>무기한</div>
+                <div class="med-checks">
+                  <div class="mc"></div>
+                </div>
               </div>
-              <div class="chart-col">
-                <div class="chart-bars">
-                  <div class="bar right" style="height:72%"></div>
-                  <div class="bar left"  style="height:76%"></div>
-                </div>
-                <span class="chart-x">7/28</span>
+            </div>
+            <div class="section-title">오늘의 점안 기록</div>
+            <div class="tl-row">
+              <div class="tl-time">오전 8:30</div>
+              <div class="tl-mid">
+                <span class="med-dot" style="background:#3B82F6"></span>
+                <div><div class="tl-name">Cosopt</div><div class="tl-sub">오전 8:31 1회차 완료</div></div>
               </div>
-              <div class="chart-col">
-                <div class="chart-bars">
-                  <div class="bar right" style="height:68%"></div>
-                  <div class="bar left"  style="height:68%"></div>
-                </div>
-                <span class="chart-x">8/25</span>
+              <div class="tl-check done blue"></div>
+            </div>
+
+            <div class="home-dim"></div>
+            <div class="conflict-sheet">
+              <div class="grabber"></div>
+              <h3>안약 간격 주의</h3>
+              <div class="timer-row">
+                <span class="timer-icon"></span>
+                <span class="timer-text">4:56</span>
               </div>
-              <div class="chart-col">
-                <div class="chart-bars">
-                  <div class="bar right" style="height:64%"></div>
-                  <div class="bar left"  style="height:60%"></div>
-                </div>
-                <span class="chart-x">9/22</span>
-              </div>
-              <div class="chart-col">
-                <div class="chart-bars">
-                  <div class="bar right" style="height:56%"></div>
-                  <div class="bar left"  style="height:56%"></div>
-                </div>
-                <span class="chart-x">10/20</span>
-              </div>
-              <div class="chart-col">
-                <div class="chart-bars">
-                  <div class="bar right" style="height:52%"></div>
-                  <div class="bar left"  style="height:52%"></div>
-                </div>
-                <span class="chart-x">11/17</span>
-              </div>
-              <div class="chart-col">
-                <div class="chart-bars">
-                  <div class="bar right" style="height:52%"></div>
-                  <div class="bar left"  style="height:48%"></div>
-                </div>
-                <span class="chart-x">12/15</span>
+              <p>Cosopt을(를) 넣은 지 얼마 되지 않았습니다<br>여러 안약을 넣을 경우 5분 간격을 두세요</p>
+              <div class="sheet-btns">
+                <div class="sheet-btn ghost">알겠어요</div>
+                <div class="sheet-btn primary">지금 점안하기</div>
               </div>
             </div>
           </div>
@@ -585,16 +991,117 @@
     </div>
   </section>
 
-  <!-- Features -->
-  <section class="features-wrap">
-    <div class="features">
-      <h2 data-i="featuresTitle"></h2>
-      <div class="feature"><span class="feature-num">1</span><span data-i="f1"></span></div>
-      <div class="feature"><span class="feature-num">2</span><span data-i="f2"></span></div>
-      <div class="feature"><span class="feature-num">3</span><span data-i="f3"></span></div>
-      <div class="feature"><span class="feature-num">4</span><span data-i="f4"></span></div>
-      <div class="feature"><span class="feature-num">5</span><span data-i="f5"></span></div>
-      <div class="feature"><span class="feature-num">6</span><span data-i="f6"></span></div>
+  <!-- Section 4: IOP records -->
+  <section class="section reverse">
+    <div class="text">
+      <span class="eyebrow" data-i="s4Eyebrow"></span>
+      <h2 data-i="s4Title"></h2>
+      <p data-i="s4Desc"></p>
+    </div>
+    <div class="phone-col">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="notch"></div>
+          <div class="status-bar"><span>11:07</span><span class="right"><span class="sb-wifi">•••• 🔋</span></span></div>
+          <div class="phone-body">
+            <div class="form-header">
+              <div class="back-arrow"></div>
+              <div class="form-title">안압 기록</div>
+              <div></div>
+            </div>
+            <div class="iop-summary">
+              <div class="iop-pill">
+                <div class="label">우안 (OD)</div>
+                <div class="value">17 <small>mmHg</small></div>
+              </div>
+              <div class="iop-pill">
+                <div class="label">좌안 (OS)</div>
+                <div class="value">16 <small>mmHg</small></div>
+              </div>
+            </div>
+            <div class="iop-chart">
+              <div class="iop-legend">
+                <span><span class="sw" style="background:#3B82F6"></span>우안</span>
+                <span><span class="sw" style="background:#8B5CF6"></span>좌안</span>
+              </div>
+              <div class="chart-area">
+                <div class="chart-col">
+                  <div class="chart-bars"><div class="bar right" style="height:88%"></div><div class="bar left" style="height:85%"></div></div>
+                  <span class="chart-x">6/2</span>
+                </div>
+                <div class="chart-col">
+                  <div class="chart-bars"><div class="bar right" style="height:80%"></div><div class="bar left" style="height:80%"></div></div>
+                  <span class="chart-x">6/30</span>
+                </div>
+                <div class="chart-col">
+                  <div class="chart-bars"><div class="bar right" style="height:72%"></div><div class="bar left" style="height:76%"></div></div>
+                  <span class="chart-x">7/28</span>
+                </div>
+                <div class="chart-col">
+                  <div class="chart-bars"><div class="bar right" style="height:68%"></div><div class="bar left" style="height:68%"></div></div>
+                  <span class="chart-x">8/25</span>
+                </div>
+                <div class="chart-col">
+                  <div class="chart-bars"><div class="bar right" style="height:64%"></div><div class="bar left" style="height:60%"></div></div>
+                  <span class="chart-x">9/22</span>
+                </div>
+                <div class="chart-col">
+                  <div class="chart-bars"><div class="bar right" style="height:56%"></div><div class="bar left" style="height:56%"></div></div>
+                  <span class="chart-x">10/20</span>
+                </div>
+                <div class="chart-col">
+                  <div class="chart-bars"><div class="bar right" style="height:52%"></div><div class="bar left" style="height:52%"></div></div>
+                  <span class="chart-x">11/17</span>
+                </div>
+                <div class="chart-col">
+                  <div class="chart-bars"><div class="bar right" style="height:52%"></div><div class="bar left" style="height:48%"></div></div>
+                  <span class="chart-x">12/15</span>
+                </div>
+              </div>
+            </div>
+            <div class="iop-add">안압 추가</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Font size -->
+  <section class="section">
+    <div class="text">
+      <span class="eyebrow" data-i="s5Eyebrow"></span>
+      <h2 data-i="s5Title"></h2>
+      <p data-i="s5Desc"></p>
+    </div>
+    <div class="phone-col">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="notch"></div>
+          <div class="status-bar"><span>11:07</span><span class="right"><span class="sb-wifi">•••• 🔋</span></span></div>
+          <div class="phone-body">
+            <div class="form-header">
+              <div class="back-arrow"></div>
+              <div class="form-title">글씨 크기</div>
+              <div></div>
+            </div>
+            <div class="slider-block">
+              <div class="slider-track">
+                <div class="slider-fill" style="width:100%"></div>
+                <div class="slider-dot" style="left:0%"></div>
+                <div class="slider-dot" style="left:50%"></div>
+                <div class="slider-thumb" style="left:100%"></div>
+              </div>
+              <div class="slider-labels">
+                <span>보통</span>
+                <span>크게</span>
+                <span class="active">제일 크게</span>
+              </div>
+            </div>
+            <div class="preview-box">이 문장은 선택한 크기로 표시됩니다</div>
+            <div class="font-save">저장하기</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -612,149 +1119,208 @@
 
 <script>
 const UI = {
-  "ko": {
-    "title": "eyeday - 안약 알람 & 점안 기록",
-    "subtitle": "안약 알람 & 점안 기록 · 안압 추이까지 한눈에",
-    "featuresTitle": "주요 기능",
-    "f1": "맞춤 안약 점안 스케줄 설정",
-    "f2": "푸시 알림으로 점안 시간 알림",
-    "f3": "점안 기록 및 달력 관리",
-    "f4": "안압 측정값 기록과 추이 그래프",
-    "f5": "안약 간 최소 간격 충돌 감지",
-    "f6": "9개 언어 지원 (한/영/일/불/서/러/독/이/포)",
-    "contact": "문의",
-    "privacy": "개인정보 처리방침",
-    "terms": "서비스 이용약관"
+  ko: {
+    title: "eyeday - 안약 알람 & 점안 기록",
+    subtitle: "맞춤 안약 스케줄, 점안 기록, 안압 추이를 한 앱에서",
+    s1Eyebrow: "안약 등록",
+    s1Title: "내 처방대로\n안약 스케줄을 설정",
+    s1Desc: "약 이름, 하루 횟수, 투약 간격, 시작 시간만 입력하면 끝. 아침·점심·저녁·자기 전 프리셋이나 직접 지정 모드 모두 지원합니다.",
+    s2Eyebrow: "점안 기록",
+    s2Title: "오늘 점안 한눈에",
+    s2Desc: "예정 시각과 완료 여부를 타임라인으로 보여주고, 점안 시간이 되면 푸시 알림으로 알려줍니다. 추가 점안과 메모도 한 화면에서.",
+    s3Eyebrow: "충돌 감지",
+    s3Title: "안약 간 최소 간격\n자동 경고",
+    s3Desc: "여러 안약을 연달아 넣으려고 하면 남은 시간을 계산해 5분 간격을 두라는 안내가 뜹니다. 의사 권장 간격을 지키도록 도와줍니다.",
+    s4Eyebrow: "안압 기록",
+    s4Title: "안압 측정값과\n추이 그래프",
+    s4Desc: "병원에서 측정한 우안/좌안 안압을 기록하면 막대 그래프로 추세를 보여줍니다. 진료 때 변화를 한눈에 공유하세요.",
+    s5Eyebrow: "접근성",
+    s5Title: "글씨 크기 조절",
+    s5Desc: "보통·크게·제일 크게 3단계로 글자 크기를 조절할 수 있어 시야가 흐려진 상태에서도 편하게 사용 가능합니다.",
+    contact: "문의",
+    privacy: "개인정보 처리방침",
+    terms: "서비스 이용약관"
   },
-  "en": {
-    "title": "eyeday - Eye drop reminder & log",
-    "subtitle": "Eye drop reminders, dosing log, and IOP trends — all in one",
-    "featuresTitle": "Key features",
-    "f1": "Custom eye drop scheduling",
-    "f2": "Push notification reminders",
-    "f3": "Dose log & calendar view",
-    "f4": "IOP measurement log with trend chart",
-    "f5": "Conflict detection between drops",
-    "f6": "Supports 9 languages (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
-    "contact": "Contact",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service"
+  en: {
+    title: "eyeday - Eye drop reminder & log",
+    subtitle: "Custom eye drop schedules, dosing log, and IOP trends in one app",
+    s1Eyebrow: "ADD MEDICATION",
+    s1Title: "Set a schedule\nthat fits your prescription",
+    s1Desc: "Enter the name, daily count, interval and start time — that's it. Morning, noon, evening, bedtime presets or fully custom timing both supported.",
+    s2Eyebrow: "DOSING LOG",
+    s2Title: "Today's drops at a glance",
+    s2Desc: "Scheduled times and completion status appear on a timeline, with push reminders when it's time. Extra doses and notes live on the same screen.",
+    s3Eyebrow: "CONFLICT ALERT",
+    s3Title: "Automatic warning between\nback-to-back drops",
+    s3Desc: "If you try to apply another drop right after one, the remaining time is calculated and a 5-minute gap is suggested — keeping you within recommended intervals.",
+    s4Eyebrow: "IOP LOG",
+    s4Title: "Pressure values and trend",
+    s4Desc: "Record left/right IOP from your clinic visits and see the trend as a bar chart — easy to share changes during your next checkup.",
+    s5Eyebrow: "ACCESSIBILITY",
+    s5Title: "Adjustable font size",
+    s5Desc: "Normal, Large, or Largest — three steps that keep the app readable even when your vision is blurred from drops.",
+    contact: "Contact",
+    privacy: "Privacy Policy",
+    terms: "Terms of Service"
   },
-  "ja": {
-    "title": "eyeday - 目薬リマインダー & 点眼記録",
-    "subtitle": "目薬リマインダー、点眼記録、眼圧推移までひとつに",
-    "featuresTitle": "主な機能",
-    "f1": "目薬スケジュールのカスタム設定",
-    "f2": "プッシュ通知での点眼リマインダー",
-    "f3": "点眼記録とカレンダー管理",
-    "f4": "眼圧の記録と推移グラフ",
-    "f5": "目薬間の最短間隔の自動調整",
-    "f6": "9言語対応 (韓/英/日/仏/西/露/独/伊/葡)",
-    "contact": "お問い合わせ",
-    "privacy": "プライバシーポリシー",
-    "terms": "利用規約"
+  ja: {
+    title: "eyeday - 目薬リマインダー & 点眼記録",
+    subtitle: "目薬スケジュール、点眼記録、眼圧推移をひとつのアプリで",
+    s1Eyebrow: "目薬の登録",
+    s1Title: "処方どおりの\nスケジュール設定",
+    s1Desc: "薬の名前、1日の回数、間隔、開始時刻を入力するだけ。朝・昼・晩・就寝前のプリセットも、自由なカスタムも両対応。",
+    s2Eyebrow: "点眼記録",
+    s2Title: "今日の点眼をひと目で",
+    s2Desc: "予定時刻と完了状態をタイムラインで表示。点眼時間にはプッシュ通知でお知らせします。追加点眼やメモも同じ画面で。",
+    s3Eyebrow: "競合検知",
+    s3Title: "目薬の最短間隔を\n自動で警告",
+    s3Desc: "複数の目薬を続けて差そうとすると残り時間を計算し、5分間隔を空けるよう案内。医師推奨の間隔を守れます。",
+    s4Eyebrow: "眼圧記録",
+    s4Title: "眼圧値と推移グラフ",
+    s4Desc: "病院で測った右眼・左眼の眼圧を記録すると、棒グラフで推移が確認できます。次回の診察にそのまま共有可能。",
+    s5Eyebrow: "アクセシビリティ",
+    s5Title: "文字サイズ調整",
+    s5Desc: "標準・大きい・最大の3段階で文字サイズを変更可能。点眼直後の視界がぼやけた状態でも快適に使えます。",
+    contact: "お問い合わせ",
+    privacy: "プライバシーポリシー",
+    terms: "利用規約"
   },
-  "fr": {
-    "title": "eyeday - Rappel de collyre & journal",
-    "subtitle": "Rappels de collyre, journal des doses et suivi de la PIO en un seul endroit",
-    "featuresTitle": "Fonctionnalités",
-    "f1": "Programmation personnalisée des gouttes",
-    "f2": "Rappels par notifications push",
-    "f3": "Journal des doses & calendrier",
-    "f4": "Mesures de TIO et graphique de tendance",
-    "f5": "Détection des conflits entre gouttes",
-    "f6": "9 langues prises en charge (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
-    "contact": "Contact",
-    "privacy": "Politique de confidentialité",
-    "terms": "Conditions d'utilisation"
+  fr: {
+    title: "eyeday - Rappel de collyre & journal",
+    subtitle: "Programmation, journal des doses et tendance de la TIO dans une seule app",
+    s1Eyebrow: "AJOUTER UN COLLYRE",
+    s1Title: "Programmez selon\nvotre ordonnance",
+    s1Desc: "Saisissez le nom, le nombre quotidien, l'intervalle et l'heure de départ — c'est tout. Préréglages matin/midi/soir/coucher ou minutage personnalisé.",
+    s2Eyebrow: "JOURNAL",
+    s2Title: "L'instillation du jour en un coup d'œil",
+    s2Desc: "Horaires prévus et statut de complétion affichés en frise, avec rappels push à l'heure. Doses supplémentaires et notes sur le même écran.",
+    s3Eyebrow: "ALERTE CONFLIT",
+    s3Title: "Avertissement automatique\nentre deux collyres",
+    s3Desc: "Si vous essayez d'instiller un autre collyre juste après, le temps restant est calculé et un intervalle de 5 minutes est suggéré.",
+    s4Eyebrow: "JOURNAL TIO",
+    s4Title: "Valeurs et courbe de tendance",
+    s4Desc: "Enregistrez les mesures de TIO œil droit/gauche issues de vos visites et visualisez la tendance — facile à partager au prochain contrôle.",
+    s5Eyebrow: "ACCESSIBILITÉ",
+    s5Title: "Taille de police réglable",
+    s5Desc: "Normale, Grande ou Très grande — trois niveaux pour garder l'app lisible même quand la vision est floue après l'instillation.",
+    contact: "Contact",
+    privacy: "Politique de confidentialité",
+    terms: "Conditions d'utilisation"
   },
-  "es": {
-    "title": "eyeday - Recordatorio de colirios y registro",
-    "subtitle": "Recordatorios de colirios, registro de dosis y tendencia de PIO en un solo lugar",
-    "featuresTitle": "Funciones principales",
-    "f1": "Programación personalizada del colirio",
-    "f2": "Recordatorios por notificación push",
-    "f3": "Registro de dosis y calendario",
-    "f4": "Registro de PIO con gráfico de tendencia",
-    "f5": "Detección de conflictos entre colirios",
-    "f6": "Soporte para 9 idiomas (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
-    "contact": "Contacto",
-    "privacy": "Política de privacidad",
-    "terms": "Términos de servicio"
+  es: {
+    title: "eyeday - Recordatorio de colirios y registro",
+    subtitle: "Programación de colirios, registro de dosis y tendencia de PIO en una sola app",
+    s1Eyebrow: "AÑADIR COLIRIO",
+    s1Title: "Programa según\ntu receta",
+    s1Desc: "Introduce el nombre, las veces al día, el intervalo y la hora de inicio — eso es todo. Preajustes mañana/mediodía/noche/al dormir o totalmente personalizado.",
+    s2Eyebrow: "REGISTRO",
+    s2Title: "Las gotas de hoy de un vistazo",
+    s2Desc: "Las horas previstas y el estado de cumplimiento se muestran en una línea de tiempo, con avisos push a su hora. Dosis extra y notas en la misma pantalla.",
+    s3Eyebrow: "ALERTA DE CONFLICTO",
+    s3Title: "Aviso automático entre\ncolirios consecutivos",
+    s3Desc: "Si intentas aplicar otra gota justo después, se calcula el tiempo restante y se sugiere dejar 5 minutos.",
+    s4Eyebrow: "REGISTRO DE PIO",
+    s4Title: "Valores y gráfica de tendencia",
+    s4Desc: "Registra la PIO de ojo derecho/izquierdo en tus visitas y mira la tendencia como gráfico — fácil de compartir en tu próxima revisión.",
+    s5Eyebrow: "ACCESIBILIDAD",
+    s5Title: "Tamaño de texto ajustable",
+    s5Desc: "Normal, Grande o Muy grande — tres niveles para mantener la app legible incluso con visión borrosa.",
+    contact: "Contacto",
+    privacy: "Política de privacidad",
+    terms: "Términos de servicio"
   },
-  "ru": {
-    "title": "eyeday — напоминания о каплях и журнал",
-    "subtitle": "Напоминания, журнал доз и динамика ВГД — всё в одном",
-    "featuresTitle": "Основные функции",
-    "f1": "Гибкое расписание капель",
-    "f2": "Push-напоминания о времени",
-    "f3": "Журнал доз и календарь",
-    "f4": "Записи ВГД и график динамики",
-    "f5": "Обнаружение конфликтов между каплями",
-    "f6": "Поддержка 9 языков (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
-    "contact": "Контакты",
-    "privacy": "Политика конфиденциальности",
-    "terms": "Условия использования"
+  ru: {
+    title: "eyeday — напоминания о каплях и журнал",
+    subtitle: "Расписание капель, журнал доз и динамика ВГД в одном приложении",
+    s1Eyebrow: "ДОБАВЛЕНИЕ КАПЕЛЬ",
+    s1Title: "Расписание под\nваше назначение",
+    s1Desc: "Имя, число раз в день, интервал и время старта — этого достаточно. Пресеты утро/обед/вечер/перед сном или полностью свой график.",
+    s2Eyebrow: "ЖУРНАЛ",
+    s2Title: "Капли на сегодня — сразу",
+    s2Desc: "Запланированные времена и отметки выполнения на таймлайне, push-напоминания в нужный момент. Доп. дозы и заметки на одном экране.",
+    s3Eyebrow: "КОНФЛИКТ",
+    s3Title: "Автопредупреждение\nмежду каплями",
+    s3Desc: "Если попытаться закапать другие капли сразу следом, оставшееся время рассчитается и предложит сделать паузу 5 минут.",
+    s4Eyebrow: "ЖУРНАЛ ВГД",
+    s4Title: "Значения и график динамики",
+    s4Desc: "Записывайте ВГД правого/левого глаза от визитов в клинику и смотрите динамику в виде столбиков — удобно показать на приёме.",
+    s5Eyebrow: "ДОСТУПНОСТЬ",
+    s5Title: "Регулировка размера шрифта",
+    s5Desc: "Обычный, крупный или самый крупный — три уровня, чтобы интерфейс оставался читаемым даже при размытом зрении.",
+    contact: "Контакты",
+    privacy: "Политика конфиденциальности",
+    terms: "Условия использования"
   },
-  "de": {
-    "title": "eyeday - Augentropfen-Erinnerung & Protokoll",
-    "subtitle": "Tropfen-Erinnerungen, Dosierungsprotokoll und IOD-Verlauf in einer App",
-    "featuresTitle": "Hauptfunktionen",
-    "f1": "Individuelle Tropfen-Pläne",
-    "f2": "Push-Erinnerungen zur Anwendung",
-    "f3": "Protokoll & Kalenderansicht",
-    "f4": "IOD-Einträge und Verlaufsdiagramm",
-    "f5": "Konflikterkennung zwischen Tropfen",
-    "f6": "9 Sprachen unterstützt (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
-    "contact": "Kontakt",
-    "privacy": "Datenschutzerklärung",
-    "terms": "Nutzungsbedingungen"
+  de: {
+    title: "eyeday - Augentropfen-Erinnerung & Protokoll",
+    subtitle: "Tropfenplan, Dosisprotokoll und IOD-Verlauf in einer App",
+    s1Eyebrow: "TROPFEN ANLEGEN",
+    s1Title: "Plan nach Ihrem\nRezept",
+    s1Desc: "Name, tägliche Anzahl, Intervall und Startzeit eingeben — fertig. Voreinstellungen Morgens/Mittags/Abends/Vor Bett oder vollständig individuell.",
+    s2Eyebrow: "PROTOKOLL",
+    s2Title: "Heutige Tropfen auf einen Blick",
+    s2Desc: "Geplante Zeiten und Status auf einer Zeitachse, Push-Erinnerung zur Zeit. Zusätzliche Dosen und Notizen im selben Bildschirm.",
+    s3Eyebrow: "KONFLIKTWARNUNG",
+    s3Title: "Automatischer Hinweis\nzwischen Tropfen",
+    s3Desc: "Wenn Sie direkt nacheinander tropfen wollen, wird die Restzeit berechnet und ein 5-Minuten-Abstand empfohlen.",
+    s4Eyebrow: "IOD-PROTOKOLL",
+    s4Title: "Werte und Verlaufsdiagramm",
+    s4Desc: "Tragen Sie IOD-Werte für rechts/links aus Ihren Kontrollterminen ein und sehen Sie den Verlauf als Balkendiagramm.",
+    s5Eyebrow: "ZUGÄNGLICHKEIT",
+    s5Title: "Schriftgröße einstellbar",
+    s5Desc: "Normal, Groß oder Sehr groß — drei Stufen, damit die App auch bei verschwommener Sicht lesbar bleibt.",
+    contact: "Kontakt",
+    privacy: "Datenschutzerklärung",
+    terms: "Nutzungsbedingungen"
   },
-  "it": {
-    "title": "eyeday - Promemoria collirio e registro",
-    "subtitle": "Promemoria, registro delle dosi e andamento della PIO in un'unica app",
-    "featuresTitle": "Funzioni principali",
-    "f1": "Pianificazione personalizzata del collirio",
-    "f2": "Promemoria con notifiche push",
-    "f3": "Registro delle dosi e calendario",
-    "f4": "Registri PIO e grafico di andamento",
-    "f5": "Rilevamento di conflitti tra colliri",
-    "f6": "9 lingue supportate (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
-    "contact": "Contatti",
-    "privacy": "Informativa sulla privacy",
-    "terms": "Termini di servizio"
+  it: {
+    title: "eyeday - Promemoria collirio e registro",
+    subtitle: "Pianificazione del collirio, registro delle dosi e andamento della PIO in un'unica app",
+    s1Eyebrow: "AGGIUNGI COLLIRIO",
+    s1Title: "Pianifica secondo\nla tua ricetta",
+    s1Desc: "Inserisci nome, numero giornaliero, intervallo e ora di inizio — è tutto. Preset mattina/pranzo/sera/prima di dormire o totalmente personalizzato.",
+    s2Eyebrow: "REGISTRO",
+    s2Title: "Le dosi di oggi a colpo d'occhio",
+    s2Desc: "Orari previsti e stato di completamento sulla timeline, con promemoria push all'ora giusta. Dosi extra e note nello stesso schermo.",
+    s3Eyebrow: "AVVISO CONFLITTI",
+    s3Title: "Avviso automatico tra\ndue colliri ravvicinati",
+    s3Desc: "Se provi ad applicare un altro collirio subito dopo, il tempo rimanente viene calcolato e viene suggerito un intervallo di 5 minuti.",
+    s4Eyebrow: "REGISTRO PIO",
+    s4Title: "Valori e grafico di andamento",
+    s4Desc: "Registra la PIO destra/sinistra dalle visite e visualizza l'andamento come grafico — facile da condividere al prossimo controllo.",
+    s5Eyebrow: "ACCESSIBILITÀ",
+    s5Title: "Dimensione del testo regolabile",
+    s5Desc: "Normale, Grande o Molto grande — tre livelli per mantenere l'app leggibile anche con vista offuscata.",
+    contact: "Contatti",
+    privacy: "Informativa sulla privacy",
+    terms: "Termini di servizio"
   },
-  "pt": {
-    "title": "eyeday - Lembrete de colírio e registro",
-    "subtitle": "Lembretes, registro de doses e tendência de PIO em um só lugar",
-    "featuresTitle": "Principais recursos",
-    "f1": "Agendamento personalizado de colírios",
-    "f2": "Lembretes por notificação push",
-    "f3": "Registro de doses e calendário",
-    "f4": "Registros de PIO e gráfico de tendência",
-    "f5": "Detecção de conflitos entre colírios",
-    "f6": "Suporte a 9 idiomas (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
-    "contact": "Contato",
-    "privacy": "Política de Privacidade",
-    "terms": "Termos de Serviço"
+  pt: {
+    title: "eyeday - Lembrete de colírio e registro",
+    subtitle: "Agendamento de colírios, registro de doses e tendência de PIO em um só app",
+    s1Eyebrow: "ADICIONAR COLÍRIO",
+    s1Title: "Programe conforme\nsua prescrição",
+    s1Desc: "Digite o nome, número diário, intervalo e horário de início — pronto. Presets manhã/almoço/noite/ao deitar ou totalmente personalizado.",
+    s2Eyebrow: "REGISTRO",
+    s2Title: "As doses de hoje em um relance",
+    s2Desc: "Horários previstos e status de conclusão na linha do tempo, com lembretes push na hora certa. Doses extras e anotações na mesma tela.",
+    s3Eyebrow: "ALERTA DE CONFLITO",
+    s3Title: "Aviso automático entre\ncolírios consecutivos",
+    s3Desc: "Se tentar aplicar outro colírio logo em seguida, o tempo restante é calculado e sugerido um intervalo de 5 minutos.",
+    s4Eyebrow: "REGISTRO PIO",
+    s4Title: "Valores e gráfico de tendência",
+    s4Desc: "Registre a PIO direita/esquerda das suas visitas e veja a tendência em gráfico — fácil de mostrar na próxima consulta.",
+    s5Eyebrow: "ACESSIBILIDADE",
+    s5Title: "Tamanho do texto ajustável",
+    s5Desc: "Normal, Grande ou Muito grande — três níveis para manter o app legível mesmo com visão embaçada.",
+    contact: "Contato",
+    privacy: "Política de Privacidade",
+    terms: "Termos de Serviço"
   }
 };
 
-// Mockup-specific localized labels (medicine names, status, IOP titles)
-const MOCK = {
-  ko: { med1: '코솝',     med2: '잘라탄',   completed: '완료',      upcoming: '예정',     bedtime: '자기 전',     iopTitle: '안압 기록',      iopRight: '우안 (OD)',  iopLeft: '좌안 (OS)',   iopRightShort: '우안', iopLeftShort: '좌안' },
-  en: { med1: 'Cosopt',   med2: 'Xalatan',  completed: 'Done',      upcoming: 'Upcoming', bedtime: 'Bedtime',     iopTitle: 'IOP records',    iopRight: 'Right (OD)', iopLeft: 'Left (OS)',   iopRightShort: 'OD',   iopLeftShort: 'OS' },
-  ja: { med1: 'コソプト', med2: 'キサラタン', completed: '完了',     upcoming: '予定',     bedtime: '就寝前',       iopTitle: '眼圧の記録',     iopRight: '右眼 (OD)',  iopLeft: '左眼 (OS)',   iopRightShort: '右',   iopLeftShort: '左' },
-  fr: { med1: 'Cosopt',   med2: 'Xalatan',  completed: 'Fait',      upcoming: 'À venir',  bedtime: 'Coucher',     iopTitle: 'Mesures de TIO', iopRight: 'OD (droit)', iopLeft: 'OS (gauche)', iopRightShort: 'OD',   iopLeftShort: 'OS' },
-  es: { med1: 'Cosopt',   med2: 'Xalatan',  completed: 'Hecho',     upcoming: 'Pendiente',bedtime: 'Al dormir',   iopTitle: 'Registros PIO',  iopRight: 'OD (derecho)',iopLeft: 'OS (izquierdo)', iopRightShort: 'OD', iopLeftShort: 'OS' },
-  ru: { med1: 'Косопт',   med2: 'Ксалатан', completed: 'Готово',    upcoming: 'Скоро',    bedtime: 'Перед сном',  iopTitle: 'Записи ВГД',     iopRight: 'Правый (OD)',iopLeft: 'Левый (OS)',  iopRightShort: 'OD',   iopLeftShort: 'OS' },
-  de: { med1: 'Cosopt',   med2: 'Xalatan',  completed: 'Erledigt',  upcoming: 'Geplant',  bedtime: 'Vor Bett',    iopTitle: 'IOD-Einträge',   iopRight: 'Rechts (OD)',iopLeft: 'Links (OS)',  iopRightShort: 'OD',   iopLeftShort: 'OS' },
-  it: { med1: 'Cosopt',   med2: 'Xalatan',  completed: 'Fatto',     upcoming: 'In arrivo',bedtime: 'Prima di dormire', iopTitle: 'Registri PIO', iopRight: 'OD (destro)', iopLeft: 'OS (sinistro)', iopRightShort: 'OD', iopLeftShort: 'OS' },
-  pt: { med1: 'Cosopt',   med2: 'Xalatan',  completed: 'Feito',     upcoming: 'A seguir', bedtime: 'Ao deitar',   iopTitle: 'Registros PIO',  iopRight: 'Direito (OD)',iopLeft: 'Esquerdo (OS)',iopRightShort: 'OD',   iopLeftShort: 'OS' },
-};
-
-const BADGES = {"ko": "ko-kr", "en": "en-us", "ja": "ja-jp", "fr": "fr-fr", "es": "es-es", "ru": "ru-ru", "de": "de-de", "it": "it-it", "pt": "pt-br"};
-const LANGS = ["ko", "en", "ja", "fr", "es", "ru", "de", "it", "pt"];
+const BADGES = {"ko":"ko-kr","en":"en-us","ja":"ja-jp","fr":"fr-fr","es":"es-es","ru":"ru-ru","de":"de-de","it":"it-it","pt":"pt-br"};
+const LANGS = ["ko","en","ja","fr","es","ru","de","it","pt"];
 
 function pickInitialLang() {
   const saved = localStorage.getItem('eyeday_lang');
@@ -766,16 +1332,22 @@ function pickInitialLang() {
 
 function applyLang(lang) {
   const dict = UI[lang] || UI.ko;
-  const mockDict = MOCK[lang] || MOCK.ko;
   document.documentElement.lang = lang;
   document.title = dict.title;
   document.querySelectorAll('[data-i]').forEach((el) => {
     const k = el.getAttribute('data-i');
-    if (dict[k] != null) el.textContent = dict[k];
-  });
-  document.querySelectorAll('[data-mock]').forEach((el) => {
-    const k = el.getAttribute('data-mock');
-    if (mockDict[k] != null) el.textContent = mockDict[k];
+    if (dict[k] != null) {
+      // Preserve newlines in headings
+      if (dict[k].includes('\n')) {
+        el.innerHTML = '';
+        dict[k].split('\n').forEach((line, i) => {
+          if (i > 0) el.appendChild(document.createElement('br'));
+          el.appendChild(document.createTextNode(line));
+        });
+      } else {
+        el.textContent = dict[k];
+      }
+    }
   });
   const bl = BADGES[lang] || 'ko-kr';
   const img = document.getElementById('badgeImg');
