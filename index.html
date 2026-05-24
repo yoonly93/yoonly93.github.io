@@ -446,27 +446,48 @@
     }
     .chip-row-2 { margin-top: 6px; }
     .time-wheel {
-      background: #F4F4F5;
+      background: #FFFFFF;
+      border: 1px solid #E4E4E7;
       border-radius: 10px;
-      height: 78px;
+      height: 154px;
       position: relative;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 20px;
+      gap: 22px;
+      padding: 0 18px;
     }
-    .time-wheel::before, .time-wheel::after {
-      content: '';
-      position: absolute; left: 16px; right: 16px;
-      height: 1px;
-      background: #E4E4E7;
+    .wheel-bar {
+      position: absolute;
+      left: 8px; right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 28px;
+      background: #F4F4F5;
+      border-radius: 6px;
+      z-index: 0;
     }
-    .time-wheel::before { top: 28px; }
-    .time-wheel::after  { bottom: 28px; }
-    .wheel-col { display: flex; flex-direction: column; align-items: center; line-height: 22px; }
-    .wheel-col span { font-size: 12px; color: #A1A1AA; }
-    .wheel-col span.mid { color: #27272A; font-weight: 700; font-size: 14px; }
+    .wheel-col {
+      display: flex; flex-direction: column;
+      align-items: center;
+      line-height: 22px;
+      z-index: 1;
+      position: relative;
+    }
+    .wheel-col span {
+      font-size: 12px;
+      color: #C7C7CC;
+      height: 22px;
+      display: block;
+    }
+    .wheel-col span.mid {
+      color: #27272A;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .wheel-col.ampm { min-width: 26px; }
+    .wheel-col.num  { min-width: 22px; }
     .primary-btn {
       margin: 8px 16px 14px;
       background: #3B82F6;
@@ -808,8 +829,23 @@
               <div class="field">
                 <div class="field-label">투약 시작 시간</div>
                 <div class="time-wheel">
-                  <div class="wheel-col"><span>5</span><span class="mid">6</span><span>7</span></div>
-                  <div class="wheel-col"><span>27</span><span class="mid">28</span><span>29</span></div>
+                  <div class="wheel-bar"></div>
+                  <div class="wheel-col ampm">
+                    <span></span><span></span><span></span>
+                    <span class="mid">오전</span>
+                    <span>오후</span>
+                    <span></span><span></span>
+                  </div>
+                  <div class="wheel-col num">
+                    <span>5</span><span>6</span><span>7</span>
+                    <span class="mid">8</span>
+                    <span>9</span><span>10</span><span>11</span>
+                  </div>
+                  <div class="wheel-col num">
+                    <span>27</span><span>28</span><span>29</span>
+                    <span class="mid">30</span>
+                    <span>31</span><span>32</span><span>33</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -919,8 +955,9 @@
             </div>
 
             <div class="pill-row">
-              <span class="pill"><svg class="ic"><use href="#i-plus"/></svg>추가 점안</span>
               <span class="pill"><svg class="ic"><use href="#i-plus"/></svg>메모</span>
+              <span class="pill"><svg class="ic"><use href="#i-plus"/></svg>추가 점안</span>
+              <span class="pill"><svg class="ic"><use href="#i-plus"/></svg>안압 기록</span>
             </div>
 
             <div class="fab"><svg class="ic"><use href="#i-plus"/></svg></div>
@@ -1009,20 +1046,21 @@
                 <div class="tl-check done blue"><svg class="ic"><use href="#i-check"/></svg></div>
               </div>
             </div>
+          </div>
 
-            <div class="home-dim"></div>
-            <div class="conflict-sheet">
-              <div class="grabber"></div>
-              <h3>안약 간격 주의</h3>
-              <div class="timer-row">
-                <svg class="ic ic-md"><use href="#i-clock"/></svg>
-                <span class="timer-text">4:56</span>
-              </div>
-              <p data-mock-tpl="{med1}을(를) 넣은 지 얼마 되지 않았습니다&#10;여러 안약을 넣을 경우 5분 간격을 두세요"></p>
-              <div class="sheet-btns">
-                <div class="sheet-btn ghost">알겠어요</div>
-                <div class="sheet-btn primary">지금 점안하기</div>
-              </div>
+          <!-- Overlay covers status bar + notch area too -->
+          <div class="home-dim"></div>
+          <div class="conflict-sheet">
+            <div class="grabber"></div>
+            <h3>안약 간격 주의</h3>
+            <div class="timer-row">
+              <svg class="ic ic-md"><use href="#i-clock"/></svg>
+              <span class="timer-text">4:56</span>
+            </div>
+            <p data-mock-tpl="{med1}을(를) 넣은 지 얼마 되지 않았습니다&#10;여러 안약을 넣을 경우 5분 간격을 두세요"></p>
+            <div class="sheet-btns">
+              <div class="sheet-btn ghost">알겠어요</div>
+              <div class="sheet-btn primary">지금 점안하기</div>
             </div>
           </div>
         </div>
@@ -1202,10 +1240,10 @@ const UI = {
     s1Desc: "약 이름, 횟수, 투약 간격, 시작 시간만 입력하세요\n\n하루 3회·4시간 간격,\n하루 4회·3시간 간격 등\n복잡한 점안 스케줄도 자동 계산됩니다\n\n안구건조증, 알레르기, 포도막염, 각막궤양 등\n다양한 안과 질환 관리에 활용할 수 있습니다",
     s2Eyebrow: "점안 기록",
     s2Title: "오늘 점안 한눈에",
-    s2Desc: "예정 시각과 완료 여부를 타임라인으로 보여주고, 점안 시간이 되면 푸시 알림으로 알려줍니다. 추가 점안과 메모도 한 화면에서.",
+    s2Desc: "점안 예정 시간과 완료 여부를\n타임라인으로 확인하세요\n\n메모 기능을 통해 찜질·세안·안연고 등\n함께 받은 처치 내용도 기록해보세요",
     s3Eyebrow: "충돌 감지",
     s3Title: "안약 간 최소 간격\n자동 경고",
-    s3Desc: "여러 안약을 연달아 넣으려고 하면 남은 시간을 계산해 5분 간격을 두라는 안내가 뜹니다. 의사 권장 간격을 지키도록 도와줍니다.",
+    s3Desc: "여러 안약 점안 시\n5분 간격을 자동 계산해 안내합니다\n\n권장 점안 간격을 쉽게 지킬 수 있습니다",
     s4Eyebrow: "안압 기록",
     s4Title: "안압 추이를\n선 그래프로",
     s4Desc: "병원에서 측정한 좌안(L)·우안(R) 안압을 기록하면 한 화면에 추세 그래프와 최근 기록을 함께 보여줍니다.",
