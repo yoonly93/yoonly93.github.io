@@ -8,124 +8,340 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #FAFAFA;
+      background: linear-gradient(135deg, #DBEAFE 0%, #F8FAFC 50%, #EFF6FF 100%);
+      min-height: 100vh;
       color: #1E293B;
-      padding: 32px 20px 64px;
+      padding: 32px 16px 64px;
       line-height: 1.6;
     }
-    .wrap { max-width: 720px; margin: 0 auto; }
-    .top {
-      display: flex; justify-content: space-between; align-items: center;
+    .container { max-width: 760px; margin: 0 auto; }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #3B82F6;
       margin-bottom: 24px;
     }
-    .back { font-size: 14px; color: #3B82F6; text-decoration: none; }
-    .lang-switch {
-      font-family: inherit;
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
       background: #fff;
-      border: 1px solid #E2E8F0;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 13px;
-      color: #334155;
-      cursor: pointer;
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      margin-bottom: 20px;
     }
-    h1 { font-size: 24px; font-weight: 700; margin-bottom: 24px; color: #3B82F6; }
-    .body {
+    .lang-select { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .lang-select label { font-size: 13px; color: #475569; }
+    .lang-select select {
+      font-family: inherit;
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #E2E8F0;
+      background: #fff;
+      color: #1E293B;
+    }
+    article {
       background: #fff;
       border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-      white-space: pre-wrap;
-      font-size: 14px;
-      color: #334155;
+      padding: 28px 28px 32px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
     }
+    article h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1E293B;
+      margin-top: 22px;
+      margin-bottom: 8px;
+    }
+    article h2:first-child { margin-top: 0; }
+    article p { font-size: 14.5px; color: #334155; margin-bottom: 8px; }
+    article ul { padding-left: 20px; margin-bottom: 8px; }
+    article li { font-size: 14.5px; color: #334155; margin-bottom: 4px; }
+    article .effective {
+      font-size: 13px;
+      color: #64748B;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #F1F5F9;
+    }
+    a { color: #3B82F6; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <a class="back" href="/" id="backLink">← Home</a>
-      <select class="lang-switch" id="langSwitch" aria-label="Language">
-      <option value="ko">한국어</option>
-      <option value="en">English</option>
-      <option value="ja">日本語</option>
-      <option value="fr">Français</option>
-      <option value="es">Español</option>
-      <option value="ru">Русский</option>
-      <option value="de">Deutsch</option>
-      <option value="it">Italiano</option>
-      <option value="pt">Português</option>
-      </select>
+  <div class="container">
+    <h1 id="title">Terms of Service</h1>
+
+    <div class="controls">
+      <div class="lang-select">
+        <label id="langLabel" for="langSwitch">Language</label>
+        <select id="langSwitch" aria-label="Language">
+          <option value="en">English</option>
+          <option value="ko">한국어</option>
+          <option value="ja">日本語</option>
+          <option value="fr">Français</option>
+          <option value="es">Español</option>
+          <option value="ru">Русский</option>
+          <option value="de">Deutsch</option>
+          <option value="it">Italiano</option>
+          <option value="pt">Português</option>
+        </select>
+      </div>
     </div>
-    <h1 id="title"></h1>
-    <div class="body" id="body"></div>
+
+    <article id="content"></article>
   </div>
 <script>
+const UI = {
+  ko: { title: "서비스 이용약관", langLabel: "언어" },
+  en: { title: "Terms of Service", langLabel: "Language" },
+  ja: { title: "利用規約", langLabel: "言語" },
+  fr: { title: "Conditions d'utilisation", langLabel: "Langue" },
+  es: { title: "Términos de Servicio", langLabel: "Idioma" },
+  ru: { title: "Условия использования", langLabel: "Язык" },
+  de: { title: "Nutzungsbedingungen", langLabel: "Sprache" },
+  it: { title: "Termini di servizio", langLabel: "Lingua" },
+  pt: { title: "Termos de Serviço", langLabel: "Idioma" },
+};
+
 const TERMS = {
-  "ko": {
-    "title": "서비스 이용약관",
-    "body": "제1조 (목적)\n이 약관은 Eyeday(이하 \"앱\")가 제공하는 안약 알림 및 점안 기록 관리 서비스(이하 \"서비스\")의 이용 조건 및 절차를 정함을 목적으로 합니다.\n\n제2조 (서비스 내용)\n앱은 다음 기능을 제공합니다.\n- 안약 등록 및 점안 시간 알림\n- 점안 기록 및 통계 관리\n- 부가 기능 (다국어 지원, 글씨 크기 설정 등)\n\n제3조 (이용자의 의무)\n- 본인의 정확한 정보를 입력해야 합니다.\n- 앱은 의료 진단·처방을 대체하지 않습니다. 의학적 판단은 의료 전문가와 상의하시기 바랍니다.\n\n제4조 (책임 제한)\n앱은 알림 누락, 기기 오류, 네트워크 장애 등으로 인한 손해에 대해 법령이 허용하는 범위 내에서 책임을 지지 않습니다.\n\n제5조 (약관 변경)\n약관이 변경될 경우 앱 내 공지 또는 본 문서를 통해 사전 안내합니다.\n\n시행일: 2026년 5월 18일",
-    "back": "← 홈으로"
+  ko: {
+    effective: "시행일: 2026년 5월 18일",
+    html: `
+      <h2>제1조 (목적)</h2>
+      <p>이 약관은 Eyeday(이하 "앱")가 제공하는 안약 알림 및 점안 기록 관리 서비스(이하 "서비스")의 이용 조건 및 절차를 정함을 목적으로 합니다.</p>
+      <h2>제2조 (서비스 내용)</h2>
+      <p>앱은 다음 기능을 제공합니다.</p>
+      <ul>
+        <li>안약 등록 및 점안 시간 알림</li>
+        <li>점안 기록 및 통계 관리</li>
+        <li>부가 기능 (다국어 지원, 글씨 크기 설정 등)</li>
+      </ul>
+      <h2>제3조 (이용자의 의무)</h2>
+      <ul>
+        <li>본인의 정확한 정보를 입력해야 합니다.</li>
+        <li>앱은 의료 진단·처방을 대체하지 않습니다. 의학적 판단은 의료 전문가와 상의하시기 바랍니다.</li>
+      </ul>
+      <h2>제4조 (책임 제한)</h2>
+      <p>앱은 알림 누락, 기기 오류, 네트워크 장애 등으로 인한 손해에 대해 법령이 허용하는 범위 내에서 책임을 지지 않습니다.</p>
+      <h2>제5조 (약관 변경)</h2>
+      <p>약관이 변경될 경우 앱 내 공지 또는 본 문서를 통해 사전 안내합니다.</p>
+    `
   },
-  "en": {
-    "title": "Terms of Service",
-    "body": "Article 1 (Purpose)\nThese Terms set out the conditions and procedures for using the eye drop reminder and dosing record service (hereinafter \"Service\") provided by Eyeday (hereinafter \"App\").\n\nArticle 2 (Service Content)\nThe App provides the following features.\n- Eye drop registration and dosing time reminders\n- Dosing records and statistics\n- Additional features (multi-language support, font size settings, etc.)\n\nArticle 3 (User Obligations)\n- You must enter accurate information.\n- The App does not replace medical diagnosis or prescription. Please consult a medical professional for medical decisions.\n\nArticle 4 (Limitation of Liability)\nThe App is not liable, to the extent permitted by law, for damages caused by missed notifications, device errors, network failures, etc.\n\nArticle 5 (Changes to Terms)\nAny changes to these Terms will be announced in advance through the App or this document.\n\nEffective date: May 18, 2026",
-    "back": "← Home"
+  en: {
+    effective: "Effective date: May 18, 2026",
+    html: `
+      <h2>Article 1 (Purpose)</h2>
+      <p>These Terms set out the conditions and procedures for using the eye drop reminder and dosing record service (hereinafter "Service") provided by Eyeday (hereinafter "App").</p>
+      <h2>Article 2 (Service Content)</h2>
+      <p>The App provides the following features.</p>
+      <ul>
+        <li>Eye drop registration and dosing time reminders</li>
+        <li>Dosing records and statistics</li>
+        <li>Additional features (multi-language support, font size settings, etc.)</li>
+      </ul>
+      <h2>Article 3 (User Obligations)</h2>
+      <ul>
+        <li>You must enter accurate information.</li>
+        <li>The App does not replace medical diagnosis or prescription. Please consult a medical professional for medical decisions.</li>
+      </ul>
+      <h2>Article 4 (Limitation of Liability)</h2>
+      <p>The App is not liable, to the extent permitted by law, for damages caused by missed notifications, device errors, network failures, etc.</p>
+      <h2>Article 5 (Changes to Terms)</h2>
+      <p>Any changes to these Terms will be announced in advance through the App or this document.</p>
+    `
   },
-  "ja": {
-    "title": "利用規約",
-    "body": "第1条 (目的)\n本規約は、Eyeday(以下「アプリ」)が提供する目薬リマインダーおよび点眼記録管理サービス(以下「サービス」)の利用条件および手続きを定めることを目的とします。\n\n第2条 (サービス内容)\nアプリは以下の機能を提供します。\n- 目薬の登録および点眼時間のリマインダー\n- 点眼記録および統計管理\n- 付加機能 (多言語対応、文字サイズ設定など)\n\n第3条 (利用者の義務)\n- 正確な情報を入力する必要があります。\n- 本アプリは医療診断・処方を代替するものではありません。医療判断は医療専門家にご相談ください。\n\n第4条 (責任の制限)\n通知の漏れ、機器の不具合、ネットワーク障害等による損害について、法令で許容される範囲内でアプリは責任を負いません。\n\n第5条 (規約の変更)\n規約変更の場合、アプリ内告知または本書面で事前にお知らせします。\n\n施行日: 2026年5月18日",
-    "back": "← ホームへ"
+  ja: {
+    effective: "施行日: 2026年5月18日",
+    html: `
+      <h2>第1条 (目的)</h2>
+      <p>本規約は、Eyeday(以下「アプリ」)が提供する目薬リマインダーおよび点眼記録管理サービス(以下「サービス」)の利用条件および手続きを定めることを目的とします。</p>
+      <h2>第2条 (サービス内容)</h2>
+      <p>アプリは以下の機能を提供します。</p>
+      <ul>
+        <li>目薬の登録および点眼時間のリマインダー</li>
+        <li>点眼記録および統計管理</li>
+        <li>付加機能 (多言語対応、文字サイズ設定など)</li>
+      </ul>
+      <h2>第3条 (利用者の義務)</h2>
+      <ul>
+        <li>正確な情報を入力する必要があります。</li>
+        <li>本アプリは医療診断・処方を代替するものではありません。医療判断は医療専門家にご相談ください。</li>
+      </ul>
+      <h2>第4条 (責任の制限)</h2>
+      <p>通知の漏れ、機器の不具合、ネットワーク障害等による損害について、法令で許容される範囲内でアプリは責任を負いません。</p>
+      <h2>第5条 (規約の変更)</h2>
+      <p>規約変更の場合、アプリ内告知または本書面で事前にお知らせします。</p>
+    `
   },
-  "fr": {
-    "title": "Conditions d'utilisation",
-    "body": "Article 1 (Objet)\nLes présentes conditions définissent les modalités d'utilisation du service de rappel de gouttes et de suivi des doses (ci-après \"Service\") fourni par Eyeday (ci-après \"l'Application\").\n\nArticle 2 (Contenu du service)\nL'Application fournit les fonctionnalités suivantes.\n- Enregistrement des collyres et rappels d'instillation\n- Suivi et statistiques des doses\n- Fonctionnalités supplémentaires (multilingue, taille de police, etc.)\n\nArticle 3 (Obligations de l'utilisateur)\n- Vous devez saisir des informations exactes.\n- L'Application ne remplace ni le diagnostic ni la prescription médicale. Consultez un professionnel de santé pour toute décision médicale.\n\nArticle 4 (Limitation de responsabilité)\nDans la limite autorisée par la loi, l'Application n'est pas responsable des dommages causés par des notifications manquées, erreurs d'appareil, défaillances réseau, etc.\n\nArticle 5 (Modification des conditions)\nToute modification sera annoncée préalablement via l'Application ou ce document.\n\nDate d'entrée en vigueur : 18 mai 2026",
-    "back": "← Accueil"
+  fr: {
+    effective: "Date d'entrée en vigueur : 18 mai 2026",
+    html: `
+      <h2>Article 1 (Objet)</h2>
+      <p>Les présentes conditions définissent les modalités d'utilisation du service de rappel de gouttes et de suivi des doses (ci-après "Service") fourni par Eyeday (ci-après "l'Application").</p>
+      <h2>Article 2 (Contenu du service)</h2>
+      <p>L'Application fournit les fonctionnalités suivantes.</p>
+      <ul>
+        <li>Enregistrement des collyres et rappels d'instillation</li>
+        <li>Suivi et statistiques des doses</li>
+        <li>Fonctionnalités supplémentaires (multilingue, taille de police, etc.)</li>
+      </ul>
+      <h2>Article 3 (Obligations de l'utilisateur)</h2>
+      <ul>
+        <li>Vous devez saisir des informations exactes.</li>
+        <li>L'Application ne remplace ni le diagnostic ni la prescription médicale. Consultez un professionnel de santé pour toute décision médicale.</li>
+      </ul>
+      <h2>Article 4 (Limitation de responsabilité)</h2>
+      <p>Dans la limite autorisée par la loi, l'Application n'est pas responsable des dommages causés par des notifications manquées, erreurs d'appareil, défaillances réseau, etc.</p>
+      <h2>Article 5 (Modification des conditions)</h2>
+      <p>Toute modification sera annoncée préalablement via l'Application ou ce document.</p>
+    `
   },
-  "es": {
-    "title": "Términos de servicio",
-    "body": "Artículo 1 (Objeto)\nEstos Términos establecen las condiciones y procedimientos para usar el servicio de recordatorios de gotas y registro de dosis (en adelante, \"Servicio\") proporcionado por Eyeday (en adelante, \"App\").\n\nArtículo 2 (Contenido del servicio)\nLa App ofrece las siguientes funciones.\n- Registro de gotas y recordatorios de aplicación\n- Historial y estadísticas de dosis\n- Funciones adicionales (multilenguaje, tamaño de texto, etc.)\n\nArtículo 3 (Obligaciones del usuario)\n- Debes introducir información precisa.\n- La App no reemplaza el diagnóstico ni la prescripción médica. Para decisiones médicas, consulta a un profesional sanitario.\n\nArtículo 4 (Limitación de responsabilidad)\nEn la medida permitida por la ley, la App no se hace responsable de daños causados por notificaciones perdidas, errores del dispositivo, fallos de red, etc.\n\nArtículo 5 (Modificación de los Términos)\nCualquier cambio se anunciará previamente a través de la App o este documento.\n\nFecha de entrada en vigor: 18 de mayo de 2026",
-    "back": "← Inicio"
+  es: {
+    effective: "Fecha de entrada en vigor: 18 de mayo de 2026",
+    html: `
+      <h2>Artículo 1 (Objeto)</h2>
+      <p>Estos Términos establecen las condiciones y procedimientos para usar el servicio de recordatorios de gotas y registro de dosis (en adelante, "Servicio") proporcionado por Eyeday (en adelante, "App").</p>
+      <h2>Artículo 2 (Contenido del servicio)</h2>
+      <p>La App ofrece las siguientes funciones.</p>
+      <ul>
+        <li>Registro de gotas y recordatorios de aplicación</li>
+        <li>Historial y estadísticas de dosis</li>
+        <li>Funciones adicionales (multilenguaje, tamaño de texto, etc.)</li>
+      </ul>
+      <h2>Artículo 3 (Obligaciones del usuario)</h2>
+      <ul>
+        <li>Debes introducir información precisa.</li>
+        <li>La App no reemplaza el diagnóstico ni la prescripción médica. Para decisiones médicas, consulta a un profesional sanitario.</li>
+      </ul>
+      <h2>Artículo 4 (Limitación de responsabilidad)</h2>
+      <p>En la medida permitida por la ley, la App no se hace responsable de daños causados por notificaciones perdidas, errores del dispositivo, fallos de red, etc.</p>
+      <h2>Artículo 5 (Modificación de los Términos)</h2>
+      <p>Cualquier cambio se anunciará previamente a través de la App o este documento.</p>
+    `
   },
-  "ru": {
-    "title": "Условия использования",
-    "body": "Статья 1 (Назначение)\nНастоящие Условия определяют порядок и процедуры использования сервиса напоминаний о каплях и журнала закапывания (далее — «Сервис»), предоставляемого приложением Eyeday (далее — «Приложение»).\n\nСтатья 2 (Содержание сервиса)\nПриложение предоставляет следующие функции.\n- Добавление капель и напоминания о времени закапывания\n- Журнал и статистика закапывания\n- Дополнительные функции (мультиязычность, размер шрифта и др.)\n\nСтатья 3 (Обязанности пользователя)\n- Вы должны вводить точную информацию.\n- Приложение не заменяет медицинский диагноз и назначение. По медицинским вопросам обращайтесь к медицинскому специалисту.\n\nСтатья 4 (Ограничение ответственности)\nВ пределах, допустимых законом, Приложение не несёт ответственности за ущерб, вызванный пропущенными уведомлениями, ошибками устройства, сбоями сети и т. п.\n\nСтатья 5 (Изменение условий)\nОб изменениях условий мы сообщим заранее через Приложение или этот документ.\n\nДата вступления в силу: 18 мая 2026 г.",
-    "back": "← На главную"
+  ru: {
+    effective: "Дата вступления в силу: 18 мая 2026 г.",
+    html: `
+      <h2>Статья 1 (Назначение)</h2>
+      <p>Настоящие Условия определяют порядок и процедуры использования сервиса напоминаний о каплях и журнала закапывания (далее — «Сервис»), предоставляемого приложением Eyeday (далее — «Приложение»).</p>
+      <h2>Статья 2 (Содержание сервиса)</h2>
+      <p>Приложение предоставляет следующие функции.</p>
+      <ul>
+        <li>Добавление капель и напоминания о времени закапывания</li>
+        <li>Журнал и статистика закапывания</li>
+        <li>Дополнительные функции (мультиязычность, размер шрифта и др.)</li>
+      </ul>
+      <h2>Статья 3 (Обязанности пользователя)</h2>
+      <ul>
+        <li>Вы должны вводить точную информацию.</li>
+        <li>Приложение не заменяет медицинский диагноз и назначение. По медицинским вопросам обращайтесь к медицинскому специалисту.</li>
+      </ul>
+      <h2>Статья 4 (Ограничение ответственности)</h2>
+      <p>В пределах, допустимых законом, Приложение не несёт ответственности за ущерб, вызванный пропущенными уведомлениями, ошибками устройства, сбоями сети и т. п.</p>
+      <h2>Статья 5 (Изменение условий)</h2>
+      <p>Об изменениях условий мы сообщим заранее через Приложение или этот документ.</p>
+    `
   },
-  "de": {
-    "title": "Nutzungsbedingungen",
-    "body": "Artikel 1 (Zweck)\nDiese Nutzungsbedingungen regeln die Bedingungen und Verfahren zur Nutzung des Dienstes zur Erinnerung an Augentropfen und Protokollierung von Dosen (nachfolgend «Dienst»), bereitgestellt von Eyeday (nachfolgend «App»).\n\nArtikel 2 (Inhalt des Dienstes)\nDie App bietet folgende Funktionen.\n- Registrierung von Augentropfen und Erinnerungen zur Dosierungszeit\n- Dosierungsprotokoll und Statistiken\n- Weitere Funktionen (Mehrsprachigkeit, Schriftgröße usw.)\n\nArtikel 3 (Nutzerpflichten)\n- Du musst korrekte Angaben machen.\n- Die App ersetzt keine ärztliche Diagnose oder Verschreibung. Bei medizinischen Entscheidungen wende dich bitte an Fachpersonal.\n\nArtikel 4 (Haftungsbeschränkung)\nIm gesetzlich zulässigen Rahmen haftet die App nicht für Schäden durch verpasste Benachrichtigungen, Gerätefehler, Netzwerkstörungen usw.\n\nArtikel 5 (Änderungen der Bedingungen)\nÄnderungen werden vorab in der App oder über dieses Dokument angekündigt.\n\nGültig ab: 18. Mai 2026",
-    "back": "← Startseite"
+  de: {
+    effective: "Gültig ab: 18. Mai 2026",
+    html: `
+      <h2>Artikel 1 (Zweck)</h2>
+      <p>Diese Nutzungsbedingungen regeln die Bedingungen und Verfahren zur Nutzung des Dienstes zur Erinnerung an Augentropfen und Protokollierung von Dosen (nachfolgend «Dienst»), bereitgestellt von Eyeday (nachfolgend «App»).</p>
+      <h2>Artikel 2 (Inhalt des Dienstes)</h2>
+      <p>Die App bietet folgende Funktionen.</p>
+      <ul>
+        <li>Registrierung von Augentropfen und Erinnerungen zur Dosierungszeit</li>
+        <li>Dosierungsprotokoll und Statistiken</li>
+        <li>Weitere Funktionen (Mehrsprachigkeit, Schriftgröße usw.)</li>
+      </ul>
+      <h2>Artikel 3 (Nutzerpflichten)</h2>
+      <ul>
+        <li>Du musst korrekte Angaben machen.</li>
+        <li>Die App ersetzt keine ärztliche Diagnose oder Verschreibung. Bei medizinischen Entscheidungen wende dich bitte an Fachpersonal.</li>
+      </ul>
+      <h2>Artikel 4 (Haftungsbeschränkung)</h2>
+      <p>Im gesetzlich zulässigen Rahmen haftet die App nicht für Schäden durch verpasste Benachrichtigungen, Gerätefehler, Netzwerkstörungen usw.</p>
+      <h2>Artikel 5 (Änderungen der Bedingungen)</h2>
+      <p>Änderungen werden vorab in der App oder über dieses Dokument angekündigt.</p>
+    `
   },
-  "it": {
-    "title": "Termini di servizio",
-    "body": "Articolo 1 (Oggetto)\nI presenti Termini definiscono le condizioni e le procedure per l'uso del servizio di promemoria dei colliri e di registrazione delle dosi (di seguito «Servizio»), fornito da Eyeday (di seguito «App»).\n\nArticolo 2 (Contenuto del servizio)\nL'App offre le seguenti funzioni.\n- Registrazione dei colliri e promemoria dell'orario di applicazione\n- Registro e statistiche delle dosi\n- Funzioni aggiuntive (multilingua, dimensione del testo, ecc.)\n\nArticolo 3 (Obblighi dell'utente)\n- Devi inserire informazioni accurate.\n- L'App non sostituisce diagnosi o prescrizioni mediche. Per decisioni mediche rivolgiti a un professionista sanitario.\n\nArticolo 4 (Limitazione di responsabilità)\nNei limiti consentiti dalla legge, l'App non è responsabile per danni causati da notifiche mancate, errori del dispositivo, problemi di rete, ecc.\n\nArticolo 5 (Modifiche ai Termini)\nEventuali modifiche saranno comunicate in anticipo tramite l'App o questo documento.\n\nData di entrata in vigore: 18 maggio 2026",
-    "back": "← Home"
+  it: {
+    effective: "Data di entrata in vigore: 18 maggio 2026",
+    html: `
+      <h2>Articolo 1 (Oggetto)</h2>
+      <p>I presenti Termini definiscono le condizioni e le procedure per l'uso del servizio di promemoria dei colliri e di registrazione delle dosi (di seguito «Servizio»), fornito da Eyeday (di seguito «App»).</p>
+      <h2>Articolo 2 (Contenuto del servizio)</h2>
+      <p>L'App offre le seguenti funzioni.</p>
+      <ul>
+        <li>Registrazione dei colliri e promemoria dell'orario di applicazione</li>
+        <li>Registro e statistiche delle dosi</li>
+        <li>Funzioni aggiuntive (multilingua, dimensione del testo, ecc.)</li>
+      </ul>
+      <h2>Articolo 3 (Obblighi dell'utente)</h2>
+      <ul>
+        <li>Devi inserire informazioni accurate.</li>
+        <li>L'App non sostituisce diagnosi o prescrizioni mediche. Per decisioni mediche rivolgiti a un professionista sanitario.</li>
+      </ul>
+      <h2>Articolo 4 (Limitazione di responsabilità)</h2>
+      <p>Nei limiti consentiti dalla legge, l'App non è responsabile per danni causati da notifiche mancate, errori del dispositivo, problemi di rete, ecc.</p>
+      <h2>Articolo 5 (Modifiche ai Termini)</h2>
+      <p>Eventuali modifiche saranno comunicate in anticipo tramite l'App o questo documento.</p>
+    `
   },
-  "pt": {
-    "title": "Termos de Serviço",
-    "body": "Artigo 1 (Objeto)\nEstes Termos estabelecem as condições e procedimentos para uso do serviço de lembretes de colírios e registro de doses (doravante «Serviço»), fornecido pela Eyeday (doravante «App»).\n\nArtigo 2 (Conteúdo do serviço)\nO App oferece as seguintes funções.\n- Cadastro de colírios e lembretes de horário\n- Registros e estatísticas de doses\n- Funções adicionais (multilíngue, tamanho do texto etc.)\n\nArtigo 3 (Obrigações do usuário)\n- Você deve inserir informações precisas.\n- O App não substitui diagnóstico nem prescrição médica. Para decisões médicas, consulte um profissional de saúde.\n\nArtigo 4 (Limitação de responsabilidade)\nNos limites permitidos por lei, o App não se responsabiliza por danos causados por notificações perdidas, erros do dispositivo, falhas de rede etc.\n\nArtigo 5 (Alterações nos Termos)\nQualquer alteração será anunciada previamente pelo App ou por este documento.\n\nData de vigência: 18 de maio de 2026",
-    "back": "← Início"
+  pt: {
+    effective: "Data de vigência: 18 de maio de 2026",
+    html: `
+      <h2>Artigo 1 (Objeto)</h2>
+      <p>Estes Termos estabelecem as condições e procedimentos para uso do serviço de lembretes de colírios e registro de doses (doravante «Serviço»), fornecido pela Eyeday (doravante «App»).</p>
+      <h2>Artigo 2 (Conteúdo do serviço)</h2>
+      <p>O App oferece as seguintes funções.</p>
+      <ul>
+        <li>Cadastro de colírios e lembretes de horário</li>
+        <li>Registros e estatísticas de doses</li>
+        <li>Funções adicionais (multilíngue, tamanho do texto etc.)</li>
+      </ul>
+      <h2>Artigo 3 (Obrigações do usuário)</h2>
+      <ul>
+        <li>Você deve inserir informações precisas.</li>
+        <li>O App não substitui diagnóstico nem prescrição médica. Para decisões médicas, consulte um profissional de saúde.</li>
+      </ul>
+      <h2>Artigo 4 (Limitação de responsabilidade)</h2>
+      <p>Nos limites permitidos por lei, o App não se responsabiliza por danos causados por notificações perdidas, erros do dispositivo, falhas de rede etc.</p>
+      <h2>Artigo 5 (Alterações nos Termos)</h2>
+      <p>Qualquer alteração será anunciada previamente pelo App ou por este documento.</p>
+    `
   }
 };
-const LANGS = ["ko", "en", "ja", "fr", "es", "ru", "de", "it", "pt"];
+
+const LANGS = ["en", "ko", "ja", "fr", "es", "ru", "de", "it", "pt"];
+
 function pickInitialLang() {
+  const params = new URLSearchParams(location.search);
+  const param = params.get('lang');
+  if (param && LANGS.includes(param)) return param;
   const saved = localStorage.getItem('eyeday_lang');
   if (saved && LANGS.includes(saved)) return saved;
-  const nav = (navigator.language || 'ko').toLowerCase();
+  const nav = (navigator.language || 'en').toLowerCase();
   for (const l of LANGS) { if (nav.startsWith(l)) return l; }
-  return 'ko';
+  return 'en';
 }
+
 function applyLang(lang) {
-  const data = TERMS[lang] || TERMS.ko;
+  const ui = UI[lang] || UI.en;
+  const data = TERMS[lang] || TERMS.en;
   document.documentElement.lang = lang;
-  document.title = `eyeday — ${data.title}`;
-  document.getElementById('title').textContent = data.title;
-  document.getElementById('body').textContent = data.body;
-  document.getElementById('backLink').textContent = data.back;
-  localStorage.setItem('eyeday_lang', lang);
+  document.title = `eyeday — ${ui.title}`;
+  document.getElementById('title').textContent = ui.title;
+  document.getElementById('langLabel').textContent = ui.langLabel;
+  document.getElementById('content').innerHTML =
+    '<p class="effective">' + data.effective + '</p>' + data.html;
   document.getElementById('langSwitch').value = lang;
+  localStorage.setItem('eyeday_lang', lang);
 }
+
 document.addEventListener('DOMContentLoaded', () => {
   applyLang(pickInitialLang());
   document.getElementById('langSwitch').addEventListener('change', (e) => applyLang(e.target.value));
