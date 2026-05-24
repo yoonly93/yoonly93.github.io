@@ -15,8 +15,6 @@
       line-height: 1.6;
     }
     .container { max-width: 760px; margin: 0 auto; }
-    .crumb { font-size: 13px; color: #64748B; margin-bottom: 16px; }
-    .crumb a { color: #3B82F6; text-decoration: none; }
     h1 {
       font-size: 28px;
       font-weight: 700;
@@ -61,17 +59,6 @@
       background: #fff;
       color: #1E293B;
     }
-    .changelog {
-      background: #FFFBEB;
-      border: 1px solid #FEF3C7;
-      border-radius: 12px;
-      padding: 14px 18px;
-      margin-bottom: 24px;
-      font-size: 14px;
-    }
-    .changelog h3 { font-size: 14px; font-weight: 600; color: #92400E; margin-bottom: 8px; }
-    .changelog ul { padding-left: 18px; color: #78350F; }
-    .changelog li { margin-bottom: 4px; }
     article {
       background: #fff;
       border-radius: 16px;
@@ -106,20 +93,11 @@
       border-radius: 6px;
       margin-right: 6px;
     }
-    .back {
-      display: inline-block;
-      margin-top: 24px;
-      font-size: 13px;
-      color: #64748B;
-      text-decoration: none;
-    }
-    .back:hover { color: #3B82F6; }
     a { color: #3B82F6; }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="crumb"><a href="../../">yoonly93.github.io</a> / eyeday / privacy</div>
     <h1 id="pageTitle">Eyeday 개인정보 처리방침</h1>
 
     <div class="controls">
@@ -140,52 +118,17 @@
       </div>
     </div>
 
-    <div class="changelog">
-      <h3 id="clTitle">변경 이력</h3>
-      <ul id="clList"></ul>
-    </div>
-
     <article id="content"></article>
-
-    <a href="../../" class="back">← yoonly93.github.io</a>
   </div>
 
   <script>
-    // 변경 이력 라벨 (언어별)
     const UI = {
-      ko: { title: "Eyeday 개인정보 처리방침", verLabel: "버전", clTitle: "변경 이력", back: "← 메인으로" },
-      en: { title: "Eyeday Privacy Policy", verLabel: "Version", clTitle: "Change Log", back: "← Back" },
-      ja: { title: "Eyeday プライバシーポリシー", verLabel: "バージョン", clTitle: "変更履歴", back: "← 戻る" },
-      fr: { title: "Politique de confidentialité Eyeday", verLabel: "Version", clTitle: "Historique", back: "← Retour" },
-      es: { title: "Política de Privacidad de Eyeday", verLabel: "Versión", clTitle: "Historial de cambios", back: "← Volver" },
-      ru: { title: "Политика конфиденциальности Eyeday", verLabel: "Версия", clTitle: "История изменений", back: "← Назад" },
-    };
-
-    const CHANGELOG = {
-      ko: [
-        "<strong>v2 (2026-05-24)</strong> — Android 출시 대응: GAID(Google Advertising ID) 추가, Android 13 이상 알림 권한 명시, 광고 ID 재설정·삭제 경로(Android) 추가",
-        "<strong>v1 (2026-05-10)</strong> — 최초 시행 (iOS)"
-      ],
-      en: [
-        "<strong>v2 (2026-05-24)</strong> — Android release update: added GAID (Google Advertising ID), Android 13+ notification permission, Android paths for ad ID reset/deletion",
-        "<strong>v1 (2026-05-10)</strong> — Initial release (iOS)"
-      ],
-      ja: [
-        "<strong>v2 (2026-05-24)</strong> — Android リリース対応: GAID（Google Advertising ID）追加、Android 13 以降の通知権限明記、広告 ID リセット経路（Android）追加",
-        "<strong>v1 (2026-05-10)</strong> — 初版（iOS）"
-      ],
-      fr: [
-        "<strong>v2 (2026-05-24)</strong> — Sortie Android : ajout du GAID (Google Advertising ID), autorisation de notification Android 13+, chemins de réinitialisation de l'ID publicitaire pour Android",
-        "<strong>v1 (2026-05-10)</strong> — Version initiale (iOS)"
-      ],
-      es: [
-        "<strong>v2 (2026-05-24)</strong> — Lanzamiento Android: se añade GAID (Google Advertising ID), permiso de notificaciones Android 13+, rutas para restablecer/eliminar el ID publicitario en Android",
-        "<strong>v1 (2026-05-10)</strong> — Versión inicial (iOS)"
-      ],
-      ru: [
-        "<strong>v2 (2026-05-24)</strong> — Релиз Android: добавлен GAID (Google Advertising ID), разрешение на уведомления для Android 13+, пути сброса рекламного идентификатора на Android",
-        "<strong>v1 (2026-05-10)</strong> — Первоначальная редакция (iOS)"
-      ],
+      ko: { title: "Eyeday 개인정보 처리방침", verLabel: "버전" },
+      en: { title: "Eyeday Privacy Policy", verLabel: "Version" },
+      ja: { title: "Eyeday プライバシーポリシー", verLabel: "バージョン" },
+      fr: { title: "Politique de confidentialité Eyeday", verLabel: "Version" },
+      es: { title: "Política de Privacidad de Eyeday", verLabel: "Versión" },
+      ru: { title: "Политика конфиденциальности Eyeday", verLabel: "Версия" },
     };
 
     // 정책 본문: DATA[lang][version] = { effective, html }
@@ -609,13 +552,10 @@
       document.documentElement.lang = currentLang;
       document.getElementById('pageTitle').textContent = ui.title;
       document.getElementById('verLabel').textContent = ui.verLabel;
-      document.getElementById('clTitle').textContent = ui.clTitle;
       document.title = ui.title;
       const badge = '<span class="badge-ver">' + currentVersion + '</span>';
       document.getElementById('content').innerHTML =
         '<p class="effective">' + badge + d.effective + '</p>' + d.html;
-      document.getElementById('clList').innerHTML =
-        CHANGELOG[currentLang].map(function (li) { return '<li>' + li + '</li>'; }).join('');
     }
 
     document.querySelectorAll('#langTabs button').forEach(function (b) {
