@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>eyeday</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     @font-face {
       font-family: 'LINESeedJP';
@@ -12,52 +15,78 @@
       font-style: normal;
       font-display: swap;
     }
-    @font-face {
-      font-family: 'LINESeedJP';
-      src: url('fonts/LINESeedJP-Regular.ttf') format('truetype');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'LINESeedJP', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Noto Sans', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      letter-spacing: -0.01em;
       background: linear-gradient(180deg, #EFF6FF 0%, #F8FAFC 30%, #FFFFFF 100%);
       min-height: 100vh;
       color: #1E293B;
       line-height: 1.55;
     }
-    .lang-switch {
-      position: fixed; top: 16px; right: 16px; z-index: 50;
-      font-family: inherit;
-      background: rgba(255,255,255,0.85);
-      border: 1px solid #E2E8F0;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 13px;
-      color: #334155;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+    /* Global language controls box (matches privacy/terms pages) */
+    .controls-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px 16px 0;
     }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+    .lang-select { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .lang-select label { font-size: 13px; color: #475569; }
+    .lang-select select {
+      font-family: inherit;
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #E2E8F0;
+      background: #fff;
+      color: #1E293B;
+    }
+
+    /* === Lucide icons (inline SVG) === */
+    .ic {
+      width: 16px; height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .ic-xs { width: 12px; height: 12px; stroke-width: 2.2; }
+    .ic-sm { width: 14px; height: 14px; }
+    .ic-md { width: 18px; height: 18px; }
+    .ic-lg { width: 22px; height: 22px; }
+    .ic-xl { width: 26px; height: 26px; }
 
     /* Hero */
     .hero {
       max-width: 760px;
       margin: 0 auto;
-      padding: 80px 24px 32px;
+      padding: 40px 24px 32px;
       text-align: center;
     }
-    .hero .icon {
+    .hero .app-icon {
       width: 104px; height: 104px;
       border-radius: 24px;
       margin: 0 auto 24px;
       box-shadow: 0 12px 32px rgba(59,130,246,0.28);
       overflow: hidden;
     }
-    .hero .icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero .app-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .hero h1 {
-      font-family: 'LINESeedJP', sans-serif;
+      font-family: 'LINESeedJP', 'Noto Sans', 'Noto Sans KR', sans-serif;
       font-size: 48px;
       font-weight: 700;
       color: #3B82F6;
@@ -69,8 +98,7 @@
       color: #475569;
       margin-bottom: 32px;
       max-width: 480px;
-      margin-left: auto;
-      margin-right: auto;
+      margin-left: auto; margin-right: auto;
     }
     .badge { display: inline-block; }
     .badge img { height: 52px; display: block; }
@@ -110,12 +138,9 @@
     }
     .section.reverse .text { order: 2; }
     .section.reverse .phone-col { order: 1; }
-    .phone-col {
-      display: flex;
-      justify-content: center;
-    }
+    .phone-col { display: flex; justify-content: center; }
 
-    /* Phone frame */
+    /* === Phone frame === */
     .phone {
       width: 300px;
       flex-shrink: 0;
@@ -152,21 +177,47 @@
       font-weight: 700;
       color: #1E293B;
     }
-    .status-bar .right { display: flex; gap: 5px; align-items: center; }
-    .sb-wifi { font-size: 11px; }
-    .sb-bat {
-      width: 22px; height: 11px;
-      border: 1px solid #1E293B; border-radius: 3px;
-      position: relative; padding: 1px;
+    .status-bar .right {
+      display: flex; gap: 6px; align-items: center;
+      color: #1E293B;
     }
-    .sb-bat::after {
-      content: ''; position: absolute; right: -3px; top: 3px;
-      width: 2px; height: 5px; background: #1E293B; border-radius: 0 1px 1px 0;
+    .sb-dots { display: flex; gap: 2px; align-items: center; }
+    .sb-dots span { width: 3px; height: 3px; border-radius: 50%; background: #1E293B; }
+    .phone-body {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      background: #FAFAFA;
     }
-    .sb-bat span { display: block; width: 80%; height: 100%; background: #1E293B; border-radius: 1px; }
-    .phone-body { flex: 1; overflow: hidden; }
 
-    /* ===== Home / Timeline mockup ===== */
+    /* === Top app bar (back / title / right action) === */
+    .topbar {
+      display: grid;
+      grid-template-columns: 36px 1fr 44px;
+      align-items: center;
+      padding: 4px 14px 12px;
+    }
+    .topbar .back, .topbar .right {
+      color: #27272A;
+      display: flex;
+      align-items: center;
+    }
+    .topbar .back { justify-self: start; }
+    .topbar .title {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      color: #27272A;
+    }
+    .topbar .right {
+      justify-self: end;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .topbar .right.primary { color: #3B82F6; }
+    .topbar .right.danger { color: #EF4444; }
+
+    /* === Home / Timeline mockup === */
     .home-header {
       display: grid;
       grid-template-columns: 24px 1fr 24px;
@@ -175,26 +226,14 @@
     }
     .home-header .brand {
       text-align: center;
-      font-family: 'LINESeedJP', sans-serif;
+      font-family: 'LINESeedJP', 'Noto Sans', 'Noto Sans KR', sans-serif;
       font-size: 19px;
       font-weight: 700;
       color: #3B82F6;
       letter-spacing: 0.3px;
     }
-    .home-header .gear {
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      border: 1.5px solid #71717A;
-      justify-self: end;
-      position: relative;
-    }
-    .home-header .gear::after {
-      content: ''; position: absolute; top: 50%; left: 50%;
-      width: 6px; height: 6px;
-      background: #71717A;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-    }
+    .home-header .right-icons { justify-self: end; color: #52525B; }
+
     .weekly {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -228,41 +267,33 @@
       border-radius: 50%;
       background: #3B82F6;
     }
-    .weekly .cell.today .num {
-      background: #3B82F6;
-      color: #FFFFFF;
-    }
-    .weekly .cell.today.has-dot .num::after {
-      background: #FFFFFF;
-    }
+    .weekly .cell.today .num { background: #3B82F6; color: #FFFFFF; }
+    .weekly .cell.today.has-dot .num::after { background: #FFFFFF; }
     .expand-row {
       text-align: center;
       font-size: 11px;
       color: #71717A;
-      padding: 4px 0 10px;
+      padding: 4px 0 12px;
+      display: flex; align-items: center; justify-content: center; gap: 3px;
     }
-    .section-title {
-      font-size: 14px;
+
+    /* Section labels inside phone */
+    .section-label {
+      font-size: 13px;
       font-weight: 700;
       color: #27272A;
-      padding: 12px 16px 8px;
+      padding: 10px 16px 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
-    .section-title .help {
-      display: inline-block;
-      width: 13px; height: 13px;
-      border: 1px solid #A1A1AA;
-      border-radius: 50%;
-      font-size: 9px;
-      line-height: 11px;
-      text-align: center;
-      color: #A1A1AA;
-      margin-left: 4px;
-      vertical-align: 1px;
-    }
+    .section-label .help { color: #A1A1AA; }
+
+    /* Medicine card (horizontal scroll) */
     .med-scroll {
       display: flex;
       gap: 8px;
-      padding: 0 16px 8px;
+      padding: 0 16px 10px;
       overflow: hidden;
     }
     .med-card {
@@ -270,58 +301,73 @@
       background: #FFFFFF;
       border-radius: 12px;
       padding: 10px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       border: 1px solid #F1F5F9;
     }
-    .med-top { display: flex; align-items: center; justify-content: space-between; }
-    .med-name { font-size: 12px; font-weight: 700; color: #27272A; display: flex; align-items: center; gap: 4px; }
-    .med-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .med-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .med-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: #27272A;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .med-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .med-actions { display: flex; gap: 6px; }
-    .ico-pen, .ico-trash {
-      width: 12px; height: 12px;
-      display: inline-block;
-    }
-    .ico-pen { border-bottom: 1.5px solid #71717A; transform: rotate(-45deg); }
-    .ico-trash {
-      border: 1px solid #EF4444; border-top: 2px solid #EF4444;
-      border-radius: 1px;
-    }
-    .med-meta { font-size: 9.5px; color: #71717A; margin-top: 4px; line-height: 1.5; }
+    .med-actions .ic-trash { color: #EF4444; }
+    .med-actions .ic-pen { color: #71717A; }
+    .med-meta { font-size: 10px; color: #71717A; line-height: 1.5; }
     .med-checks { display: flex; gap: 4px; margin-top: 8px; }
-    .mc { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #E4E4E7; flex-shrink: 0; }
-    .mc.done.blue { background: #3B82F6; border-color: #3B82F6; position: relative; }
-    .mc.done.blue::after {
-      content: ''; position: absolute;
-      width: 7px; height: 4px;
-      border-left: 1.5px solid #fff; border-bottom: 1.5px solid #fff;
-      transform: rotate(-45deg); top: 4px; left: 3px;
+    .mc {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 1.5px solid #E4E4E7;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #FFFFFF;
     }
+    .mc.done.blue { background: #3B82F6; border-color: #3B82F6; }
+    .mc .ic { width: 9px; height: 9px; stroke-width: 3; }
 
+    /* Timeline (white container with row dividers) */
+    .timeline-card {
+      background: #FFFFFF;
+      margin: 0 16px;
+      border-radius: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      border: 1px solid #F1F5F9;
+      overflow: hidden;
+    }
     .tl-row {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 10px 16px;
+      padding: 11px 12px;
       border-bottom: 1px solid #F4F4F5;
     }
-    .tl-time { font-size: 11px; font-weight: 700; color: #27272A; width: 50px; flex-shrink: 0; }
-    .tl-mid { flex: 1; display: flex; align-items: center; gap: 6px; }
+    .tl-row:last-child { border-bottom: 0; }
+    .tl-time { font-size: 11px; font-weight: 700; color: #27272A; width: 52px; flex-shrink: 0; }
+    .tl-mid { flex: 1; display: flex; align-items: center; gap: 6px; min-width: 0; }
     .tl-name { font-size: 12px; font-weight: 600; color: #27272A; }
     .tl-sub { font-size: 10px; color: #71717A; margin-top: 1px; }
-    .tl-check { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid #E4E4E7; flex-shrink: 0; position: relative; }
-    .tl-check.done.blue { background: #3B82F6; border-color: #3B82F6; }
-    .tl-check.done.blue::after {
-      content: ''; position: absolute;
-      width: 9px; height: 5px;
-      border-left: 1.5px solid #fff; border-bottom: 1.5px solid #fff;
-      transform: rotate(-45deg); top: 6px; left: 5px;
+    .tl-check {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 1.6px solid #E4E4E7;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #FFFFFF;
     }
+    .tl-check.done.blue { background: #3B82F6; border-color: #3B82F6; }
     .tl-check.green { border-color: #22C55E; }
+    .tl-check .ic { width: 11px; height: 11px; stroke-width: 3; }
 
     .pill-row {
       display: flex;
       gap: 8px;
-      padding: 10px 16px;
+      padding: 10px 16px 14px;
     }
     .pill-row .pill {
       background: #F4F4F5;
@@ -330,77 +376,64 @@
       font-size: 11px;
       color: #52525B;
       font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
-    .pill-row .pill::before {
-      content: '+ ';
-      color: #71717A;
-    }
+    .pill-row .pill .ic { width: 11px; height: 11px; }
+
     .fab {
       position: absolute;
-      right: 18px; bottom: 24px;
+      right: 16px; bottom: 18px;
       width: 44px; height: 44px;
       border-radius: 50%;
       background: #3B82F6;
       color: #FFFFFF;
-      font-size: 24px;
-      font-weight: 300;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 6px 16px rgba(59,130,246,0.4);
+      box-shadow: 0 8px 18px rgba(59,130,246,0.42);
+      z-index: 2;
     }
+    .fab .ic { width: 22px; height: 22px; stroke-width: 2.4; }
 
-    /* ===== Edit medicine form mockup ===== */
-    .form-header {
-      display: grid;
-      grid-template-columns: 30px 1fr 40px;
-      align-items: center;
-      padding: 4px 16px 14px;
-    }
-    .back-arrow {
-      width: 0; height: 0;
-      border-top: 6px solid transparent;
-      border-bottom: 6px solid transparent;
-      border-right: 8px solid #27272A;
-    }
-    .form-title { text-align: center; font-size: 15px; font-weight: 600; color: #27272A; }
-    .delete-btn { text-align: right; font-size: 12px; color: #EF4444; font-weight: 600; }
-    .form-scroll { padding: 0 16px; overflow-y: auto; }
+    /* === Form (Edit medicine) === */
+    .form-scroll { padding: 0 16px 12px; overflow-y: auto; }
     .field { margin-bottom: 14px; }
-    .field-label { font-size: 12px; font-weight: 600; color: #27272A; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
+    .field-label {
+      font-size: 12px; font-weight: 600;
+      color: #27272A;
+      margin-bottom: 6px;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .field-label .help { color: #A1A1AA; }
     .input-row { display: flex; gap: 6px; }
     .text-input {
       flex: 1;
       background: #FFFFFF;
       border: 1px solid #E4E4E7;
-      border-radius: 8px;
-      padding: 8px 10px;
+      border-radius: 10px;
+      padding: 9px 12px;
       font-size: 12px;
       color: #27272A;
       font-weight: 500;
+      display: flex;
+      align-items: center;
     }
     .select-input {
       background: #FFFFFF;
       border: 1px solid #E4E4E7;
-      border-radius: 8px;
-      padding: 8px 10px;
+      border-radius: 10px;
+      padding: 9px 10px;
       font-size: 11px;
       color: #71717A;
       display: flex; align-items: center; gap: 4px;
       min-width: 56px; justify-content: center;
     }
-    .chevron-down {
-      width: 0; height: 0;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 5px solid #71717A;
-    }
-    .chips {
-      display: flex; flex-wrap: wrap; gap: 5px;
-    }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
     .chip {
       background: #FFFFFF;
       border: 1px solid #E4E4E7;
       border-radius: 999px;
-      padding: 5px 12px;
+      padding: 6px 12px;
       font-size: 11px;
       color: #52525B;
       font-weight: 500;
@@ -411,16 +444,7 @@
       color: #FFFFFF;
       font-weight: 600;
     }
-    .chip-block {
-      background: #3B82F6;
-      color: #FFFFFF;
-      border-radius: 999px;
-      padding: 5px 14px;
-      font-size: 11px;
-      font-weight: 600;
-      display: inline-block;
-      margin-top: 6px;
-    }
+    .chip-row-2 { margin-top: 6px; }
     .time-wheel {
       background: #F4F4F5;
       border-radius: 10px;
@@ -430,7 +454,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 18px;
+      gap: 20px;
     }
     .time-wheel::before, .time-wheel::after {
       content: '';
@@ -443,18 +467,18 @@
     .wheel-col { display: flex; flex-direction: column; align-items: center; line-height: 22px; }
     .wheel-col span { font-size: 12px; color: #A1A1AA; }
     .wheel-col span.mid { color: #27272A; font-weight: 700; font-size: 14px; }
-    .form-save {
-      margin: 14px 16px 16px;
+    .primary-btn {
+      margin: 8px 16px 14px;
       background: #3B82F6;
       color: #FFFFFF;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 12px 0;
       text-align: center;
       font-size: 13px;
       font-weight: 600;
     }
 
-    /* ===== Conflict bottom sheet mockup ===== */
+    /* === Conflict bottom sheet === */
     .home-dim {
       position: absolute; inset: 0;
       background: rgba(15,23,42,0.45);
@@ -464,9 +488,9 @@
       position: absolute;
       left: 0; right: 0; bottom: 0;
       background: #FFFFFF;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      padding: 16px 20px 24px;
+      border-top-left-radius: 22px;
+      border-top-right-radius: 22px;
+      padding: 14px 20px 22px;
       z-index: 4;
       text-align: center;
     }
@@ -478,30 +502,12 @@
     }
     .conflict-sheet h3 { font-size: 14px; font-weight: 700; color: #27272A; margin-bottom: 10px; }
     .timer-row {
-      display: flex; align-items: center; justify-content: center; gap: 6px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px;
       margin-bottom: 8px;
+      color: #3B82F6;
     }
-    .timer-icon {
-      width: 16px; height: 16px;
-      border: 1.6px solid #3B82F6;
-      border-radius: 50%;
-      position: relative;
-    }
-    .timer-icon::before {
-      content: ''; position: absolute;
-      width: 1.4px; height: 5px;
-      background: #3B82F6;
-      top: 3px; left: 50%;
-      transform: translateX(-50%);
-      transform-origin: bottom center;
-    }
-    .timer-icon::after {
-      content: ''; position: absolute;
-      width: 4px; height: 1.4px;
-      background: #3B82F6;
-      top: 50%; left: 50%;
-      transform: translate(0, -50%);
-    }
+    .timer-row .ic { color: #3B82F6; }
     .timer-text {
       font-size: 22px;
       font-weight: 700;
@@ -526,89 +532,58 @@
     .sheet-btn.ghost { background: #E4E4E7; color: #27272A; }
     .sheet-btn.primary { background: #3B82F6; color: #FFFFFF; }
 
-    /* ===== IOP mockup ===== */
-    .iop-summary {
-      display: flex; gap: 8px;
-      padding: 4px 16px 12px;
-    }
-    .iop-pill {
-      flex: 1;
-      background: #FFFFFF;
-      border-radius: 12px;
-      padding: 10px 12px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-      border: 1px solid #F1F5F9;
-    }
-    .iop-pill .label { font-size: 10px; color: #71717A; }
-    .iop-pill .value {
-      font-size: 18px;
-      font-weight: 700;
-      color: #27272A;
-      margin-top: 2px;
-    }
-    .iop-pill .value small { font-size: 10px; font-weight: 500; color: #71717A; }
-    .iop-chart {
-      margin: 0 16px;
+    /* === IOP records === */
+    .iop-chart-card {
+      margin: 0 16px 14px;
       background: #FFFFFF;
       border-radius: 14px;
-      padding: 12px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      padding: 12px 10px 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       border: 1px solid #F1F5F9;
     }
     .iop-legend {
-      display: flex; gap: 12px;
-      justify-content: flex-end;
-      font-size: 10px; color: #71717A;
-      margin-bottom: 8px;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #27272A;
+      padding: 0 6px 4px;
     }
-    .iop-legend .sw {
-      display: inline-block; width: 7px; height: 7px;
-      border-radius: 50%; margin-right: 4px; vertical-align: 0;
+    .iop-legend .l-items { display: flex; gap: 12px; }
+    .iop-legend .l-items span { display: inline-flex; align-items: center; gap: 4px; }
+    .iop-legend .sw { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+    .iop-legend .unit { font-size: 10px; color: #71717A; }
+    .iop-chart-svg { width: 100%; height: 150px; display: block; }
+    .iop-recent-title {
+      padding: 4px 16px 6px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #27272A;
     }
-    .chart-area {
-      display: flex; align-items: flex-end; gap: 4px;
-      height: 130px; padding-bottom: 16px; position: relative;
+    .iop-recent-list {
+      padding: 0 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
-    .chart-area::after {
-      content: '';
-      position: absolute; left: 0; right: 0; bottom: 16px;
-      height: 1px; background: #E4E4E7;
-    }
-    .chart-col {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; height: 100%;
-      justify-content: flex-end; position: relative;
-    }
-    .chart-bars {
-      display: flex; gap: 2px;
-      align-items: flex-end;
-      height: 100%; width: 100%;
-      justify-content: center;
-    }
-    .bar { width: 5px; border-radius: 2.5px 2.5px 0 0; }
-    .bar.right { background: #3B82F6; }
-    .bar.left  { background: #8B5CF6; }
-    .chart-x {
-      position: absolute; bottom: 0;
-      font-size: 8.5px; color: #71717A;
-    }
-
-    .iop-add {
-      margin: 12px 16px;
-      background: #DBEAFE;
-      color: #1D4ED8;
+    .iop-row {
+      background: #FFFFFF;
       border-radius: 10px;
-      padding: 10px 0;
-      text-align: center;
-      font-size: 12px;
-      font-weight: 600;
+      padding: 9px 12px;
+      border: 1px solid #F1F5F9;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11.5px;
     }
-    .iop-add::before { content: '+ '; }
+    .iop-row .date { font-weight: 700; color: #27272A; min-width: 58px; }
+    .iop-row .vals { color: #27272A; display: flex; gap: 10px; }
+    .iop-row .vals .lab { color: #71717A; margin-right: 2px; font-weight: 500; }
 
-    /* ===== Font size mockup ===== */
-    .slider-block {
-      padding: 28px 24px 16px;
-    }
+    /* === Font size === */
+    .slider-block { padding: 28px 24px 16px; }
     .slider-track {
       height: 4px;
       background: #DBEAFE;
@@ -641,7 +616,7 @@
     }
     .slider-labels {
       display: flex; justify-content: space-between;
-      margin-top: 14px;
+      margin-top: 16px;
       font-size: 12px;
       color: #71717A;
     }
@@ -650,19 +625,20 @@
       margin: 24px 24px 0;
       background: #FFFFFF;
       border: 1px solid #E4E4E7;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 16px;
       text-align: center;
       font-size: 14px;
       color: #27272A;
       font-weight: 500;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
     .font-save {
       position: absolute;
-      left: 16px; right: 16px; bottom: 24px;
+      left: 16px; right: 16px; bottom: 22px;
       background: #3B82F6;
       color: #FFFFFF;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 12px 0;
       text-align: center;
       font-size: 13px;
@@ -678,17 +654,11 @@
       border-top: 1px solid rgba(148,163,184,0.18);
     }
     footer .links {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
+      display: flex; justify-content: center; flex-wrap: wrap;
       gap: 8px 16px;
       margin-bottom: 12px;
     }
-    footer .links a {
-      color: #475569;
-      text-decoration: none;
-      font-size: 14px;
-    }
+    footer .links a { color: #475569; text-decoration: none; font-size: 14px; }
     footer .links a:hover { color: #2563EB; text-decoration: underline; }
     footer .sep { color: #CBD5E1; }
     footer .copyright { color: #94A3B8; font-size: 12px; }
@@ -714,21 +684,45 @@
   </style>
 </head>
 <body>
-  <select class="lang-switch" id="langSwitch" aria-label="Language">
-    <option value="ko">한국어</option>
-    <option value="en">English</option>
-    <option value="ja">日本語</option>
-    <option value="fr">Français</option>
-    <option value="es">Español</option>
-    <option value="ru">Русский</option>
-    <option value="de">Deutsch</option>
-    <option value="it">Italiano</option>
-    <option value="pt">Português</option>
-  </select>
+  <!-- ===== Reusable lucide icons (symbol library) ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-chev-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+      <symbol id="i-chev-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+      <symbol id="i-pen" viewBox="0 0 24 24"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497Z"/><path d="m15 5 4 4"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></symbol>
+      <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></symbol>
+      <symbol id="i-battery" viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="10" rx="2" ry="2"/><line x1="22" y1="11" x2="22" y2="13"/><rect x="4" y="9" width="13" height="6" rx="1" fill="currentColor" stroke="none"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="controls-wrap">
+    <div class="controls">
+      <div class="lang-select">
+        <label id="langLabel" for="languageSelect">Language</label>
+        <select id="languageSelect">
+          <option value="en">English</option>
+          <option value="ko">한국어</option>
+          <option value="ja">日本語</option>
+          <option value="fr">Français</option>
+          <option value="es">Español</option>
+          <option value="ru">Русский</option>
+          <option value="de">Deutsch</option>
+          <option value="it">Italiano</option>
+          <option value="pt">Português</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
   <!-- Hero -->
   <section class="hero">
-    <div class="icon"><img src="icon.png" alt="Eyeday App Icon"></div>
+    <div class="app-icon"><img src="icon.png" alt="Eyeday App Icon"></div>
     <h1>eyeday</h1>
     <p class="subtitle" data-i="subtitle"></p>
     <a class="badge" id="appBadge" href="https://apps.apple.com/kr/app/eyeday-%EC%95%88%EC%95%BD-%EC%95%8C%EB%9E%8C-%EC%A0%90%EC%95%88-%EA%B8%B0%EB%A1%9D/id6759497954">
@@ -736,7 +730,7 @@
     </a>
   </section>
 
-  <!-- Section 1: Add medicine -->
+  <!-- ===== Section 1: Edit medicine ===== -->
   <section class="section">
     <div class="text">
       <span class="eyebrow" data-i="s1Eyebrow"></span>
@@ -744,34 +738,42 @@
       <p data-i="s1Desc"></p>
     </div>
     <div class="phone-col">
-      <!-- Phone: edit medicine form -->
       <div class="phone">
         <div class="phone-screen">
           <div class="notch"></div>
-          <div class="status-bar"><span>11:07</span><span class="right"><span class="sb-wifi">•••• 🔋</span></span></div>
+          <div class="status-bar">
+            <span>11:07</span>
+            <span class="right">
+              <span class="sb-dots"><span></span><span></span><span></span><span></span></span>
+              <svg class="ic ic-sm"><use href="#i-wifi"/></svg>
+              <svg class="ic ic-sm"><use href="#i-battery"/></svg>
+            </span>
+          </div>
           <div class="phone-body">
-            <div class="form-header">
-              <div class="back-arrow"></div>
-              <div class="form-title">안약 수정</div>
-              <div class="delete-btn">삭제</div>
+            <div class="topbar">
+              <span class="back"><svg class="ic ic-md"><use href="#i-chev-left"/></svg></span>
+              <span class="title">안약 수정</span>
+              <span class="right danger">삭제</span>
             </div>
             <div class="form-scroll">
               <div class="field">
                 <div class="field-label">안약 이름</div>
                 <div class="input-row">
                   <div class="text-input">코솝</div>
-                  <div class="select-input">선택 <span class="chevron-down"></span></div>
+                  <div class="select-input">선택 <svg class="ic ic-xs"><use href="#i-chev-down"/></svg></div>
                 </div>
               </div>
               <div class="field">
-                <div class="field-label">투약 시간 <span class="help-mini">ⓘ</span></div>
+                <div class="field-label">투약 시간 <svg class="ic ic-xs help"><use href="#i-help"/></svg></div>
                 <div class="chips">
                   <span class="chip">아침</span>
                   <span class="chip">점심</span>
                   <span class="chip">저녁</span>
                   <span class="chip">자기 전</span>
                 </div>
-                <div class="chip-block">직접 지정할게요</div>
+                <div class="chips chip-row-2">
+                  <span class="chip active">직접 지정할게요</span>
+                </div>
               </div>
               <div class="field">
                 <div class="field-label">하루 횟수</div>
@@ -811,14 +813,14 @@
                 </div>
               </div>
             </div>
-            <div class="form-save">저장하기</div>
+            <div class="primary-btn">저장하기</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Section 2: Today's timeline -->
+  <!-- ===== Section 2: Home timeline ===== -->
   <section class="section reverse">
     <div class="text">
       <span class="eyebrow" data-i="s2Eyebrow"></span>
@@ -829,12 +831,19 @@
       <div class="phone">
         <div class="phone-screen">
           <div class="notch"></div>
-          <div class="status-bar"><span>11:07</span><span class="right"><span class="sb-wifi">•••• 🔋</span></span></div>
+          <div class="status-bar">
+            <span>11:07</span>
+            <span class="right">
+              <span class="sb-dots"><span></span><span></span><span></span><span></span></span>
+              <svg class="ic ic-sm"><use href="#i-wifi"/></svg>
+              <svg class="ic ic-sm"><use href="#i-battery"/></svg>
+            </span>
+          </div>
           <div class="phone-body">
             <div class="home-header">
-              <div></div>
-              <div class="brand">eyeday</div>
-              <div class="gear"></div>
+              <span></span>
+              <span class="brand">eyeday</span>
+              <span class="right-icons"><svg class="ic ic-md"><use href="#i-settings"/></svg></span>
             </div>
             <div class="weekly">
               <div class="cell"><div>일</div><div class="num">8</div></div>
@@ -845,24 +854,31 @@
               <div class="cell"><div>금</div><div class="num">13</div></div>
               <div class="cell"><div>토</div><div class="num">14</div></div>
             </div>
-            <div class="expand-row">펼치기 ⌄</div>
-            <div class="section-title">점안중인 안약</div>
+            <div class="expand-row">펼치기 <svg class="ic ic-xs"><use href="#i-chev-down"/></svg></div>
+
+            <div class="section-label">점안중인 안약</div>
             <div class="med-scroll">
               <div class="med-card">
                 <div class="med-top">
-                  <div class="med-name"><span class="med-dot" style="background:#3B82F6"></span>코솝</div>
-                  <div class="med-actions"><span class="ico-pen"></span><span class="ico-trash"></span></div>
+                  <span class="med-name"><span class="med-dot" style="background:#3B82F6"></span><span data-mock="med1">코솝</span></span>
+                  <span class="med-actions">
+                    <svg class="ic ic-xs ic-pen"><use href="#i-pen"/></svg>
+                    <svg class="ic ic-xs ic-trash"><use href="#i-trash"/></svg>
+                  </span>
                 </div>
                 <div class="med-meta">08:30부터 | 2회 | 12시간<br>무기한</div>
                 <div class="med-checks">
-                  <div class="mc done blue"></div>
+                  <div class="mc done blue"><svg class="ic"><use href="#i-check"/></svg></div>
                   <div class="mc"></div>
                 </div>
               </div>
               <div class="med-card">
                 <div class="med-top">
-                  <div class="med-name"><span class="med-dot" style="background:#22C55E"></span>잘라탄</div>
-                  <div class="med-actions"><span class="ico-pen"></span><span class="ico-trash"></span></div>
+                  <span class="med-name"><span class="med-dot" style="background:#22C55E"></span><span data-mock="med2">잘라탄</span></span>
+                  <span class="med-actions">
+                    <svg class="ic ic-xs ic-pen"><use href="#i-pen"/></svg>
+                    <svg class="ic ic-xs ic-trash"><use href="#i-trash"/></svg>
+                  </span>
                 </div>
                 <div class="med-meta">자기 전<br>무기한</div>
                 <div class="med-checks">
@@ -870,46 +886,51 @@
                 </div>
               </div>
             </div>
-            <div class="section-title">오늘의 점안 기록 <span class="help">?</span></div>
-            <div class="tl-row">
-              <div class="tl-time">오전 8:30</div>
-              <div class="tl-mid">
-                <span class="med-dot" style="background:#3B82F6"></span>
-                <div>
-                  <div class="tl-name">코솝</div>
-                  <div class="tl-sub">오전 8:31 1회차 완료</div>
+
+            <div class="section-label">오늘의 점안 기록 <svg class="ic ic-xs help"><use href="#i-help"/></svg></div>
+            <div class="timeline-card">
+              <div class="tl-row">
+                <div class="tl-time">오전 8:30</div>
+                <div class="tl-mid">
+                  <span class="med-dot" style="background:#3B82F6"></span>
+                  <div>
+                    <div class="tl-name" data-mock="med1">코솝</div>
+                    <div class="tl-sub">오전 8:31 1회차 완료</div>
+                  </div>
                 </div>
+                <div class="tl-check done blue"><svg class="ic"><use href="#i-check"/></svg></div>
               </div>
-              <div class="tl-check done blue"></div>
-            </div>
-            <div class="tl-row">
-              <div class="tl-time">오후 8:30</div>
-              <div class="tl-mid">
-                <span class="med-dot" style="background:#3B82F6"></span>
-                <div><div class="tl-name">코솝</div></div>
+              <div class="tl-row">
+                <div class="tl-time">오후 8:30</div>
+                <div class="tl-mid">
+                  <span class="med-dot" style="background:#3B82F6"></span>
+                  <div><div class="tl-name" data-mock="med1">코솝</div></div>
+                </div>
+                <div class="tl-check"></div>
               </div>
-              <div class="tl-check"></div>
-            </div>
-            <div class="tl-row">
-              <div class="tl-time">오후 10:00</div>
-              <div class="tl-mid">
-                <span class="med-dot" style="background:#22C55E"></span>
-                <div><div class="tl-name">잘라탄</div></div>
+              <div class="tl-row">
+                <div class="tl-time">오후 10:00</div>
+                <div class="tl-mid">
+                  <span class="med-dot" style="background:#22C55E"></span>
+                  <div><div class="tl-name" data-mock="med2">잘라탄</div></div>
+                </div>
+                <div class="tl-check green"></div>
               </div>
-              <div class="tl-check green"></div>
             </div>
+
             <div class="pill-row">
-              <div class="pill">추가 점안</div>
-              <div class="pill">메모</div>
+              <span class="pill"><svg class="ic"><use href="#i-plus"/></svg>추가 점안</span>
+              <span class="pill"><svg class="ic"><use href="#i-plus"/></svg>메모</span>
             </div>
-            <div class="fab">+</div>
+
+            <div class="fab"><svg class="ic"><use href="#i-plus"/></svg></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Section 3: Conflict warning -->
+  <!-- ===== Section 3: Conflict warning ===== -->
   <section class="section">
     <div class="text">
       <span class="eyebrow" data-i="s3Eyebrow"></span>
@@ -920,12 +941,19 @@
       <div class="phone">
         <div class="phone-screen">
           <div class="notch"></div>
-          <div class="status-bar"><span>11:07</span><span class="right"><span class="sb-wifi">•••• 🔋</span></span></div>
+          <div class="status-bar">
+            <span>11:07</span>
+            <span class="right">
+              <span class="sb-dots"><span></span><span></span><span></span><span></span></span>
+              <svg class="ic ic-sm"><use href="#i-wifi"/></svg>
+              <svg class="ic ic-sm"><use href="#i-battery"/></svg>
+            </span>
+          </div>
           <div class="phone-body">
             <div class="home-header">
-              <div></div>
-              <div class="brand">eyeday</div>
-              <div class="gear"></div>
+              <span></span>
+              <span class="brand">eyeday</span>
+              <span class="right-icons"><svg class="ic ic-md"><use href="#i-settings"/></svg></span>
             </div>
             <div class="weekly">
               <div class="cell"><div>일</div><div class="num">8</div></div>
@@ -936,24 +964,30 @@
               <div class="cell"><div>금</div><div class="num">13</div></div>
               <div class="cell"><div>토</div><div class="num">14</div></div>
             </div>
-            <div class="expand-row">펼치기 ⌄</div>
-            <div class="section-title">점안중인 안약</div>
+            <div class="expand-row">펼치기 <svg class="ic ic-xs"><use href="#i-chev-down"/></svg></div>
+            <div class="section-label">점안중인 안약</div>
             <div class="med-scroll">
               <div class="med-card">
                 <div class="med-top">
-                  <div class="med-name"><span class="med-dot" style="background:#3B82F6"></span>Cosopt</div>
-                  <div class="med-actions"><span class="ico-pen"></span><span class="ico-trash"></span></div>
+                  <span class="med-name"><span class="med-dot" style="background:#3B82F6"></span><span data-mock="med1">코솝</span></span>
+                  <span class="med-actions">
+                    <svg class="ic ic-xs ic-pen"><use href="#i-pen"/></svg>
+                    <svg class="ic ic-xs ic-trash"><use href="#i-trash"/></svg>
+                  </span>
                 </div>
                 <div class="med-meta">08:30부터 | 2회 | 12시간<br>무기한</div>
                 <div class="med-checks">
-                  <div class="mc done blue"></div>
-                  <div class="mc done blue"></div>
+                  <div class="mc done blue"><svg class="ic"><use href="#i-check"/></svg></div>
+                  <div class="mc done blue"><svg class="ic"><use href="#i-check"/></svg></div>
                 </div>
               </div>
               <div class="med-card">
                 <div class="med-top">
-                  <div class="med-name"><span class="med-dot" style="background:#22C55E"></span>Xalatan</div>
-                  <div class="med-actions"><span class="ico-pen"></span><span class="ico-trash"></span></div>
+                  <span class="med-name"><span class="med-dot" style="background:#22C55E"></span><span data-mock="med2">잘라탄</span></span>
+                  <span class="med-actions">
+                    <svg class="ic ic-xs ic-pen"><use href="#i-pen"/></svg>
+                    <svg class="ic ic-xs ic-trash"><use href="#i-trash"/></svg>
+                  </span>
                 </div>
                 <div class="med-meta">자기 전<br>무기한</div>
                 <div class="med-checks">
@@ -961,14 +995,19 @@
                 </div>
               </div>
             </div>
-            <div class="section-title">오늘의 점안 기록</div>
-            <div class="tl-row">
-              <div class="tl-time">오전 8:30</div>
-              <div class="tl-mid">
-                <span class="med-dot" style="background:#3B82F6"></span>
-                <div><div class="tl-name">Cosopt</div><div class="tl-sub">오전 8:31 1회차 완료</div></div>
+            <div class="section-label">오늘의 점안 기록</div>
+            <div class="timeline-card">
+              <div class="tl-row">
+                <div class="tl-time">오전 8:30</div>
+                <div class="tl-mid">
+                  <span class="med-dot" style="background:#3B82F6"></span>
+                  <div>
+                    <div class="tl-name" data-mock="med1">코솝</div>
+                    <div class="tl-sub">오전 8:31 1회차 완료</div>
+                  </div>
+                </div>
+                <div class="tl-check done blue"><svg class="ic"><use href="#i-check"/></svg></div>
               </div>
-              <div class="tl-check done blue"></div>
             </div>
 
             <div class="home-dim"></div>
@@ -976,10 +1015,10 @@
               <div class="grabber"></div>
               <h3>안약 간격 주의</h3>
               <div class="timer-row">
-                <span class="timer-icon"></span>
+                <svg class="ic ic-md"><use href="#i-clock"/></svg>
                 <span class="timer-text">4:56</span>
               </div>
-              <p>Cosopt을(를) 넣은 지 얼마 되지 않았습니다<br>여러 안약을 넣을 경우 5분 간격을 두세요</p>
+              <p data-mock-tpl="{med1}을(를) 넣은 지 얼마 되지 않았습니다&#10;여러 안약을 넣을 경우 5분 간격을 두세요"></p>
               <div class="sheet-btns">
                 <div class="sheet-btn ghost">알겠어요</div>
                 <div class="sheet-btn primary">지금 점안하기</div>
@@ -991,7 +1030,7 @@
     </div>
   </section>
 
-  <!-- Section 4: IOP records -->
+  <!-- ===== Section 4: IOP records ===== -->
   <section class="section reverse">
     <div class="text">
       <span class="eyebrow" data-i="s4Eyebrow"></span>
@@ -1002,71 +1041,100 @@
       <div class="phone">
         <div class="phone-screen">
           <div class="notch"></div>
-          <div class="status-bar"><span>11:07</span><span class="right"><span class="sb-wifi">•••• 🔋</span></span></div>
+          <div class="status-bar">
+            <span>12:42</span>
+            <span class="right">
+              <span class="sb-dots"><span></span><span></span><span></span><span></span></span>
+              <svg class="ic ic-sm"><use href="#i-wifi"/></svg>
+              <svg class="ic ic-sm"><use href="#i-battery"/></svg>
+            </span>
+          </div>
           <div class="phone-body">
-            <div class="form-header">
-              <div class="back-arrow"></div>
-              <div class="form-title">안압 기록</div>
-              <div></div>
+            <div class="topbar">
+              <span class="back"><svg class="ic ic-md"><use href="#i-chev-left"/></svg></span>
+              <span class="title">안압 기록</span>
+              <span class="right primary">추가</span>
             </div>
-            <div class="iop-summary">
-              <div class="iop-pill">
-                <div class="label">우안 (OD)</div>
-                <div class="value">17 <small>mmHg</small></div>
-              </div>
-              <div class="iop-pill">
-                <div class="label">좌안 (OS)</div>
-                <div class="value">16 <small>mmHg</small></div>
-              </div>
-            </div>
-            <div class="iop-chart">
+
+            <!-- Chart card -->
+            <div class="iop-chart-card">
               <div class="iop-legend">
-                <span><span class="sw" style="background:#3B82F6"></span>우안</span>
-                <span><span class="sw" style="background:#8B5CF6"></span>좌안</span>
+                <span class="l-items">
+                  <span><span class="sw" style="background:#F59E0B"></span>L</span>
+                  <span><span class="sw" style="background:#8B5CF6"></span>R</span>
+                </span>
+                <span class="unit">mmHg</span>
               </div>
-              <div class="chart-area">
-                <div class="chart-col">
-                  <div class="chart-bars"><div class="bar right" style="height:88%"></div><div class="bar left" style="height:85%"></div></div>
-                  <span class="chart-x">6/2</span>
-                </div>
-                <div class="chart-col">
-                  <div class="chart-bars"><div class="bar right" style="height:80%"></div><div class="bar left" style="height:80%"></div></div>
-                  <span class="chart-x">6/30</span>
-                </div>
-                <div class="chart-col">
-                  <div class="chart-bars"><div class="bar right" style="height:72%"></div><div class="bar left" style="height:76%"></div></div>
-                  <span class="chart-x">7/28</span>
-                </div>
-                <div class="chart-col">
-                  <div class="chart-bars"><div class="bar right" style="height:68%"></div><div class="bar left" style="height:68%"></div></div>
-                  <span class="chart-x">8/25</span>
-                </div>
-                <div class="chart-col">
-                  <div class="chart-bars"><div class="bar right" style="height:64%"></div><div class="bar left" style="height:60%"></div></div>
-                  <span class="chart-x">9/22</span>
-                </div>
-                <div class="chart-col">
-                  <div class="chart-bars"><div class="bar right" style="height:56%"></div><div class="bar left" style="height:56%"></div></div>
-                  <span class="chart-x">10/20</span>
-                </div>
-                <div class="chart-col">
-                  <div class="chart-bars"><div class="bar right" style="height:52%"></div><div class="bar left" style="height:52%"></div></div>
-                  <span class="chart-x">11/17</span>
-                </div>
-                <div class="chart-col">
-                  <div class="chart-bars"><div class="bar right" style="height:52%"></div><div class="bar left" style="height:48%"></div></div>
-                  <span class="chart-x">12/15</span>
-                </div>
-              </div>
+              <svg class="iop-chart-svg" viewBox="0 0 280 150" preserveAspectRatio="xMidYMid meet">
+                <!-- Grid lines (10, 15, 20, 25, 30) -->
+                <g stroke="#F1F5F9" stroke-width="1">
+                  <line x1="30" y1="20"  x2="270" y2="20" />
+                  <line x1="30" y1="50"  x2="270" y2="50" />
+                  <line x1="30" y1="80"  x2="270" y2="80" />
+                  <line x1="30" y1="110" x2="270" y2="110" />
+                  <line x1="30" y1="140" x2="270" y2="140" />
+                </g>
+                <!-- Y labels -->
+                <g fill="#A1A1AA" font-size="9" font-family="sans-serif">
+                  <text x="20" y="23"  text-anchor="end">30</text>
+                  <text x="20" y="53"  text-anchor="end">25</text>
+                  <text x="20" y="83"  text-anchor="end">20</text>
+                  <text x="20" y="113" text-anchor="end">15</text>
+                  <text x="20" y="143" text-anchor="end">10</text>
+                </g>
+                <!-- L line (orange #F59E0B): 25,24,23,21,19,18 -->
+                <polyline points="40,50 80,56 120,62 160,74 200,86 240,92"
+                          fill="none" stroke="#F59E0B" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- R line (purple #8B5CF6): 26,24,22,21,20,18 -->
+                <polyline points="40,44 80,56 120,68 160,74 200,80 240,92"
+                          fill="none" stroke="#8B5CF6" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- L dots -->
+                <g fill="#F59E0B">
+                  <circle cx="40"  cy="50" r="3"/>
+                  <circle cx="80"  cy="56" r="3"/>
+                  <circle cx="120" cy="62" r="3"/>
+                  <circle cx="160" cy="74" r="3"/>
+                  <circle cx="200" cy="86" r="3"/>
+                  <circle cx="240" cy="92" r="3"/>
+                </g>
+                <!-- R dots -->
+                <g fill="#8B5CF6">
+                  <circle cx="40"  cy="44" r="3"/>
+                  <circle cx="80"  cy="56" r="3"/>
+                  <circle cx="120" cy="68" r="3"/>
+                  <circle cx="160" cy="74" r="3"/>
+                  <circle cx="200" cy="80" r="3"/>
+                  <circle cx="240" cy="92" r="3"/>
+                </g>
+                <!-- X axis labels -->
+                <g fill="#71717A" font-size="9" font-family="sans-serif">
+                  <text x="40"  y="148" text-anchor="middle">06/02</text>
+                  <text x="80"  y="148" text-anchor="middle">06/30</text>
+                  <text x="120" y="148" text-anchor="middle">07/28</text>
+                  <text x="160" y="148" text-anchor="middle">08/25</text>
+                  <text x="200" y="148" text-anchor="middle">09/22</text>
+                  <text x="240" y="148" text-anchor="middle">10/20</text>
+                </g>
+              </svg>
             </div>
-            <div class="iop-add">안압 추가</div>
+
+            <div class="iop-recent-title">최근 기록</div>
+            <div class="iop-recent-list">
+              <div class="iop-row"><span class="date">26.12.15</span><span class="vals"><span><span class="lab">좌</span>16</span><span><span class="lab">우</span>17</span></span></div>
+              <div class="iop-row"><span class="date">26.11.17</span><span class="vals"><span><span class="lab">좌</span>17</span><span><span class="lab">우</span>17</span></span></div>
+              <div class="iop-row"><span class="date">26.10.20</span><span class="vals"><span><span class="lab">좌</span>18</span><span><span class="lab">우</span>18</span></span></div>
+              <div class="iop-row"><span class="date">26.09.22</span><span class="vals"><span><span class="lab">좌</span>19</span><span><span class="lab">우</span>20</span></span></div>
+              <div class="iop-row"><span class="date">26.08.25</span><span class="vals"><span><span class="lab">좌</span>21</span><span><span class="lab">우</span>21</span></span></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Section 5: Font size -->
+  <!-- ===== Section 5: Font size ===== -->
   <section class="section">
     <div class="text">
       <span class="eyebrow" data-i="s5Eyebrow"></span>
@@ -1077,12 +1145,19 @@
       <div class="phone">
         <div class="phone-screen">
           <div class="notch"></div>
-          <div class="status-bar"><span>11:07</span><span class="right"><span class="sb-wifi">•••• 🔋</span></span></div>
+          <div class="status-bar">
+            <span>11:07</span>
+            <span class="right">
+              <span class="sb-dots"><span></span><span></span><span></span><span></span></span>
+              <svg class="ic ic-sm"><use href="#i-wifi"/></svg>
+              <svg class="ic ic-sm"><use href="#i-battery"/></svg>
+            </span>
+          </div>
           <div class="phone-body">
-            <div class="form-header">
-              <div class="back-arrow"></div>
-              <div class="form-title">글씨 크기</div>
-              <div></div>
+            <div class="topbar">
+              <span class="back"><svg class="ic ic-md"><use href="#i-chev-left"/></svg></span>
+              <span class="title">글씨 크기</span>
+              <span></span>
             </div>
             <div class="slider-block">
               <div class="slider-track">
@@ -1114,17 +1189,17 @@
       <span class="sep">·</span>
       <a href="mailto:wildkindground@gmail.com"><span data-i="contact"></span></a>
     </div>
-    <div class="copyright">© 2026 eyeday</div>
+    <div class="copyright">© 2026 posiki</div>
   </footer>
 
 <script>
 const UI = {
   ko: {
     title: "eyeday - 안약 알람 & 점안 기록",
-    subtitle: "맞춤 안약 스케줄, 점안 기록, 안압 추이를 한 앱에서",
+    subtitle: "녹내장, 백내장, 라식, 라섹, 렌즈삽입술(ICL) 등 안과 수술 후, 또는 안과 질환에 맞는 안약 앱. 맞춤 안약 스케줄, 점안 기록, 안압 추이를 한 앱에서.",
     s1Eyebrow: "안약 등록",
     s1Title: "내 처방대로\n안약 스케줄을 설정",
-    s1Desc: "약 이름, 하루 횟수, 투약 간격, 시작 시간만 입력하면 끝. 아침·점심·저녁·자기 전 프리셋이나 직접 지정 모드 모두 지원합니다.",
+    s1Desc: "약 이름, 하루 횟수, 투약 간격, 시작 시간만 입력하면 끝. 직접 지정할 경우 하루 3회 4시간마다, 하루 4회 3시간마다 등 자동으로 계산해 표시됩니다. 안구건조증, 알레르기, 안구 염증(포도막염), 각막궤양 등 다양한 질환의 처방에 활용해보세요.",
     s2Eyebrow: "점안 기록",
     s2Title: "오늘 점안 한눈에",
     s2Desc: "예정 시각과 완료 여부를 타임라인으로 보여주고, 점안 시간이 되면 푸시 알림으로 알려줍니다. 추가 점안과 메모도 한 화면에서.",
@@ -1132,8 +1207,8 @@ const UI = {
     s3Title: "안약 간 최소 간격\n자동 경고",
     s3Desc: "여러 안약을 연달아 넣으려고 하면 남은 시간을 계산해 5분 간격을 두라는 안내가 뜹니다. 의사 권장 간격을 지키도록 도와줍니다.",
     s4Eyebrow: "안압 기록",
-    s4Title: "안압 측정값과\n추이 그래프",
-    s4Desc: "병원에서 측정한 우안/좌안 안압을 기록하면 막대 그래프로 추세를 보여줍니다. 진료 때 변화를 한눈에 공유하세요.",
+    s4Title: "안압 추이를\n선 그래프로",
+    s4Desc: "병원에서 측정한 좌안(L)·우안(R) 안압을 기록하면 한 화면에 추세 그래프와 최근 기록을 함께 보여줍니다.",
     s5Eyebrow: "접근성",
     s5Title: "글씨 크기 조절",
     s5Desc: "보통·크게·제일 크게 3단계로 글자 크기를 조절할 수 있어 시야가 흐려진 상태에서도 편하게 사용 가능합니다.",
@@ -1143,10 +1218,10 @@ const UI = {
   },
   en: {
     title: "eyeday - Eye drop reminder & log",
-    subtitle: "Custom eye drop schedules, dosing log, and IOP trends in one app",
+    subtitle: "An eye drop app tailored to post-op care (glaucoma, cataract, LASIK, LASEK, ICL) and ophthalmic conditions. Custom drop schedules, dosing log, and IOP trends in one app.",
     s1Eyebrow: "ADD MEDICATION",
     s1Title: "Set a schedule\nthat fits your prescription",
-    s1Desc: "Enter the name, daily count, interval and start time — that's it. Morning, noon, evening, bedtime presets or fully custom timing both supported.",
+    s1Desc: "Enter the name, daily count, interval and start time — that's it. With the custom mode, schedules like 3×/day every 4 hours or 4×/day every 3 hours are computed and laid out automatically. Use it for a wide range of conditions — dry eye, allergies, uveitis, corneal ulcers and more.",
     s2Eyebrow: "DOSING LOG",
     s2Title: "Today's drops at a glance",
     s2Desc: "Scheduled times and completion status appear on a timeline, with push reminders when it's time. Extra doses and notes live on the same screen.",
@@ -1154,8 +1229,8 @@ const UI = {
     s3Title: "Automatic warning between\nback-to-back drops",
     s3Desc: "If you try to apply another drop right after one, the remaining time is calculated and a 5-minute gap is suggested — keeping you within recommended intervals.",
     s4Eyebrow: "IOP LOG",
-    s4Title: "Pressure values and trend",
-    s4Desc: "Record left/right IOP from your clinic visits and see the trend as a bar chart — easy to share changes during your next checkup.",
+    s4Title: "IOP trend as a line chart",
+    s4Desc: "Log left (L) and right (R) IOP from your clinic visits — the trend chart and recent entries appear together on one screen.",
     s5Eyebrow: "ACCESSIBILITY",
     s5Title: "Adjustable font size",
     s5Desc: "Normal, Large, or Largest — three steps that keep the app readable even when your vision is blurred from drops.",
@@ -1165,10 +1240,10 @@ const UI = {
   },
   ja: {
     title: "eyeday - 目薬リマインダー & 点眼記録",
-    subtitle: "目薬スケジュール、点眼記録、眼圧推移をひとつのアプリで",
+    subtitle: "緑内障・白内障・LASIK・LASEK・ICLなど眼科手術後、または眼科疾患に合わせた目薬アプリ。目薬スケジュール、点眼記録、眼圧推移をひとつのアプリで。",
     s1Eyebrow: "目薬の登録",
     s1Title: "処方どおりの\nスケジュール設定",
-    s1Desc: "薬の名前、1日の回数、間隔、開始時刻を入力するだけ。朝・昼・晩・就寝前のプリセットも、自由なカスタムも両対応。",
+    s1Desc: "薬の名前、1日の回数、間隔、開始時刻を入力するだけ。カスタム指定なら1日3回4時間ごと、1日4回3時間ごとといった配分を自動計算して表示。ドライアイ、アレルギー、ぶどう膜炎、角膜潰瘍などさまざまな疾患の処方に活用できます。",
     s2Eyebrow: "点眼記録",
     s2Title: "今日の点眼をひと目で",
     s2Desc: "予定時刻と完了状態をタイムラインで表示。点眼時間にはプッシュ通知でお知らせします。追加点眼やメモも同じ画面で。",
@@ -1176,8 +1251,8 @@ const UI = {
     s3Title: "目薬の最短間隔を\n自動で警告",
     s3Desc: "複数の目薬を続けて差そうとすると残り時間を計算し、5分間隔を空けるよう案内。医師推奨の間隔を守れます。",
     s4Eyebrow: "眼圧記録",
-    s4Title: "眼圧値と推移グラフ",
-    s4Desc: "病院で測った右眼・左眼の眼圧を記録すると、棒グラフで推移が確認できます。次回の診察にそのまま共有可能。",
+    s4Title: "眼圧推移を折れ線グラフで",
+    s4Desc: "病院で測った左眼(L)・右眼(R)の眼圧を記録すると、推移グラフと最近の記録が同じ画面に並びます。",
     s5Eyebrow: "アクセシビリティ",
     s5Title: "文字サイズ調整",
     s5Desc: "標準・大きい・最大の3段階で文字サイズを変更可能。点眼直後の視界がぼやけた状態でも快適に使えます。",
@@ -1187,10 +1262,10 @@ const UI = {
   },
   fr: {
     title: "eyeday - Rappel de collyre & journal",
-    subtitle: "Programmation, journal des doses et tendance de la TIO dans une seule app",
+    subtitle: "App de collyre adaptée à la prise en charge post-opératoire (glaucome, cataracte, LASIK, LASEK, ICL) et aux pathologies ophtalmiques. Programmes sur mesure, journal des doses et tendance de la TIO dans une seule app.",
     s1Eyebrow: "AJOUTER UN COLLYRE",
     s1Title: "Programmez selon\nvotre ordonnance",
-    s1Desc: "Saisissez le nom, le nombre quotidien, l'intervalle et l'heure de départ — c'est tout. Préréglages matin/midi/soir/coucher ou minutage personnalisé.",
+    s1Desc: "Saisissez le nom, le nombre quotidien, l'intervalle et l'heure de départ — c'est tout. En mode personnalisé, des rythmes comme 3×/jour toutes les 4h ou 4×/jour toutes les 3h sont calculés et planifiés automatiquement. Utile pour de nombreuses pathologies — sécheresse oculaire, allergies, uvéite, ulcères cornéens, etc.",
     s2Eyebrow: "JOURNAL",
     s2Title: "L'instillation du jour en un coup d'œil",
     s2Desc: "Horaires prévus et statut de complétion affichés en frise, avec rappels push à l'heure. Doses supplémentaires et notes sur le même écran.",
@@ -1198,8 +1273,8 @@ const UI = {
     s3Title: "Avertissement automatique\nentre deux collyres",
     s3Desc: "Si vous essayez d'instiller un autre collyre juste après, le temps restant est calculé et un intervalle de 5 minutes est suggéré.",
     s4Eyebrow: "JOURNAL TIO",
-    s4Title: "Valeurs et courbe de tendance",
-    s4Desc: "Enregistrez les mesures de TIO œil droit/gauche issues de vos visites et visualisez la tendance — facile à partager au prochain contrôle.",
+    s4Title: "Tendance TIO en courbe",
+    s4Desc: "Enregistrez la TIO œil gauche (L) et droit (R) — le graphique d'évolution et les entrées récentes s'affichent ensemble.",
     s5Eyebrow: "ACCESSIBILITÉ",
     s5Title: "Taille de police réglable",
     s5Desc: "Normale, Grande ou Très grande — trois niveaux pour garder l'app lisible même quand la vision est floue après l'instillation.",
@@ -1209,10 +1284,10 @@ const UI = {
   },
   es: {
     title: "eyeday - Recordatorio de colirios y registro",
-    subtitle: "Programación de colirios, registro de dosis y tendencia de PIO en una sola app",
+    subtitle: "App de colirio pensada para el postoperatorio (glaucoma, catarata, LASIK, LASEK, ICL) y enfermedades oftalmológicas. Programación a medida, registro de dosis y tendencia de PIO en una sola app.",
     s1Eyebrow: "AÑADIR COLIRIO",
     s1Title: "Programa según\ntu receta",
-    s1Desc: "Introduce el nombre, las veces al día, el intervalo y la hora de inicio — eso es todo. Preajustes mañana/mediodía/noche/al dormir o totalmente personalizado.",
+    s1Desc: "Introduce el nombre, las veces al día, el intervalo y la hora de inicio — eso es todo. En modo personalizado, pautas como 3 veces al día cada 4 h o 4 veces al día cada 3 h se calculan y reparten automáticamente. Útil para distintas afecciones — ojo seco, alergias, uveítis, úlceras corneales y más.",
     s2Eyebrow: "REGISTRO",
     s2Title: "Las gotas de hoy de un vistazo",
     s2Desc: "Las horas previstas y el estado de cumplimiento se muestran en una línea de tiempo, con avisos push a su hora. Dosis extra y notas en la misma pantalla.",
@@ -1220,8 +1295,8 @@ const UI = {
     s3Title: "Aviso automático entre\ncolirios consecutivos",
     s3Desc: "Si intentas aplicar otra gota justo después, se calcula el tiempo restante y se sugiere dejar 5 minutos.",
     s4Eyebrow: "REGISTRO DE PIO",
-    s4Title: "Valores y gráfica de tendencia",
-    s4Desc: "Registra la PIO de ojo derecho/izquierdo en tus visitas y mira la tendencia como gráfico — fácil de compartir en tu próxima revisión.",
+    s4Title: "Tendencia de PIO en línea",
+    s4Desc: "Registra la PIO de ojo izquierdo (L) y derecho (R) — el gráfico de tendencia y las entradas recientes aparecen juntos.",
     s5Eyebrow: "ACCESIBILIDAD",
     s5Title: "Tamaño de texto ajustable",
     s5Desc: "Normal, Grande o Muy grande — tres niveles para mantener la app legible incluso con visión borrosa.",
@@ -1231,10 +1306,10 @@ const UI = {
   },
   ru: {
     title: "eyeday — напоминания о каплях и журнал",
-    subtitle: "Расписание капель, журнал доз и динамика ВГД в одном приложении",
+    subtitle: "Приложение для капель под послеоперационный уход (глаукома, катаракта, LASIK, LASEK, ICL) и офтальмологические заболевания. Гибкое расписание, журнал доз и динамика ВГД в одном приложении.",
     s1Eyebrow: "ДОБАВЛЕНИЕ КАПЕЛЬ",
     s1Title: "Расписание под\nваше назначение",
-    s1Desc: "Имя, число раз в день, интервал и время старта — этого достаточно. Пресеты утро/обед/вечер/перед сном или полностью свой график.",
+    s1Desc: "Имя, число раз в день, интервал и время старта — этого достаточно. В режиме «Своё расписание» схемы вроде 3 раза/день каждые 4 ч или 4 раза/день каждые 3 ч рассчитываются и раскладываются автоматически. Подходит для разных состояний — сухой глаз, аллергия, увеит, язва роговицы и др.",
     s2Eyebrow: "ЖУРНАЛ",
     s2Title: "Капли на сегодня — сразу",
     s2Desc: "Запланированные времена и отметки выполнения на таймлайне, push-напоминания в нужный момент. Доп. дозы и заметки на одном экране.",
@@ -1242,8 +1317,8 @@ const UI = {
     s3Title: "Автопредупреждение\nмежду каплями",
     s3Desc: "Если попытаться закапать другие капли сразу следом, оставшееся время рассчитается и предложит сделать паузу 5 минут.",
     s4Eyebrow: "ЖУРНАЛ ВГД",
-    s4Title: "Значения и график динамики",
-    s4Desc: "Записывайте ВГД правого/левого глаза от визитов в клинику и смотрите динамику в виде столбиков — удобно показать на приёме.",
+    s4Title: "Динамика ВГД на графике",
+    s4Desc: "Записывайте ВГД левого (L) и правого (R) глаза — график и последние записи отображаются вместе на одном экране.",
     s5Eyebrow: "ДОСТУПНОСТЬ",
     s5Title: "Регулировка размера шрифта",
     s5Desc: "Обычный, крупный или самый крупный — три уровня, чтобы интерфейс оставался читаемым даже при размытом зрении.",
@@ -1253,10 +1328,10 @@ const UI = {
   },
   de: {
     title: "eyeday - Augentropfen-Erinnerung & Protokoll",
-    subtitle: "Tropfenplan, Dosisprotokoll und IOD-Verlauf in einer App",
+    subtitle: "Augentropfen-App für die Nachsorge nach Augenoperationen (Glaukom, Katarakt, LASIK, LASEK, ICL) und Augenerkrankungen. Individuelle Pläne, Dosisprotokoll und IOD-Verlauf in einer App.",
     s1Eyebrow: "TROPFEN ANLEGEN",
     s1Title: "Plan nach Ihrem\nRezept",
-    s1Desc: "Name, tägliche Anzahl, Intervall und Startzeit eingeben — fertig. Voreinstellungen Morgens/Mittags/Abends/Vor Bett oder vollständig individuell.",
+    s1Desc: "Name, tägliche Anzahl, Intervall und Startzeit eingeben — fertig. Im individuellen Modus werden Rhythmen wie 3×/Tag alle 4 h oder 4×/Tag alle 3 h automatisch berechnet und verteilt. Geeignet für viele Indikationen — trockenes Auge, Allergien, Uveitis, Hornhautulkus u. a.",
     s2Eyebrow: "PROTOKOLL",
     s2Title: "Heutige Tropfen auf einen Blick",
     s2Desc: "Geplante Zeiten und Status auf einer Zeitachse, Push-Erinnerung zur Zeit. Zusätzliche Dosen und Notizen im selben Bildschirm.",
@@ -1264,8 +1339,8 @@ const UI = {
     s3Title: "Automatischer Hinweis\nzwischen Tropfen",
     s3Desc: "Wenn Sie direkt nacheinander tropfen wollen, wird die Restzeit berechnet und ein 5-Minuten-Abstand empfohlen.",
     s4Eyebrow: "IOD-PROTOKOLL",
-    s4Title: "Werte und Verlaufsdiagramm",
-    s4Desc: "Tragen Sie IOD-Werte für rechts/links aus Ihren Kontrollterminen ein und sehen Sie den Verlauf als Balkendiagramm.",
+    s4Title: "IOD-Verlauf als Liniendiagramm",
+    s4Desc: "Tragen Sie IOD-Werte für links (L) und rechts (R) ein — Verlaufsgrafik und neueste Einträge erscheinen zusammen.",
     s5Eyebrow: "ZUGÄNGLICHKEIT",
     s5Title: "Schriftgröße einstellbar",
     s5Desc: "Normal, Groß oder Sehr groß — drei Stufen, damit die App auch bei verschwommener Sicht lesbar bleibt.",
@@ -1275,10 +1350,10 @@ const UI = {
   },
   it: {
     title: "eyeday - Promemoria collirio e registro",
-    subtitle: "Pianificazione del collirio, registro delle dosi e andamento della PIO in un'unica app",
+    subtitle: "App di colliri pensata per il post-operatorio (glaucoma, cataratta, LASIK, LASEK, ICL) e le patologie oculari. Pianificazione personalizzata, registro delle dosi e andamento della PIO in un'unica app.",
     s1Eyebrow: "AGGIUNGI COLLIRIO",
     s1Title: "Pianifica secondo\nla tua ricetta",
-    s1Desc: "Inserisci nome, numero giornaliero, intervallo e ora di inizio — è tutto. Preset mattina/pranzo/sera/prima di dormire o totalmente personalizzato.",
+    s1Desc: "Inserisci nome, numero giornaliero, intervallo e ora di inizio — è tutto. In modalità personalizzata, ritmi come 3 volte/giorno ogni 4 ore o 4 volte/giorno ogni 3 ore vengono calcolati e distribuiti in automatico. Utile per molte condizioni — secchezza oculare, allergie, uveite, ulcere corneali e altro.",
     s2Eyebrow: "REGISTRO",
     s2Title: "Le dosi di oggi a colpo d'occhio",
     s2Desc: "Orari previsti e stato di completamento sulla timeline, con promemoria push all'ora giusta. Dosi extra e note nello stesso schermo.",
@@ -1286,8 +1361,8 @@ const UI = {
     s3Title: "Avviso automatico tra\ndue colliri ravvicinati",
     s3Desc: "Se provi ad applicare un altro collirio subito dopo, il tempo rimanente viene calcolato e viene suggerito un intervallo di 5 minuti.",
     s4Eyebrow: "REGISTRO PIO",
-    s4Title: "Valori e grafico di andamento",
-    s4Desc: "Registra la PIO destra/sinistra dalle visite e visualizza l'andamento come grafico — facile da condividere al prossimo controllo.",
+    s4Title: "Andamento PIO in linea",
+    s4Desc: "Registra la PIO sinistra (L) e destra (R) — il grafico di andamento e le voci recenti compaiono insieme.",
     s5Eyebrow: "ACCESSIBILITÀ",
     s5Title: "Dimensione del testo regolabile",
     s5Desc: "Normale, Grande o Molto grande — tre livelli per mantenere l'app leggibile anche con vista offuscata.",
@@ -1297,10 +1372,10 @@ const UI = {
   },
   pt: {
     title: "eyeday - Lembrete de colírio e registro",
-    subtitle: "Agendamento de colírios, registro de doses e tendência de PIO em um só app",
+    subtitle: "App de colírio pensado para o pós-operatório (glaucoma, catarata, LASIK, LASEK, ICL) e doenças oftalmológicas. Agendamento personalizado, registro de doses e tendência de PIO em um só app.",
     s1Eyebrow: "ADICIONAR COLÍRIO",
     s1Title: "Programe conforme\nsua prescrição",
-    s1Desc: "Digite o nome, número diário, intervalo e horário de início — pronto. Presets manhã/almoço/noite/ao deitar ou totalmente personalizado.",
+    s1Desc: "Digite o nome, número diário, intervalo e horário de início — pronto. No modo personalizado, ritmos como 3×/dia a cada 4 h ou 4×/dia a cada 3 h são calculados e distribuídos automaticamente. Útil para diversas condições — olho seco, alergias, uveíte, úlceras de córnea e mais.",
     s2Eyebrow: "REGISTRO",
     s2Title: "As doses de hoje em um relance",
     s2Desc: "Horários previstos e status de conclusão na linha do tempo, com lembretes push na hora certa. Doses extras e anotações na mesma tela.",
@@ -1308,8 +1383,8 @@ const UI = {
     s3Title: "Aviso automático entre\ncolírios consecutivos",
     s3Desc: "Se tentar aplicar outro colírio logo em seguida, o tempo restante é calculado e sugerido um intervalo de 5 minutos.",
     s4Eyebrow: "REGISTRO PIO",
-    s4Title: "Valores e gráfico de tendência",
-    s4Desc: "Registre a PIO direita/esquerda das suas visitas e veja a tendência em gráfico — fácil de mostrar na próxima consulta.",
+    s4Title: "Tendência de PIO em linha",
+    s4Desc: "Registre a PIO esquerda (L) e direita (R) — o gráfico de tendência e os últimos registros aparecem juntos.",
     s5Eyebrow: "ACESSIBILIDADE",
     s5Title: "Tamanho do texto ajustável",
     s5Desc: "Normal, Grande ou Muito grande — três níveis para manter o app legível mesmo com visão embaçada.",
@@ -1330,14 +1405,31 @@ function pickInitialLang() {
   return 'ko';
 }
 
+const LANG_LABEL = {
+  ko: "언어", en: "Language", ja: "言語", fr: "Langue", es: "Idioma",
+  ru: "Язык", de: "Sprache", it: "Lingua", pt: "Idioma"
+};
+
+const MOCK = {
+  ko: { med1: "코솝",     med2: "잘라탄" },
+  en: { med1: "Cosopt",   med2: "Xalatan" },
+  ja: { med1: "コソプト", med2: "キサラタン" },
+  fr: { med1: "Cosopt",   med2: "Xalatan" },
+  es: { med1: "Cosopt",   med2: "Xalatan" },
+  ru: { med1: "Косопт",   med2: "Ксалатан" },
+  de: { med1: "Cosopt",   med2: "Xalatan" },
+  it: { med1: "Cosopt",   med2: "Xalatan" },
+  pt: { med1: "Cosopt",   med2: "Xalatan" }
+};
+
 function applyLang(lang) {
   const dict = UI[lang] || UI.ko;
+  const mock = MOCK[lang] || MOCK.ko;
   document.documentElement.lang = lang;
   document.title = dict.title;
   document.querySelectorAll('[data-i]').forEach((el) => {
     const k = el.getAttribute('data-i');
     if (dict[k] != null) {
-      // Preserve newlines in headings
       if (dict[k].includes('\n')) {
         el.innerHTML = '';
         dict[k].split('\n').forEach((line, i) => {
@@ -1349,17 +1441,32 @@ function applyLang(lang) {
       }
     }
   });
+  document.querySelectorAll('[data-mock]').forEach((el) => {
+    const k = el.getAttribute('data-mock');
+    if (mock[k] != null) el.textContent = mock[k];
+  });
+  // Conflict body referencing med1
+  document.querySelectorAll('[data-mock-tpl]').forEach((el) => {
+    const tpl = el.getAttribute('data-mock-tpl');
+    el.innerHTML = '';
+    tpl.replace(/\{med1\}/g, mock.med1).split('\n').forEach((line, i) => {
+      if (i > 0) el.appendChild(document.createElement('br'));
+      el.appendChild(document.createTextNode(line));
+    });
+  });
+  const langLabel = document.getElementById('langLabel');
+  if (langLabel) langLabel.textContent = LANG_LABEL[lang] || 'Language';
   const bl = BADGES[lang] || 'ko-kr';
   const img = document.getElementById('badgeImg');
   if (img) img.src = `https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/${bl}?size=250x83`;
   localStorage.setItem('eyeday_lang', lang);
-  const sel = document.getElementById('langSwitch');
+  const sel = document.getElementById('languageSelect');
   if (sel) sel.value = lang;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   applyLang(pickInitialLang());
-  document.getElementById('langSwitch').addEventListener('change', (e) => applyLang(e.target.value));
+  document.getElementById('languageSelect').addEventListener('change', (e) => applyLang(e.target.value));
 });
 </script>
 </body>
