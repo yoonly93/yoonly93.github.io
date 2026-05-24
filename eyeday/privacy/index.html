@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,25 +32,9 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.04);
       margin-bottom: 20px;
     }
-    .lang-tabs { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
-    .lang-tabs button {
-      border: 1px solid #E2E8F0;
-      background: #fff;
-      color: #475569;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      cursor: pointer;
-      font-family: inherit;
-    }
-    .lang-tabs button.active {
-      background: #3B82F6;
-      color: #fff;
-      border-color: #3B82F6;
-    }
-    .version-select { display: flex; align-items: center; gap: 8px; }
-    .version-select label { font-size: 13px; color: #475569; }
-    .version-select select {
+    .lang-select { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .lang-select label, .version-select label { font-size: 13px; color: #475569; }
+    .lang-select select, .version-select select {
       font-family: inherit;
       font-size: 13px;
       padding: 6px 10px;
@@ -59,6 +43,7 @@
       background: #fff;
       color: #1E293B;
     }
+    .version-select { display: flex; align-items: center; gap: 8px; }
     article {
       background: #fff;
       border-radius: 16px;
@@ -98,19 +83,25 @@
 </head>
 <body>
   <div class="container">
-    <h1 id="pageTitle">Eyeday 개인정보 처리방침</h1>
+    <h1 id="pageTitle">Eyeday Privacy Policy</h1>
 
     <div class="controls">
-      <div class="lang-tabs" id="langTabs">
-        <button data-lang="ko" class="active">한국어</button>
-        <button data-lang="en">English</button>
-        <button data-lang="ja">日本語</button>
-        <button data-lang="fr">Français</button>
-        <button data-lang="es">Español</button>
-        <button data-lang="ru">Русский</button>
+      <div class="lang-select">
+        <label id="langLabel" for="languageSelect">Language</label>
+        <select id="languageSelect">
+          <option value="en">English</option>
+          <option value="ko">한국어</option>
+          <option value="ja">日本語</option>
+          <option value="fr">Français</option>
+          <option value="es">Español</option>
+          <option value="ru">Русский</option>
+          <option value="de">Deutsch</option>
+          <option value="it">Italiano</option>
+          <option value="pt">Português</option>
+        </select>
       </div>
       <div class="version-select">
-        <label id="verLabel" for="versionSelect">버전</label>
+        <label id="verLabel" for="versionSelect">Version</label>
         <select id="versionSelect">
           <option value="v2">v2 — 2026-05-24</option>
           <option value="v1">v1 — 2026-05-10</option>
@@ -123,12 +114,15 @@
 
   <script>
     const UI = {
-      ko: { title: "Eyeday 개인정보 처리방침", verLabel: "버전" },
-      en: { title: "Eyeday Privacy Policy", verLabel: "Version" },
-      ja: { title: "Eyeday プライバシーポリシー", verLabel: "バージョン" },
-      fr: { title: "Politique de confidentialité Eyeday", verLabel: "Version" },
-      es: { title: "Política de Privacidad de Eyeday", verLabel: "Versión" },
-      ru: { title: "Политика конфиденциальности Eyeday", verLabel: "Версия" },
+      ko: { title: "Eyeday 개인정보 처리방침", verLabel: "버전", langLabel: "언어" },
+      en: { title: "Eyeday Privacy Policy", verLabel: "Version", langLabel: "Language" },
+      ja: { title: "Eyeday プライバシーポリシー", verLabel: "バージョン", langLabel: "言語" },
+      fr: { title: "Politique de confidentialité Eyeday", verLabel: "Version", langLabel: "Langue" },
+      es: { title: "Política de Privacidad de Eyeday", verLabel: "Versión", langLabel: "Idioma" },
+      ru: { title: "Политика конфиденциальности Eyeday", verLabel: "Версия", langLabel: "Язык" },
+      de: { title: "Eyeday Datenschutzerklärung", verLabel: "Version", langLabel: "Sprache" },
+      it: { title: "Informativa sulla privacy di Eyeday", verLabel: "Versione", langLabel: "Lingua" },
+      pt: { title: "Política de Privacidade do Eyeday", verLabel: "Versão", langLabel: "Idioma" },
     };
 
     // 정책 본문: DATA[lang][version] = { effective, html }
@@ -540,10 +534,215 @@
             <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
           `
         }
+      },
+      de: {
+        v1: {
+          effective: "Gültig ab: 10. Mai 2026",
+          html: `
+            <h2>1. Erhobene Daten</h2>
+            <p><strong>(a) Vom Nutzer eingegebene Informationen</strong>: Namen der Augentropfen, Dosierzeiten/-rhythmen, Dosierungsprotokolle. Diese Daten werden auf Ihrem Gerät gespeichert. Ausgewählte Elemente (Name des Augentropfens, Hinzufügen-/Bearbeiten-/Dosierungs-Ereignisse) werden zu Analysezwecken an Firebase Analytics übermittelt.</p>
+            <p><strong>(b) Automatisch erhobene Daten</strong>: Gerätekennungen (von Firebase erzeugte user_pseudo_id, IDFV), In-App-Nutzungsereignisse (Bildschirmaufrufe, Konflikthinweise usw.), Sprache/Region, Modell und Betriebssystemversion, grobe IP-basierte Standortinformationen (Landesebene), Werbe-Identifier IDFA (nur mit Ihrer Einwilligung).</p>
+            <h2>2. Zwecke</h2>
+            <p>Bereitstellung geplanter Erinnerungen, Analyse von Nutzungsmustern zur Verbesserung der App, Anzeigenauslieferung (kostenlose Version).</p>
+            <h2>3. Geräteberechtigungen</h2>
+            <p>Benachrichtigungen (für Dosierungserinnerungen), Tracking (optional — bei Ablehnung werden nur nicht personalisierte Anzeigen ausgespielt).</p>
+            <h2>4. Weitergabe an Dritte / Auftragsverarbeiter</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: Verhaltensanalyse</li>
+              <li><strong>Google LLC – AdMob</strong>: Anzeigenauslieferung</li>
+            </ul>
+            <h2>5. Internationale Übermittlung</h2>
+            <p>Die oben genannten Daten werden an Server von Google LLC in den USA übermittelt und dort gespeichert.</p>
+            <h2>6. Speicherung</h2>
+            <ul>
+              <li>Daten auf dem Gerät (Medikamenten-Infos, Dosierungsprotokolle): werden beim Deinstallieren der App gelöscht</li>
+              <li>Firebase Analytics: bis zu 14 Monate gemäß Googles Speicherrichtlinie</li>
+              <li>AdMob-Werbe-Identifier: jederzeit in den iOS-Einstellungen zurücksetzbar/deaktivierbar</li>
+            </ul>
+            <h2>7. Ihre Rechte</h2>
+            <p>Das Löschen eines Medikaments in der App entfernt die lokalen Daten sofort. Für eine Löschung von in Firebase gespeicherten Daten kontaktieren Sie uns bitte per E-Mail. Das Werbe-Tracking lässt sich über iOS „Einstellungen > Datenschutz & Sicherheit > Tracking" deaktivieren.</p>
+            <h2>8. Daten von Kindern</h2>
+            <p>Diese App erhebt nicht wissentlich personenbezogene Daten von Kindern unter 14 Jahren.</p>
+            <h2>9. Änderungen</h2>
+            <p>Wir informieren Sie über Änderungen via App oder auf dieser Seite.</p>
+            <h2>10. Kontakt</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+          `
+        },
+        v2: {
+          effective: "Gültig ab: 24. Mai 2026",
+          html: `
+            <h2>1. Erhobene Daten</h2>
+            <p><strong>(a) Vom Nutzer eingegebene Informationen</strong>: Namen der Augentropfen, Dosierzeiten/-rhythmen, Dosierungsprotokolle. Diese Daten werden auf Ihrem Gerät gespeichert. Ausgewählte Elemente (Name des Augentropfens, Hinzufügen-/Bearbeiten-/Dosierungs-Ereignisse) werden zu Analysezwecken an Firebase Analytics übermittelt.</p>
+            <p><strong>(b) Automatisch erhobene Daten</strong>: Gerätekennungen (von Firebase erzeugte user_pseudo_id, IDFV auf iOS / Firebase Installation ID auf Android), In-App-Nutzungsereignisse (Bildschirmaufrufe, Konflikthinweise usw.), Sprache/Region, Modell und Betriebssystemversion, grobe IP-basierte Standortinformationen (Landesebene), Werbe-Identifier (IDFA auf iOS / GAID auf Android — nur mit Ihrer Einwilligung).</p>
+            <h2>2. Zwecke</h2>
+            <p>Bereitstellung geplanter Erinnerungen, Analyse von Nutzungsmustern zur Verbesserung der App, Anzeigenauslieferung (kostenlose Version).</p>
+            <h2>3. Geräteberechtigungen</h2>
+            <p>Benachrichtigungen (für Dosierungserinnerungen — Android 13+ erfordert eine Laufzeitberechtigung), Tracking (nur iOS — bei Ablehnung werden nur nicht personalisierte Anzeigen ausgespielt).</p>
+            <h2>4. Weitergabe an Dritte / Auftragsverarbeiter</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: Verhaltensanalyse</li>
+              <li><strong>Google LLC – AdMob</strong>: Anzeigenauslieferung</li>
+            </ul>
+            <h2>5. Internationale Übermittlung</h2>
+            <p>Die oben genannten Daten werden an Server von Google LLC in den USA übermittelt und dort gespeichert.</p>
+            <h2>6. Speicherung</h2>
+            <ul>
+              <li>Daten auf dem Gerät (Medikamenten-Infos, Dosierungsprotokolle): werden beim Deinstallieren der App gelöscht</li>
+              <li>Firebase Analytics: bis zu 14 Monate gemäß Googles Speicherrichtlinie</li>
+              <li>Werbe-Identifier: jederzeit über iOS „Einstellungen > Datenschutz & Sicherheit > Tracking" oder Android „Einstellungen > Datenschutz > Werbung" zurücksetzbar/deaktivierbar</li>
+            </ul>
+            <h2>7. Ihre Rechte</h2>
+            <p>Das Löschen eines Medikaments in der App entfernt die lokalen Daten sofort. Für eine Löschung von in Firebase gespeicherten Daten kontaktieren Sie uns bitte per E-Mail. Das Werbe-Tracking lässt sich über iOS „Einstellungen > Datenschutz & Sicherheit > Tracking" oder Android „Einstellungen > Datenschutz > Werbung > Werbe-ID löschen" deaktivieren.</p>
+            <h2>8. Daten von Kindern</h2>
+            <p>Diese App erhebt nicht wissentlich personenbezogene Daten von Kindern unter 14 Jahren.</p>
+            <h2>9. Änderungen</h2>
+            <p>Wir informieren Sie über Änderungen via App oder auf dieser Seite.</p>
+            <h2>10. Kontakt</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+          `
+        }
+      },
+      it: {
+        v1: {
+          effective: "Data di entrata in vigore: 10 maggio 2026",
+          html: `
+            <h2>1. Informazioni raccolte</h2>
+            <p><strong>(a) Informazioni fornite dall'utente</strong>: nomi dei colliri, orari e frequenza di applicazione, registri delle dosi. Questi dati sono memorizzati sul tuo dispositivo. Alcuni elementi (nome del collirio, eventi di aggiunta/modifica/applicazione) vengono inoltre trasmessi a Firebase Analytics a scopo analitico.</p>
+            <p><strong>(b) Raccolte automaticamente</strong>: identificatori del dispositivo (user_pseudo_id generato da Firebase, IDFV), eventi d'uso (visualizzazioni di schermate, avvisi di conflitto ecc.), lingua/regione, modello e versione del SO, posizione approssimativa a livello paese (basata su IP), identificatore pubblicitario IDFA (solo con il tuo consenso).</p>
+            <h2>2. Finalità</h2>
+            <p>Fornire promemoria pianificati, analizzare i modelli d'uso per migliorare l'app, erogare pubblicità (versione gratuita).</p>
+            <h2>3. Autorizzazioni del dispositivo</h2>
+            <p>Notifiche (per i promemoria), Tracciamento (facoltativo — il rifiuto limita gli annunci a non personalizzati).</p>
+            <h2>4. Condivisione con terzi / Responsabili del trattamento</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: analisi del comportamento</li>
+              <li><strong>Google LLC – AdMob</strong>: erogazione pubblicitaria</li>
+            </ul>
+            <h2>5. Trasferimento internazionale</h2>
+            <p>I dati di cui sopra vengono trasmessi e archiviati sui server Google LLC negli Stati Uniti.</p>
+            <h2>6. Conservazione</h2>
+            <ul>
+              <li>Dati sul dispositivo: eliminati alla disinstallazione</li>
+              <li>Firebase Analytics: fino a 14 mesi secondo la politica di Google</li>
+              <li>Identificatore pubblicitario AdMob: reimpostabile/disattivabile in qualunque momento dalle impostazioni iOS</li>
+            </ul>
+            <h2>7. I tuoi diritti</h2>
+            <p>Eliminando un farmaco nell'app i dati locali vengono rimossi immediatamente. Per richiedere la cancellazione dei dati conservati in Firebase, contattaci via e-mail. Puoi disattivare il tracciamento pubblicitario in iOS «Impostazioni > Privacy e sicurezza > Tracciamento».</p>
+            <h2>8. Privacy dei minori</h2>
+            <p>Questa app non raccoglie consapevolmente dati personali di minori di 14 anni.</p>
+            <h2>9. Modifiche</h2>
+            <p>Comunicheremo eventuali modifiche tramite l'app o questa pagina.</p>
+            <h2>10. Contatto</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+          `
+        },
+        v2: {
+          effective: "Data di entrata in vigore: 24 maggio 2026",
+          html: `
+            <h2>1. Informazioni raccolte</h2>
+            <p><strong>(a) Informazioni fornite dall'utente</strong>: nomi dei colliri, orari e frequenza di applicazione, registri delle dosi. Questi dati sono memorizzati sul tuo dispositivo. Alcuni elementi (nome del collirio, eventi di aggiunta/modifica/applicazione) vengono inoltre trasmessi a Firebase Analytics a scopo analitico.</p>
+            <p><strong>(b) Raccolte automaticamente</strong>: identificatori del dispositivo (user_pseudo_id generato da Firebase, IDFV su iOS / Firebase Installation ID su Android), eventi d'uso (visualizzazioni di schermate, avvisi di conflitto ecc.), lingua/regione, modello e versione del SO, posizione approssimativa a livello paese (basata su IP), identificatore pubblicitario (IDFA su iOS / GAID su Android, solo con il tuo consenso).</p>
+            <h2>2. Finalità</h2>
+            <p>Fornire promemoria pianificati, analizzare i modelli d'uso per migliorare l'app, erogare pubblicità (versione gratuita).</p>
+            <h2>3. Autorizzazioni del dispositivo</h2>
+            <p>Notifiche (per i promemoria — Android 13+ richiede un'autorizzazione runtime), Tracciamento (solo iOS — il rifiuto limita gli annunci a non personalizzati).</p>
+            <h2>4. Condivisione con terzi / Responsabili del trattamento</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: analisi del comportamento</li>
+              <li><strong>Google LLC – AdMob</strong>: erogazione pubblicitaria</li>
+            </ul>
+            <h2>5. Trasferimento internazionale</h2>
+            <p>I dati di cui sopra vengono trasmessi e archiviati sui server Google LLC negli Stati Uniti.</p>
+            <h2>6. Conservazione</h2>
+            <ul>
+              <li>Dati sul dispositivo: eliminati alla disinstallazione</li>
+              <li>Firebase Analytics: fino a 14 mesi secondo la politica di Google</li>
+              <li>Identificatore pubblicitario: reimpostabile/disattivabile in qualunque momento da iOS «Impostazioni > Privacy e sicurezza > Tracciamento» o Android «Impostazioni > Privacy > Annunci»</li>
+            </ul>
+            <h2>7. I tuoi diritti</h2>
+            <p>Eliminando un farmaco nell'app i dati locali vengono rimossi immediatamente. Per richiedere la cancellazione dei dati conservati in Firebase, contattaci via e-mail. Puoi disattivare il tracciamento pubblicitario in iOS «Impostazioni > Privacy e sicurezza > Tracciamento» o Android «Impostazioni > Privacy > Annunci > Elimina ID pubblicità».</p>
+            <h2>8. Privacy dei minori</h2>
+            <p>Questa app non raccoglie consapevolmente dati personali di minori di 14 anni.</p>
+            <h2>9. Modifiche</h2>
+            <p>Comunicheremo eventuali modifiche tramite l'app o questa pagina.</p>
+            <h2>10. Contatto</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+          `
+        }
+      },
+      pt: {
+        v1: {
+          effective: "Data de vigência: 10 de maio de 2026",
+          html: `
+            <h2>1. Informações coletadas</h2>
+            <p><strong>(a) Informações fornecidas pelo usuário</strong>: nomes dos colírios, horários e frequência de aplicação, registros de aplicação. Esses dados ficam armazenados no seu dispositivo. Itens selecionados (nome do colírio, eventos de adicionar/editar/aplicar) também são transmitidos ao Firebase Analytics para análise.</p>
+            <p><strong>(b) Coletadas automaticamente</strong>: identificadores do dispositivo (user_pseudo_id gerado pelo Firebase, IDFV), eventos de uso (visualizações de tela, avisos de conflito etc.), idioma/região, modelo e versão do SO, localização aproximada em nível de país (baseada em IP), identificador de publicidade IDFA (apenas com seu consentimento).</p>
+            <h2>2. Finalidade</h2>
+            <p>Fornecer lembretes programados, analisar padrões de uso para melhorar o aplicativo e exibir anúncios (versão gratuita).</p>
+            <h2>3. Permissões do dispositivo</h2>
+            <p>Notificações (para lembretes), Rastreamento (opcional — recusar limita os anúncios a não personalizados).</p>
+            <h2>4. Compartilhamento com terceiros / Operadores</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: análise de comportamento</li>
+              <li><strong>Google LLC – AdMob</strong>: veiculação de anúncios</li>
+            </ul>
+            <h2>5. Transferência internacional</h2>
+            <p>Os dados acima são transmitidos e armazenados em servidores do Google LLC nos Estados Unidos.</p>
+            <h2>6. Retenção</h2>
+            <ul>
+              <li>Dados no dispositivo: removidos ao desinstalar</li>
+              <li>Firebase Analytics: até 14 meses, conforme a política do Google</li>
+              <li>Identificador de publicidade AdMob: pode ser redefinido/desativado a qualquer momento nas configurações do iOS</li>
+            </ul>
+            <h2>7. Seus direitos</h2>
+            <p>Excluir um medicamento no app remove os dados locais imediatamente. Para solicitar a exclusão de dados armazenados no Firebase, entre em contato pelo e-mail abaixo. É possível desativar o rastreamento publicitário em iOS «Ajustes > Privacidade e Segurança > Rastreamento».</p>
+            <h2>8. Privacidade infantil</h2>
+            <p>Este app não coleta intencionalmente dados pessoais de menores de 14 anos.</p>
+            <h2>9. Alterações</h2>
+            <p>Comunicaremos quaisquer mudanças pelo aplicativo ou por esta página.</p>
+            <h2>10. Contato</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+          `
+        },
+        v2: {
+          effective: "Data de vigência: 24 de maio de 2026",
+          html: `
+            <h2>1. Informações coletadas</h2>
+            <p><strong>(a) Informações fornecidas pelo usuário</strong>: nomes dos colírios, horários e frequência de aplicação, registros de aplicação. Esses dados ficam armazenados no seu dispositivo. Itens selecionados (nome do colírio, eventos de adicionar/editar/aplicar) também são transmitidos ao Firebase Analytics para análise.</p>
+            <p><strong>(b) Coletadas automaticamente</strong>: identificadores do dispositivo (user_pseudo_id gerado pelo Firebase, IDFV no iOS / Firebase Installation ID no Android), eventos de uso (visualizações de tela, avisos de conflito etc.), idioma/região, modelo e versão do SO, localização aproximada em nível de país (baseada em IP), identificador de publicidade (IDFA no iOS / GAID no Android, apenas com seu consentimento).</p>
+            <h2>2. Finalidade</h2>
+            <p>Fornecer lembretes programados, analisar padrões de uso para melhorar o aplicativo e exibir anúncios (versão gratuita).</p>
+            <h2>3. Permissões do dispositivo</h2>
+            <p>Notificações (para lembretes — Android 13+ requer permissão em tempo de execução), Rastreamento (apenas iOS — recusar limita os anúncios a não personalizados).</p>
+            <h2>4. Compartilhamento com terceiros / Operadores</h2>
+            <ul>
+              <li><strong>Google LLC – Firebase Analytics</strong>: análise de comportamento</li>
+              <li><strong>Google LLC – AdMob</strong>: veiculação de anúncios</li>
+            </ul>
+            <h2>5. Transferência internacional</h2>
+            <p>Os dados acima são transmitidos e armazenados em servidores do Google LLC nos Estados Unidos.</p>
+            <h2>6. Retenção</h2>
+            <ul>
+              <li>Dados no dispositivo: removidos ao desinstalar</li>
+              <li>Firebase Analytics: até 14 meses, conforme a política do Google</li>
+              <li>Identificador de publicidade: pode ser redefinido/desativado a qualquer momento em iOS «Ajustes > Privacidade e Segurança > Rastreamento» ou Android «Configurações > Privacidade > Anúncios»</li>
+            </ul>
+            <h2>7. Seus direitos</h2>
+            <p>Excluir um medicamento no app remove os dados locais imediatamente. Para solicitar a exclusão de dados armazenados no Firebase, entre em contato pelo e-mail abaixo. É possível desativar o rastreamento publicitário em iOS «Ajustes > Privacidade e Segurança > Rastreamento» ou Android «Configurações > Privacidade > Anúncios > Excluir ID de publicidade».</p>
+            <h2>8. Privacidade infantil</h2>
+            <p>Este app não coleta intencionalmente dados pessoais de menores de 14 anos.</p>
+            <h2>9. Alterações</h2>
+            <p>Comunicaremos quaisquer mudanças pelo aplicativo ou por esta página.</p>
+            <h2>10. Contato</h2>
+            <p><a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+          `
+        }
       }
     };
 
-    let currentLang = 'ko';
+    // 기본 언어는 영어. URL ?lang= 로 지정 가능.
+    let currentLang = 'en';
     let currentVersion = 'v2';
 
     function render() {
@@ -552,34 +751,31 @@
       document.documentElement.lang = currentLang;
       document.getElementById('pageTitle').textContent = ui.title;
       document.getElementById('verLabel').textContent = ui.verLabel;
+      document.getElementById('langLabel').textContent = ui.langLabel;
       document.title = ui.title;
       const badge = '<span class="badge-ver">' + currentVersion + '</span>';
       document.getElementById('content').innerHTML =
         '<p class="effective">' + badge + d.effective + '</p>' + d.html;
     }
 
-    document.querySelectorAll('#langTabs button').forEach(function (b) {
-      b.addEventListener('click', function () {
-        document.querySelectorAll('#langTabs button').forEach(function (x) { x.classList.remove('active'); });
-        b.classList.add('active');
-        currentLang = b.dataset.lang;
-        render();
-      });
+    document.getElementById('languageSelect').addEventListener('change', function (e) {
+      currentLang = e.target.value;
+      render();
     });
     document.getElementById('versionSelect').addEventListener('change', function (e) {
       currentVersion = e.target.value;
       render();
     });
 
-    // URL ?lang=en&v=v2 지원
+    // URL ?lang=ko&v=v2 지원
     var params = new URLSearchParams(location.search);
     var langParam = params.get('lang');
     var verParam = params.get('v');
     if (langParam && DATA[langParam]) {
       currentLang = langParam;
-      document.querySelectorAll('#langTabs button').forEach(function (b) {
-        b.classList.toggle('active', b.dataset.lang === langParam);
-      });
+      document.getElementById('languageSelect').value = langParam;
+    } else {
+      document.getElementById('languageSelect').value = currentLang;
     }
     if (verParam && (verParam === 'v1' || verParam === 'v2')) {
       currentVersion = verParam;
