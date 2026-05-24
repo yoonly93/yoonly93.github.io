@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>eyeday - 안약 알람 & 점안 기록</title>
+  <title>eyeday</title>
   <style>
     @font-face {
       font-family: 'LINESeedJP';
@@ -28,6 +28,20 @@
       align-items: center;
       justify-content: center;
       color: #1E293B;
+    }
+    .lang-switch {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      font-family: inherit;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid #E2E8F0;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      color: #334155;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
     }
     .container {
       text-align: center;
@@ -75,10 +89,7 @@
       background: #3B82F6;
       flex-shrink: 0;
     }
-    .badge {
-      display: inline-block;
-      margin-top: 8px;
-    }
+    .badge { display: inline-block; margin-top: 8px; }
     .badge img { height: 48px; }
     .contact {
       margin-top: 24px;
@@ -89,28 +100,206 @@
   </style>
 </head>
 <body>
+  <select class="lang-switch" id="langSwitch" aria-label="Language">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+      <option value="fr">Français</option>
+      <option value="es">Español</option>
+      <option value="ru">Русский</option>
+      <option value="de">Deutsch</option>
+      <option value="it">Italiano</option>
+      <option value="pt">Português</option>
+  </select>
   <div class="container">
     <div class="icon">
       <img src="icon.png" alt="Eyeday App Icon">
     </div>
     <h1>eyeday</h1>
-    <p class="subtitle">안약 알람 & 점안 기록</p>
+    <p class="subtitle" data-i="subtitle"></p>
     <div class="features">
-      <h2>주요 기능</h2>
-      <div class="feature"><span class="feature-dot"></span>맞춤 안약 점안 스케줄 설정</div>
-      <div class="feature"><span class="feature-dot"></span>푸시 알림으로 점안 시간 알림</div>
-      <div class="feature"><span class="feature-dot"></span>점안 기록 및 달력 관리</div>
-      <div class="feature"><span class="feature-dot"></span>안약 간 최소 간격 충돌 감지</div>
-      <div class="feature"><span class="feature-dot"></span>올바른 점안 방법 가이드</div>
-      <div class="feature"><span class="feature-dot"></span>6개 언어 지원 (한/영/일/불/서/러)</div>
+      <h2 data-i="featuresTitle"></h2>
+      <div class="feature"><span class="feature-dot"></span><span data-i="f1"></span></div>
+      <div class="feature"><span class="feature-dot"></span><span data-i="f2"></span></div>
+      <div class="feature"><span class="feature-dot"></span><span data-i="f3"></span></div>
+      <div class="feature"><span class="feature-dot"></span><span data-i="f4"></span></div>
+      <div class="feature"><span class="feature-dot"></span><span data-i="f5"></span></div>
+      <div class="feature"><span class="feature-dot"></span><span data-i="f6"></span></div>
     </div>
-    <a class="badge" href="https://apps.apple.com/kr/app/eyeday-%EC%95%88%EC%95%BD-%EC%95%8C%EB%9E%8C-%EC%A0%90%EC%95%88-%EA%B8%B0%EB%A1%9D/id6759497954">
-      <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ko-kr?size=250x83" alt="Download on the App Store">
+    <a class="badge" id="appBadge" href="https://apps.apple.com/kr/app/eyeday-%EC%95%88%EC%95%BD-%EC%95%8C%EB%9E%8C-%EC%A0%90%EC%95%88-%EA%B8%B0%EB%A1%9D/id6759497954">
+      <img id="badgeImg" src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ko-kr?size=250x83" alt="Download on the App Store">
     </a>
     <div class="contact">
-      <p>문의: <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
-      <p style="margin-top:8px;"><a href="eyeday/privacy/">개인정보 처리방침</a></p>
+      <p><span data-i="contact"></span>: <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+      <p style="margin-top:8px;">
+        <a href="eyeday/privacy/" data-i="privacy"></a>
+        &nbsp;·&nbsp;
+        <a href="eyeday/terms/" data-i="terms"></a>
+      </p>
     </div>
   </div>
+<script>
+const UI = {
+  "ko": {
+    "title": "eyeday - 안약 알람 & 점안 기록",
+    "subtitle": "안약 알람 & 점안 기록",
+    "featuresTitle": "주요 기능",
+    "f1": "맞춤 안약 점안 스케줄 설정",
+    "f2": "푸시 알림으로 점안 시간 알림",
+    "f3": "점안 기록 및 달력 관리",
+    "f4": "안약 간 최소 간격 충돌 감지",
+    "f5": "올바른 점안 방법 가이드",
+    "f6": "9개 언어 지원 (한/영/일/불/서/러/독/이/포)",
+    "contact": "문의",
+    "privacy": "개인정보 처리방침",
+    "terms": "서비스 이용약관"
+  },
+  "en": {
+    "title": "eyeday - Eye drop reminder & log",
+    "subtitle": "Eye drop reminder & log",
+    "featuresTitle": "Key features",
+    "f1": "Custom eye drop scheduling",
+    "f2": "Push notification reminders",
+    "f3": "Dose log & calendar view",
+    "f4": "Conflict detection between drops",
+    "f5": "Step-by-step application guide",
+    "f6": "Supports 9 languages (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "ja": {
+    "title": "eyeday - 目薬リマインダー & 点眼記録",
+    "subtitle": "目薬リマインダー & 点眼記録",
+    "featuresTitle": "主な機能",
+    "f1": "目薬スケジュールのカスタム設定",
+    "f2": "プッシュ通知での点眼リマインダー",
+    "f3": "点眼記録とカレンダー管理",
+    "f4": "目薬間の最短間隔の自動調整",
+    "f5": "正しい点眼方法ガイド",
+    "f6": "9言語対応 (韓/英/日/仏/西/露/独/伊/葡)",
+    "contact": "お問い合わせ",
+    "privacy": "プライバシーポリシー",
+    "terms": "利用規約"
+  },
+  "fr": {
+    "title": "eyeday - Rappel de collyre & journal",
+    "subtitle": "Rappel de collyre & journal",
+    "featuresTitle": "Fonctionnalités",
+    "f1": "Programmation personnalisée des gouttes",
+    "f2": "Rappels par notifications push",
+    "f3": "Journal des doses & calendrier",
+    "f4": "Détection des conflits entre gouttes",
+    "f5": "Guide pas à pas pour l'application",
+    "f6": "9 langues prises en charge (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
+    "contact": "Contact",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation"
+  },
+  "es": {
+    "title": "eyeday - Recordatorio de colirios y registro",
+    "subtitle": "Recordatorio de colirios y registro",
+    "featuresTitle": "Funciones principales",
+    "f1": "Programación personalizada del colirio",
+    "f2": "Recordatorios por notificación push",
+    "f3": "Registro de dosis y calendario",
+    "f4": "Detección de conflictos entre colirios",
+    "f5": "Guía paso a paso para aplicar gotas",
+    "f6": "Soporte para 9 idiomas (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
+    "contact": "Contacto",
+    "privacy": "Política de privacidad",
+    "terms": "Términos de servicio"
+  },
+  "ru": {
+    "title": "eyeday — напоминания о каплях и журнал",
+    "subtitle": "Напоминания о каплях и журнал",
+    "featuresTitle": "Основные функции",
+    "f1": "Гибкое расписание капель",
+    "f2": "Push-напоминания о времени",
+    "f3": "Журнал доз и календарь",
+    "f4": "Обнаружение конфликтов между каплями",
+    "f5": "Пошаговое руководство по закапыванию",
+    "f6": "Поддержка 9 языков (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
+    "contact": "Контакты",
+    "privacy": "Политика конфиденциальности",
+    "terms": "Условия использования"
+  },
+  "de": {
+    "title": "eyeday - Augentropfen-Erinnerung & Protokoll",
+    "subtitle": "Augentropfen-Erinnerung & Protokoll",
+    "featuresTitle": "Hauptfunktionen",
+    "f1": "Individuelle Tropfen-Pläne",
+    "f2": "Push-Erinnerungen zur Anwendung",
+    "f3": "Protokoll & Kalenderansicht",
+    "f4": "Konflikterkennung zwischen Tropfen",
+    "f5": "Schritt-für-Schritt-Anwendungsanleitung",
+    "f6": "9 Sprachen unterstützt (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
+    "contact": "Kontakt",
+    "privacy": "Datenschutzerklärung",
+    "terms": "Nutzungsbedingungen"
+  },
+  "it": {
+    "title": "eyeday - Promemoria collirio e registro",
+    "subtitle": "Promemoria collirio e registro",
+    "featuresTitle": "Funzioni principali",
+    "f1": "Pianificazione personalizzata del collirio",
+    "f2": "Promemoria con notifiche push",
+    "f3": "Registro delle dosi e calendario",
+    "f4": "Rilevamento di conflitti tra colliri",
+    "f5": "Guida passo passo all'applicazione",
+    "f6": "9 lingue supportate (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
+    "contact": "Contatti",
+    "privacy": "Informativa sulla privacy",
+    "terms": "Termini di servizio"
+  },
+  "pt": {
+    "title": "eyeday - Lembrete de colírio e registro",
+    "subtitle": "Lembrete de colírio e registro",
+    "featuresTitle": "Principais recursos",
+    "f1": "Agendamento personalizado de colírios",
+    "f2": "Lembretes por notificação push",
+    "f3": "Registro de doses e calendário",
+    "f4": "Detecção de conflitos entre colírios",
+    "f5": "Guia passo a passo para aplicação",
+    "f6": "Suporte a 9 idiomas (KO/EN/JA/FR/ES/RU/DE/IT/PT)",
+    "contact": "Contato",
+    "privacy": "Política de Privacidade",
+    "terms": "Termos de Serviço"
+  }
+};
+const BADGES = {"ko": "ko-kr", "en": "en-us", "ja": "ja-jp", "fr": "fr-fr", "es": "es-es", "ru": "ru-ru", "de": "de-de", "it": "it-it", "pt": "pt-br"};
+const LANGS = ["ko", "en", "ja", "fr", "es", "ru", "de", "it", "pt"];
+
+function pickInitialLang() {
+  const saved = localStorage.getItem('eyeday_lang');
+  if (saved && LANGS.includes(saved)) return saved;
+  const nav = (navigator.language || 'ko').toLowerCase();
+  for (const l of LANGS) { if (nav.startsWith(l)) return l; }
+  return 'ko';
+}
+
+function applyLang(lang) {
+  const dict = UI[lang] || UI.ko;
+  document.documentElement.lang = lang;
+  document.title = dict.title;
+  document.querySelectorAll('[data-i]').forEach((el) => {
+    const k = el.getAttribute('data-i');
+    if (dict[k] != null) el.textContent = dict[k];
+  });
+  // App Store badge locale
+  const bl = BADGES[lang] || 'ko-kr';
+  const img = document.getElementById('badgeImg');
+  if (img) img.src = `https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/${bl}?size=250x83`;
+  localStorage.setItem('eyeday_lang', lang);
+  const sel = document.getElementById('langSwitch');
+  if (sel) sel.value = lang;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const init = pickInitialLang();
+  applyLang(init);
+  document.getElementById('langSwitch').addEventListener('change', (e) => applyLang(e.target.value));
+});
+</script>
 </body>
 </html>
