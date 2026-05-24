@@ -45,33 +45,29 @@
       color: #1E293B;
       line-height: 1.55;
     }
-    /* Global language controls box (matches privacy/terms pages) */
-    .controls-wrap {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 24px 16px 0;
-    }
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      background: #fff;
-      border-radius: 12px;
-      padding: 14px 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-    }
-    .lang-select { display: flex; align-items: center; gap: 8px; flex: 1; }
-    .lang-select label { font-size: 13px; color: #475569; }
-    .lang-select select {
+    /* Floating language dropdown (top-right) */
+    .lang-switch {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      z-index: 50;
       font-family: inherit;
-      font-size: 13px;
-      padding: 6px 10px;
-      border-radius: 8px;
-      border: 1px solid #E2E8F0;
-      background: #fff;
+      font-size: 14px;
       color: #1E293B;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 8px 36px 8px 14px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      box-shadow: 0 2px 8px rgba(15,23,42,0.06);
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2371717A' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
     }
+    .lang-switch:focus { outline: none; border-color: #3B82F6; }
 
     /* === Lucide icons (inline SVG) === */
     .ic {
@@ -236,7 +232,7 @@
       font-weight: 600;
     }
     .topbar .right.primary { color: #3B82F6; }
-    .topbar .right.danger { color: #EF4444; }
+    .topbar .right.muted { color: #71717A; font-weight: 400; }
 
     /* === Home / Timeline mockup === */
     .home-header {
@@ -352,23 +348,23 @@
     .mc.done.blue { background: #3B82F6; border-color: #3B82F6; }
     .mc .ic { width: 9px; height: 9px; stroke-width: 3; }
 
-    /* Timeline (white container with row dividers) */
-    .timeline-card {
-      background: #FFFFFF;
-      margin: 0 16px;
-      border-radius: 14px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-      border: 1px solid #F1F5F9;
-      overflow: hidden;
+    /* Timeline — each row is its own card with gap between */
+    .timeline-list {
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
     .tl-row {
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 11px 12px;
-      border-bottom: 1px solid #F4F4F5;
+      background: #FFFFFF;
+      border-radius: 12px;
+      border: 1px solid #F1F5F9;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
-    .tl-row:last-child { border-bottom: 0; }
     .tl-time { font-size: 11px; font-weight: 700; color: #27272A; width: 52px; flex-shrink: 0; }
     .tl-mid { flex: 1; display: flex; align-items: center; gap: 6px; min-width: 0; }
     .tl-name { font-size: 12px; font-weight: 600; color: #27272A; }
@@ -743,24 +739,17 @@
     </defs>
   </svg>
 
-  <div class="controls-wrap">
-    <div class="controls">
-      <div class="lang-select">
-        <label id="langLabel" for="languageSelect">Language</label>
-        <select id="languageSelect">
-          <option value="en">English</option>
-          <option value="ko">한국어</option>
-          <option value="ja">日本語</option>
-          <option value="fr">Français</option>
-          <option value="es">Español</option>
-          <option value="ru">Русский</option>
-          <option value="de">Deutsch</option>
-          <option value="it">Italiano</option>
-          <option value="pt">Português</option>
-        </select>
-      </div>
-    </div>
-  </div>
+  <select class="lang-switch" id="languageSelect" aria-label="Language">
+    <option value="ko">한국어</option>
+    <option value="en">English</option>
+    <option value="ja">日本語</option>
+    <option value="fr">Français</option>
+    <option value="es">Español</option>
+    <option value="ru">Русский</option>
+    <option value="de">Deutsch</option>
+    <option value="it">Italiano</option>
+    <option value="pt">Português</option>
+  </select>
 
   <!-- Hero -->
   <section class="hero">
@@ -795,14 +784,14 @@
             <div class="topbar">
               <span class="back"><svg class="ic ic-md"><use href="#i-chev-left"/></svg></span>
               <span class="title">안약 수정</span>
-              <span class="right danger">삭제</span>
+              <span class="right muted">삭제</span>
             </div>
             <div class="form-scroll">
               <div class="field">
                 <div class="field-label">안약 이름</div>
                 <div class="input-row">
-                  <div class="text-input">코솝</div>
-                  <div class="select-input">선택 <svg class="ic ic-xs"><use href="#i-chev-down"/></svg></div>
+                  <div class="text-input" data-mock="med1">코솝</div>
+                  <div class="select-input"><span data-mock="leftEye">좌안</span> <svg class="ic ic-xs"><use href="#i-chev-down"/></svg></div>
                 </div>
               </div>
               <div class="field">
@@ -945,7 +934,7 @@
             </div>
 
             <div class="section-label">오늘의 점안 기록 <svg class="ic ic-xs help"><use href="#i-help"/></svg></div>
-            <div class="timeline-card">
+            <div class="timeline-list">
               <div class="tl-row">
                 <div class="tl-time">오전 8:30</div>
                 <div class="tl-mid">
@@ -1054,7 +1043,7 @@
               </div>
             </div>
             <div class="section-label">오늘의 점안 기록</div>
-            <div class="timeline-card">
+            <div class="timeline-list">
               <div class="tl-row">
                 <div class="tl-time">오전 8:30</div>
                 <div class="tl-mid">
@@ -1186,6 +1175,9 @@
               <div class="iop-row"><span class="date">26.10.20</span><span class="vals"><span><span class="lab">좌</span>18</span><span><span class="lab">우</span>18</span></span></div>
               <div class="iop-row"><span class="date">26.09.22</span><span class="vals"><span><span class="lab">좌</span>19</span><span><span class="lab">우</span>20</span></span></div>
               <div class="iop-row"><span class="date">26.08.25</span><span class="vals"><span><span class="lab">좌</span>21</span><span><span class="lab">우</span>21</span></span></div>
+              <div class="iop-row"><span class="date">26.07.28</span><span class="vals"><span><span class="lab">좌</span>23</span><span><span class="lab">우</span>22</span></span></div>
+              <div class="iop-row"><span class="date">26.06.30</span><span class="vals"><span><span class="lab">좌</span>24</span><span><span class="lab">우</span>24</span></span></div>
+              <div class="iop-row"><span class="date">26.06.02</span><span class="vals"><span><span class="lab">좌</span>25</span><span><span class="lab">우</span>26</span></span></div>
             </div>
           </div>
         </div>
@@ -1477,15 +1469,15 @@ const LANG_LABEL = {
 };
 
 const MOCK = {
-  ko: { med1: "코솝",     med2: "잘라탄" },
-  en: { med1: "Cosopt",   med2: "Xalatan" },
-  ja: { med1: "コソプト", med2: "キサラタン" },
-  fr: { med1: "Cosopt",   med2: "Xalatan" },
-  es: { med1: "Cosopt",   med2: "Xalatan" },
-  ru: { med1: "Косопт",   med2: "Ксалатан" },
-  de: { med1: "Cosopt",   med2: "Xalatan" },
-  it: { med1: "Cosopt",   med2: "Xalatan" },
-  pt: { med1: "Cosopt",   med2: "Xalatan" }
+  ko: { med1: "코솝",     med2: "잘라탄",    leftEye: "좌안" },
+  en: { med1: "Cosopt",   med2: "Xalatan",   leftEye: "Left" },
+  ja: { med1: "コソプト", med2: "キサラタン", leftEye: "左眼" },
+  fr: { med1: "Cosopt",   med2: "Xalatan",   leftEye: "Gauche" },
+  es: { med1: "Cosopt",   med2: "Xalatan",   leftEye: "Izq." },
+  ru: { med1: "Косопт",   med2: "Ксалатан",  leftEye: "Лев." },
+  de: { med1: "Cosopt",   med2: "Xalatan",   leftEye: "Links" },
+  it: { med1: "Cosopt",   med2: "Xalatan",   leftEye: "Sin." },
+  pt: { med1: "Cosopt",   med2: "Xalatan",   leftEye: "Esq." }
 };
 
 function applyLang(lang) {
@@ -1520,8 +1512,6 @@ function applyLang(lang) {
       el.appendChild(document.createTextNode(line));
     });
   });
-  const langLabel = document.getElementById('langLabel');
-  if (langLabel) langLabel.textContent = LANG_LABEL[lang] || 'Language';
   // SEO meta sync
   const descText = flatten(dict.subtitle);
   ['metaDesc','ogDesc','twDesc'].forEach((id) => {
