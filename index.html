@@ -3,6 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1RH70WMQY5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-1RH70WMQY5');
+  </script>
   <title>eyeday</title>
   <meta name="description" id="metaDesc" content="An eye drop reminder app for post-op care (glaucoma, cataract, LASIK, LASEK, ICL) and ophthalmic conditions. Custom schedules, dosing log, and IOP trends in one app.">
   <meta property="og:type" content="website">
@@ -1710,8 +1717,18 @@ function applyLang(lang) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  applyLang(pickInitialLang());
-  document.getElementById('languageSelect').addEventListener('change', (e) => applyLang(e.target.value));
+  const initLang = pickInitialLang();
+  applyLang(initLang);
+  gtag('event', 'page_view_lang', { language: initLang });
+
+  document.getElementById('languageSelect').addEventListener('change', (e) => {
+    applyLang(e.target.value);
+    gtag('event', 'language_switched', { language: e.target.value });
+  });
+
+  document.getElementById('appBadge').addEventListener('click', () => {
+    gtag('event', 'app_store_click', { language: document.documentElement.lang });
+  });
 });
 </script>
 </body>
