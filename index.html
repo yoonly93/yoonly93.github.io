@@ -783,67 +783,67 @@
           <div class="phone-body">
             <div class="topbar">
               <span class="back"><svg class="ic ic-md"><use href="#i-chev-left"/></svg></span>
-              <span class="title">안약 수정</span>
-              <span class="right muted">삭제</span>
+              <span class="title" data-mock="editTitle">안약 수정</span>
+              <span class="right muted" data-mock="deleteLabel">삭제</span>
             </div>
             <div class="form-scroll">
               <div class="field">
-                <div class="field-label">안약 이름</div>
+                <div class="field-label" data-mock="medName">안약 이름</div>
                 <div class="input-row">
                   <div class="text-input" data-mock="med1">코솝</div>
                   <div class="select-input"><span data-mock="leftEye">좌안</span> <svg class="ic ic-xs"><use href="#i-chev-down"/></svg></div>
                 </div>
               </div>
               <div class="field">
-                <div class="field-label">투약 시간 <svg class="ic ic-xs help"><use href="#i-help"/></svg></div>
+                <div class="field-label"><span data-mock="scheduleType">투약 시간</span> <svg class="ic ic-xs help"><use href="#i-help"/></svg></div>
                 <div class="chips">
-                  <span class="chip">아침</span>
-                  <span class="chip">점심</span>
-                  <span class="chip">저녁</span>
-                  <span class="chip">자기 전</span>
+                  <span class="chip" data-mock="morning">아침</span>
+                  <span class="chip" data-mock="noon">점심</span>
+                  <span class="chip" data-mock="evening">저녁</span>
+                  <span class="chip" data-mock="bedtime">자기 전</span>
                 </div>
                 <div class="chips chip-row-2">
-                  <span class="chip active">직접 지정할게요</span>
+                  <span class="chip active" data-mock="custom">직접 지정할게요</span>
                 </div>
               </div>
               <div class="field">
-                <div class="field-label">하루 횟수</div>
+                <div class="field-label" data-mock="timesPerDay">하루 횟수</div>
                 <div class="chips">
-                  <span class="chip">1회</span>
-                  <span class="chip active">2회</span>
-                  <span class="chip">3회</span>
-                  <span class="chip">4회</span>
-                  <span class="chip">5회</span>
-                  <span class="chip">6회</span>
-                  <span class="chip">7회</span>
-                  <span class="chip">8회</span>
-                  <span class="chip">9회</span>
-                  <span class="chip">10회</span>
-                  <span class="chip">11회</span>
-                  <span class="chip">12회</span>
+                  <span class="chip" data-mock="t1">1회</span>
+                  <span class="chip active" data-mock="t2">2회</span>
+                  <span class="chip" data-mock="t3">3회</span>
+                  <span class="chip" data-mock="t4">4회</span>
+                  <span class="chip" data-mock="t5">5회</span>
+                  <span class="chip" data-mock="t6">6회</span>
+                  <span class="chip" data-mock="t7">7회</span>
+                  <span class="chip" data-mock="t8">8회</span>
+                  <span class="chip" data-mock="t9">9회</span>
+                  <span class="chip" data-mock="t10">10회</span>
+                  <span class="chip" data-mock="t11">11회</span>
+                  <span class="chip" data-mock="t12">12회</span>
                 </div>
               </div>
               <div class="field">
-                <div class="field-label">투약 간격</div>
+                <div class="field-label" data-mock="intervalLabel">투약 간격</div>
                 <div class="chips">
-                  <span class="chip">1시간</span>
-                  <span class="chip">2시간</span>
-                  <span class="chip">3시간</span>
-                  <span class="chip">4시간</span>
-                  <span class="chip">6시간</span>
-                  <span class="chip">8시간</span>
-                  <span class="chip">10시간</span>
-                  <span class="chip active">12시간</span>
+                  <span class="chip" data-mock="h1">1시간</span>
+                  <span class="chip" data-mock="h2">2시간</span>
+                  <span class="chip" data-mock="h3">3시간</span>
+                  <span class="chip" data-mock="h4">4시간</span>
+                  <span class="chip" data-mock="h6">6시간</span>
+                  <span class="chip" data-mock="h8">8시간</span>
+                  <span class="chip" data-mock="h10">10시간</span>
+                  <span class="chip active" data-mock="h12">12시간</span>
                 </div>
               </div>
               <div class="field">
-                <div class="field-label">투약 시작 시간</div>
+                <div class="field-label" data-mock="startTime">투약 시작 시간</div>
                 <div class="time-wheel">
                   <div class="wheel-bar"></div>
                   <div class="wheel-col ampm">
                     <span></span><span></span><span></span>
-                    <span class="mid">오전</span>
-                    <span>오후</span>
+                    <span class="mid" data-mock="am">오전</span>
+                    <span data-mock="pm">오후</span>
                     <span></span><span></span>
                   </div>
                   <div class="wheel-col num">
@@ -859,7 +859,7 @@
                 </div>
               </div>
             </div>
-            <div class="primary-btn">저장하기</div>
+            <div class="primary-btn" data-mock="saveLabel">저장하기</div>
           </div>
         </div>
       </div>
@@ -892,17 +892,17 @@
               <span class="right-icons"><svg class="ic ic-md"><use href="#i-settings"/></svg></span>
             </div>
             <div class="weekly">
-              <div class="cell"><div>일</div><div class="num">8</div></div>
-              <div class="cell has-dot"><div>월</div><div class="num">9</div></div>
-              <div class="cell has-dot"><div>화</div><div class="num">10</div></div>
-              <div class="cell today has-dot"><div>수</div><div class="num">11</div></div>
-              <div class="cell"><div>목</div><div class="num">12</div></div>
-              <div class="cell"><div>금</div><div class="num">13</div></div>
-              <div class="cell"><div>토</div><div class="num">14</div></div>
+              <div class="cell"><div data-mock="wd0">일</div><div class="num">8</div></div>
+              <div class="cell has-dot"><div data-mock="wd1">월</div><div class="num">9</div></div>
+              <div class="cell has-dot"><div data-mock="wd2">화</div><div class="num">10</div></div>
+              <div class="cell today has-dot"><div data-mock="wd3">수</div><div class="num">11</div></div>
+              <div class="cell"><div data-mock="wd4">목</div><div class="num">12</div></div>
+              <div class="cell"><div data-mock="wd5">금</div><div class="num">13</div></div>
+              <div class="cell"><div data-mock="wd6">토</div><div class="num">14</div></div>
             </div>
-            <div class="expand-row">펼치기 <svg class="ic ic-xs"><use href="#i-chev-down"/></svg></div>
+            <div class="expand-row"><span data-mock="expand">펼치기</span> <svg class="ic ic-xs"><use href="#i-chev-down"/></svg></div>
 
-            <div class="section-label">점안중인 안약</div>
+            <div class="section-label" data-mock="activeMeds">점안중인 안약</div>
             <div class="med-scroll">
               <div class="med-card">
                 <div class="med-top">
@@ -912,7 +912,7 @@
                     <svg class="ic ic-xs ic-trash"><use href="#i-trash"/></svg>
                   </span>
                 </div>
-                <div class="med-meta">08:30부터 | 2회 | 12시간<br>무기한</div>
+                <div class="med-meta"><span data-mock="metaFrom">08:30부터 | 2회 | 12시간</span><br><span data-mock="metaIndef">무기한</span></div>
                 <div class="med-checks">
                   <div class="mc done blue"><svg class="ic"><use href="#i-check"/></svg></div>
                   <div class="mc"></div>
@@ -926,28 +926,28 @@
                     <svg class="ic ic-xs ic-trash"><use href="#i-trash"/></svg>
                   </span>
                 </div>
-                <div class="med-meta">자기 전<br>무기한</div>
+                <div class="med-meta"><span data-mock="metaBedtime">자기 전</span><br><span data-mock="metaIndef">무기한</span></div>
                 <div class="med-checks">
                   <div class="mc"></div>
                 </div>
               </div>
             </div>
 
-            <div class="section-label">오늘의 점안 기록 <svg class="ic ic-xs help"><use href="#i-help"/></svg></div>
+            <div class="section-label"><span data-mock="todaySchedule">오늘의 점안 기록</span> <svg class="ic ic-xs help"><use href="#i-help"/></svg></div>
             <div class="timeline-list">
               <div class="tl-row">
-                <div class="tl-time">오전 8:30</div>
+                <div class="tl-time" data-mock="time830am">오전 8:30</div>
                 <div class="tl-mid">
                   <span class="med-dot" style="background:#3B82F6"></span>
                   <div>
                     <div class="tl-name" data-mock="med1">코솝</div>
-                    <div class="tl-sub">오전 8:31 1회차 완료</div>
+                    <div class="tl-sub" data-mock="sub1Done">오전 8:31 1회차 완료</div>
                   </div>
                 </div>
                 <div class="tl-check done blue"><svg class="ic"><use href="#i-check"/></svg></div>
               </div>
               <div class="tl-row">
-                <div class="tl-time">오후 8:30</div>
+                <div class="tl-time" data-mock="time830pm">오후 8:30</div>
                 <div class="tl-mid">
                   <span class="med-dot" style="background:#3B82F6"></span>
                   <div><div class="tl-name" data-mock="med1">코솝</div></div>
@@ -955,19 +955,19 @@
                 <div class="tl-check"></div>
               </div>
               <div class="tl-row">
-                <div class="tl-time">오후 10:00</div>
+                <div class="tl-time" data-mock="time1000pm">오후 10:00</div>
                 <div class="tl-mid">
                   <span class="med-dot" style="background:#22C55E"></span>
                   <div><div class="tl-name" data-mock="med2">잘라탄</div></div>
                 </div>
-                <div class="tl-check green"></div>
+                <div class="tl-check"></div>
               </div>
             </div>
 
             <div class="pill-row">
-              <span class="pill"><svg class="ic"><use href="#i-plus"/></svg>메모</span>
-              <span class="pill"><svg class="ic"><use href="#i-plus"/></svg>추가 점안</span>
-              <span class="pill"><svg class="ic"><use href="#i-plus"/></svg>안압 기록</span>
+              <span class="pill"><svg class="ic"><use href="#i-plus"/></svg><span data-mock="noteAdd">메모</span></span>
+              <span class="pill"><svg class="ic"><use href="#i-plus"/></svg><span data-mock="extraDropAdd">추가 점안</span></span>
+              <span class="pill"><svg class="ic"><use href="#i-plus"/></svg><span data-mock="iopAdd">안압 기록</span></span>
             </div>
 
             <div class="fab"><svg class="ic"><use href="#i-plus"/></svg></div>
@@ -1003,16 +1003,16 @@
               <span class="right-icons"><svg class="ic ic-md"><use href="#i-settings"/></svg></span>
             </div>
             <div class="weekly">
-              <div class="cell"><div>일</div><div class="num">8</div></div>
-              <div class="cell has-dot"><div>월</div><div class="num">9</div></div>
-              <div class="cell has-dot"><div>화</div><div class="num">10</div></div>
-              <div class="cell today has-dot"><div>수</div><div class="num">11</div></div>
-              <div class="cell"><div>목</div><div class="num">12</div></div>
-              <div class="cell"><div>금</div><div class="num">13</div></div>
-              <div class="cell"><div>토</div><div class="num">14</div></div>
+              <div class="cell"><div data-mock="wd0">일</div><div class="num">8</div></div>
+              <div class="cell has-dot"><div data-mock="wd1">월</div><div class="num">9</div></div>
+              <div class="cell has-dot"><div data-mock="wd2">화</div><div class="num">10</div></div>
+              <div class="cell today has-dot"><div data-mock="wd3">수</div><div class="num">11</div></div>
+              <div class="cell"><div data-mock="wd4">목</div><div class="num">12</div></div>
+              <div class="cell"><div data-mock="wd5">금</div><div class="num">13</div></div>
+              <div class="cell"><div data-mock="wd6">토</div><div class="num">14</div></div>
             </div>
-            <div class="expand-row">펼치기 <svg class="ic ic-xs"><use href="#i-chev-down"/></svg></div>
-            <div class="section-label">점안중인 안약</div>
+            <div class="expand-row"><span data-mock="expand">펼치기</span> <svg class="ic ic-xs"><use href="#i-chev-down"/></svg></div>
+            <div class="section-label" data-mock="activeMeds">점안중인 안약</div>
             <div class="med-scroll">
               <div class="med-card">
                 <div class="med-top">
@@ -1022,7 +1022,7 @@
                     <svg class="ic ic-xs ic-trash"><use href="#i-trash"/></svg>
                   </span>
                 </div>
-                <div class="med-meta">08:30부터 | 2회 | 12시간<br>무기한</div>
+                <div class="med-meta"><span data-mock="metaFrom">08:30부터 | 2회 | 12시간</span><br><span data-mock="metaIndef">무기한</span></div>
                 <div class="med-checks">
                   <div class="mc done blue"><svg class="ic"><use href="#i-check"/></svg></div>
                   <div class="mc done blue"><svg class="ic"><use href="#i-check"/></svg></div>
@@ -1036,21 +1036,21 @@
                     <svg class="ic ic-xs ic-trash"><use href="#i-trash"/></svg>
                   </span>
                 </div>
-                <div class="med-meta">자기 전<br>무기한</div>
+                <div class="med-meta"><span data-mock="metaBedtime">자기 전</span><br><span data-mock="metaIndef">무기한</span></div>
                 <div class="med-checks">
                   <div class="mc"></div>
                 </div>
               </div>
             </div>
-            <div class="section-label">오늘의 점안 기록</div>
+            <div class="section-label" data-mock="todaySchedule">오늘의 점안 기록</div>
             <div class="timeline-list">
               <div class="tl-row">
-                <div class="tl-time">오전 8:30</div>
+                <div class="tl-time" data-mock="time830am">오전 8:30</div>
                 <div class="tl-mid">
                   <span class="med-dot" style="background:#3B82F6"></span>
                   <div>
                     <div class="tl-name" data-mock="med1">코솝</div>
-                    <div class="tl-sub">오전 8:31 1회차 완료</div>
+                    <div class="tl-sub" data-mock="sub1Done">오전 8:31 1회차 완료</div>
                   </div>
                 </div>
                 <div class="tl-check done blue"><svg class="ic"><use href="#i-check"/></svg></div>
@@ -1062,15 +1062,15 @@
           <div class="home-dim"></div>
           <div class="conflict-sheet">
             <div class="grabber"></div>
-            <h3>안약 간격 주의</h3>
+            <h3 data-mock="conflictTitle">안약 간격 주의</h3>
             <div class="timer-row">
               <svg class="ic ic-md"><use href="#i-clock"/></svg>
               <span class="timer-text">4:56</span>
             </div>
             <p data-mock-tpl="{med1}을(를) 넣은 지 얼마 되지 않았습니다&#10;여러 안약을 넣을 경우 5분 간격을 두세요"></p>
             <div class="sheet-btns">
-              <div class="sheet-btn ghost">알겠어요</div>
-              <div class="sheet-btn primary">지금 점안하기</div>
+              <div class="sheet-btn ghost" data-mock="conflictSnooze">알겠어요</div>
+              <div class="sheet-btn primary" data-mock="conflictDoNow">지금 점안하기</div>
             </div>
           </div>
         </div>
@@ -1100,8 +1100,8 @@
           <div class="phone-body">
             <div class="topbar">
               <span class="back"><svg class="ic ic-md"><use href="#i-chev-left"/></svg></span>
-              <span class="title">안압 기록</span>
-              <span class="right primary">추가</span>
+              <span class="title" data-mock="iopTitle">안압 기록</span>
+              <span class="right primary" data-mock="addLabel">추가</span>
             </div>
 
             <!-- Chart card -->
@@ -1168,16 +1168,16 @@
               </svg>
             </div>
 
-            <div class="iop-recent-title">최근 기록</div>
+            <div class="iop-recent-title" data-mock="iopRecentTitle">최근 기록</div>
             <div class="iop-recent-list">
-              <div class="iop-row"><span class="date">26.12.15</span><span class="vals"><span><span class="lab">좌</span>16</span><span><span class="lab">우</span>17</span></span></div>
-              <div class="iop-row"><span class="date">26.11.17</span><span class="vals"><span><span class="lab">좌</span>17</span><span><span class="lab">우</span>17</span></span></div>
-              <div class="iop-row"><span class="date">26.10.20</span><span class="vals"><span><span class="lab">좌</span>18</span><span><span class="lab">우</span>18</span></span></div>
-              <div class="iop-row"><span class="date">26.09.22</span><span class="vals"><span><span class="lab">좌</span>19</span><span><span class="lab">우</span>20</span></span></div>
-              <div class="iop-row"><span class="date">26.08.25</span><span class="vals"><span><span class="lab">좌</span>21</span><span><span class="lab">우</span>21</span></span></div>
-              <div class="iop-row"><span class="date">26.07.28</span><span class="vals"><span><span class="lab">좌</span>23</span><span><span class="lab">우</span>22</span></span></div>
-              <div class="iop-row"><span class="date">26.06.30</span><span class="vals"><span><span class="lab">좌</span>24</span><span><span class="lab">우</span>24</span></span></div>
-              <div class="iop-row"><span class="date">26.06.02</span><span class="vals"><span><span class="lab">좌</span>25</span><span><span class="lab">우</span>26</span></span></div>
+              <div class="iop-row"><span class="date" data-iop-date="0">26.12.15</span><span class="vals"><span><span class="lab" data-mock="leftAbbr">좌</span>16</span><span><span class="lab" data-mock="rightAbbr">우</span>17</span></span></div>
+              <div class="iop-row"><span class="date" data-iop-date="1">26.11.17</span><span class="vals"><span><span class="lab" data-mock="leftAbbr">좌</span>17</span><span><span class="lab" data-mock="rightAbbr">우</span>17</span></span></div>
+              <div class="iop-row"><span class="date" data-iop-date="2">26.10.20</span><span class="vals"><span><span class="lab" data-mock="leftAbbr">좌</span>18</span><span><span class="lab" data-mock="rightAbbr">우</span>18</span></span></div>
+              <div class="iop-row"><span class="date" data-iop-date="3">26.09.22</span><span class="vals"><span><span class="lab" data-mock="leftAbbr">좌</span>19</span><span><span class="lab" data-mock="rightAbbr">우</span>20</span></span></div>
+              <div class="iop-row"><span class="date" data-iop-date="4">26.08.25</span><span class="vals"><span><span class="lab" data-mock="leftAbbr">좌</span>21</span><span><span class="lab" data-mock="rightAbbr">우</span>21</span></span></div>
+              <div class="iop-row"><span class="date" data-iop-date="5">26.07.28</span><span class="vals"><span><span class="lab" data-mock="leftAbbr">좌</span>23</span><span><span class="lab" data-mock="rightAbbr">우</span>22</span></span></div>
+              <div class="iop-row"><span class="date" data-iop-date="6">26.06.30</span><span class="vals"><span><span class="lab" data-mock="leftAbbr">좌</span>24</span><span><span class="lab" data-mock="rightAbbr">우</span>24</span></span></div>
+              <div class="iop-row"><span class="date" data-iop-date="7">26.06.02</span><span class="vals"><span><span class="lab" data-mock="leftAbbr">좌</span>25</span><span><span class="lab" data-mock="rightAbbr">우</span>26</span></span></div>
             </div>
           </div>
         </div>
@@ -1207,7 +1207,7 @@
           <div class="phone-body">
             <div class="topbar">
               <span class="back"><svg class="ic ic-md"><use href="#i-chev-left"/></svg></span>
-              <span class="title">글씨 크기</span>
+              <span class="title" data-mock="fontTitle">글씨 크기</span>
               <span></span>
             </div>
             <div class="slider-block">
@@ -1218,13 +1218,13 @@
                 <div class="slider-thumb" style="left:100%"></div>
               </div>
               <div class="slider-labels">
-                <span>보통</span>
-                <span>크게</span>
-                <span class="active">제일 크게</span>
+                <span data-mock="fontNormal">보통</span>
+                <span data-mock="fontLarge">크게</span>
+                <span class="active" data-mock="fontLargest">제일 크게</span>
               </div>
             </div>
-            <div class="preview-box">이 문장은 선택한 크기로 표시됩니다</div>
-            <div class="font-save">저장하기</div>
+            <div class="preview-box" data-mock="fontPreview">이 문장은 선택한 크기로 표시됩니다</div>
+            <div class="font-save" data-mock="saveLabel">저장하기</div>
           </div>
         </div>
       </div>
@@ -1469,15 +1469,186 @@ const LANG_LABEL = {
 };
 
 const MOCK = {
-  ko: { med1: "코솝",     med2: "잘라탄",    leftEye: "좌안" },
-  en: { med1: "Cosopt",   med2: "Xalatan",   leftEye: "Left" },
-  ja: { med1: "コソプト", med2: "キサラタン", leftEye: "左眼" },
-  fr: { med1: "Cosopt",   med2: "Xalatan",   leftEye: "Gauche" },
-  es: { med1: "Cosopt",   med2: "Xalatan",   leftEye: "Izq." },
-  ru: { med1: "Косопт",   med2: "Ксалатан",  leftEye: "Лев." },
-  de: { med1: "Cosopt",   med2: "Xalatan",   leftEye: "Links" },
-  it: { med1: "Cosopt",   med2: "Xalatan",   leftEye: "Sin." },
-  pt: { med1: "Cosopt",   med2: "Xalatan",   leftEye: "Esq." }
+  ko: {
+    med1:'코솝',med2:'잘라탄',leftEye:'좌안',
+    editTitle:'안약 수정',deleteLabel:'삭제',saveLabel:'저장하기',addLabel:'추가',
+    medName:'안약 이름',scheduleType:'투약 시간',timesPerDay:'하루 횟수',intervalLabel:'투약 간격',startTime:'투약 시작 시간',
+    morning:'아침',noon:'점심',evening:'저녁',bedtime:'자기 전',custom:'직접 지정할게요',indefinite:'무기한',
+    am:'오전',pm:'오후',
+    t1:'1회',t2:'2회',t3:'3회',t4:'4회',t5:'5회',t6:'6회',t7:'7회',t8:'8회',t9:'9회',t10:'10회',t11:'11회',t12:'12회',
+    h1:'1시간',h2:'2시간',h3:'3시간',h4:'4시간',h6:'6시간',h8:'8시간',h10:'10시간',h12:'12시간',
+    activeMeds:'점안중인 안약',todaySchedule:'오늘의 점안 기록',
+    noteAdd:'메모',extraDropAdd:'추가 점안',iopAdd:'안압 기록',expand:'펼치기',
+    wd0:'일',wd1:'월',wd2:'화',wd3:'수',wd4:'목',wd5:'금',wd6:'토',
+    metaFrom:'08:30부터 | 2회 | 12시간',metaBedtime:'자기 전',metaIndef:'무기한',
+    time830am:'오전 8:30',time830pm:'오후 8:30',time1000pm:'오후 10:00',
+    sub1Done:'오전 8:31 1회차 완료',
+    conflictTitle:'안약 간격 주의',conflictSnooze:'알겠어요',conflictDoNow:'지금 점안하기',
+    iopTitle:'안압 기록',iopRecentTitle:'최근 기록',leftAbbr:'좌',rightAbbr:'우',
+    fontTitle:'글씨 크기',fontNormal:'보통',fontLarge:'크게',fontLargest:'제일 크게',
+    fontPreview:'이 문장은 선택한 크기로 표시됩니다',
+    iopDates:['26.12.15','26.11.17','26.10.20','26.09.22','26.08.25','26.07.28','26.06.30','26.06.02']
+  },
+  en: {
+    med1:'Cosopt',med2:'Xalatan',leftEye:'Left',
+    editTitle:'Edit Eye Drop',deleteLabel:'Delete',saveLabel:'Save',addLabel:'Add',
+    medName:'Eye Drop Name',scheduleType:'Dose times',timesPerDay:'Times Per Day',intervalLabel:'Interval',startTime:'Start Time',
+    morning:'Morning',noon:'Noon',evening:'Evening',bedtime:'Bedtime',custom:'Set my own',indefinite:'Indefinite',
+    am:'AM',pm:'PM',
+    t1:'1x',t2:'2x',t3:'3x',t4:'4x',t5:'5x',t6:'6x',t7:'7x',t8:'8x',t9:'9x',t10:'10x',t11:'11x',t12:'12x',
+    h1:'1h',h2:'2h',h3:'3h',h4:'4h',h6:'6h',h8:'8h',h10:'10h',h12:'12h',
+    activeMeds:'Active Eye Drops',todaySchedule:'Today\'s Drop Records',
+    noteAdd:'Note',extraDropAdd:'Extra dose',iopAdd:'IOP',expand:'Expand',
+    wd0:'Sun',wd1:'Mon',wd2:'Tue',wd3:'Wed',wd4:'Thu',wd5:'Fri',wd6:'Sat',
+    metaFrom:'From 08:30 | 2x | 12h',metaBedtime:'Bedtime',metaIndef:'Indefinite',
+    time830am:'8:30 AM',time830pm:'8:30 PM',time1000pm:'10:00 PM',
+    sub1Done:'8:31 AM Dose 1 done',
+    conflictTitle:'Eye Drop Interval Warning',conflictSnooze:'Got It',conflictDoNow:'Apply Now',
+    iopTitle:'IOP History',iopRecentTitle:'Recent records',leftAbbr:'L',rightAbbr:'R',
+    fontTitle:'Font Size',fontNormal:'Normal',fontLarge:'Large',fontLargest:'Largest',
+    fontPreview:'This sentence is shown at the selected size',
+    iopDates:['12/15/26','11/17/26','10/20/26','09/22/26','08/25/26','07/28/26','06/30/26','06/02/26']
+  },
+  ja: {
+    med1:'コソプト',med2:'キサラタン',leftEye:'左眼',
+    editTitle:'目薬を編集',deleteLabel:'削除',saveLabel:'保存する',addLabel:'追加',
+    medName:'目薬の名前',scheduleType:'投薬時間',timesPerDay:'1日の回数',intervalLabel:'投薬間隔',startTime:'投薬開始時間',
+    morning:'朝',noon:'昼',evening:'夜',bedtime:'就寝前',custom:'自分で設定する',indefinite:'無期限',
+    am:'午前',pm:'午後',
+    t1:'1回',t2:'2回',t3:'3回',t4:'4回',t5:'5回',t6:'6回',t7:'7回',t8:'8回',t9:'9回',t10:'10回',t11:'11回',t12:'12回',
+    h1:'1時間',h2:'2時間',h3:'3時間',h4:'4時間',h6:'6時間',h8:'8時間',h10:'10時間',h12:'12時間',
+    activeMeds:'点眼中の目薬',todaySchedule:'今日の点眼記録',
+    noteAdd:'メモ',extraDropAdd:'追加点眼',iopAdd:'眼圧記録',expand:'開く',
+    wd0:'日',wd1:'月',wd2:'火',wd3:'水',wd4:'木',wd5:'金',wd6:'土',
+    metaFrom:'08:30から | 2回 | 12時間',metaBedtime:'就寝前',metaIndef:'無期限',
+    time830am:'午前 8:30',time830pm:'午後 8:30',time1000pm:'午後 10:00',
+    sub1Done:'午前 8:31 1回目 完了',
+    conflictTitle:'点眼間隔の注意',conflictSnooze:'わかりました',conflictDoNow:'今すぐ点眼する',
+    iopTitle:'眼圧の記録',iopRecentTitle:'最近の記録',leftAbbr:'左',rightAbbr:'右',
+    fontTitle:'文字サイズ',fontNormal:'標準',fontLarge:'大きめ',fontLargest:'最大',
+    fontPreview:'この文章は選択したサイズで表示されます',
+    iopDates:['26.12.15','26.11.17','26.10.20','26.09.22','26.08.25','26.07.28','26.06.30','26.06.02']
+  },
+  fr: {
+    med1:'Cosopt',med2:'Xalatan',leftEye:'Gauche',
+    editTitle:'Modifier le collyre',deleteLabel:'Supprimer',saveLabel:'Enregistrer',addLabel:'Ajouter',
+    medName:'Nom du collyre',scheduleType:'Heures de prise',timesPerDay:'Fois par jour',intervalLabel:'Intervalle',startTime:'Heure de début',
+    morning:'Matin',noon:'Midi',evening:'Soir',bedtime:'Au coucher',custom:'Personnaliser',indefinite:'Indéfini',
+    am:'AM',pm:'PM',
+    t1:'1x',t2:'2x',t3:'3x',t4:'4x',t5:'5x',t6:'6x',t7:'7x',t8:'8x',t9:'9x',t10:'10x',t11:'11x',t12:'12x',
+    h1:'1h',h2:'2h',h3:'3h',h4:'4h',h6:'6h',h8:'8h',h10:'10h',h12:'12h',
+    activeMeds:'Collyres en cours',todaySchedule:'Gouttes d\'aujourd\'hui',
+    noteAdd:'Note',extraDropAdd:'Dose en plus',iopAdd:'TIO',expand:'Développer',
+    wd0:'Dim',wd1:'Lun',wd2:'Mar',wd3:'Mer',wd4:'Jeu',wd5:'Ven',wd6:'Sam',
+    metaFrom:'À partir de 08:30 | 2x | 12h',metaBedtime:'Au coucher',metaIndef:'Indéfini',
+    time830am:'8:30',time830pm:'20:30',time1000pm:'22:00',
+    sub1Done:'8:31 Dose 1 prise',
+    conflictTitle:'Intervalle de gouttes',conflictSnooze:'D\'accord',conflictDoNow:'Appliquer maintenant',
+    iopTitle:'Historique TIO',iopRecentTitle:'Enregistrements récents',leftAbbr:'G',rightAbbr:'D',
+    fontTitle:'Taille du texte',fontNormal:'Normale',fontLarge:'Grande',fontLargest:'Très grande',
+    fontPreview:'Cette phrase s\'affiche dans la taille sélectionnée',
+    iopDates:['15.12.26','17.11.26','20.10.26','22.09.26','25.08.26','28.07.26','30.06.26','02.06.26']
+  },
+  es: {
+    med1:'Cosopt',med2:'Xalatan',leftEye:'Izq.',
+    editTitle:'Editar gota',deleteLabel:'Eliminar',saveLabel:'Guardar',addLabel:'Añadir',
+    medName:'Nombre de la gota',scheduleType:'Horarios de toma',timesPerDay:'Veces al día',intervalLabel:'Intervalo',startTime:'Hora de inicio',
+    morning:'Mañana',noon:'Mediodía',evening:'Tarde',bedtime:'Antes de dormir',custom:'Personalizar',indefinite:'Indefinido',
+    am:'AM',pm:'PM',
+    t1:'1x',t2:'2x',t3:'3x',t4:'4x',t5:'5x',t6:'6x',t7:'7x',t8:'8x',t9:'9x',t10:'10x',t11:'11x',t12:'12x',
+    h1:'1h',h2:'2h',h3:'3h',h4:'4h',h6:'6h',h8:'8h',h10:'10h',h12:'12h',
+    activeMeds:'Gotas activas',todaySchedule:'Gotas de hoy',
+    noteAdd:'Nota',extraDropAdd:'Dosis extra',iopAdd:'PIO',expand:'Expandir',
+    wd0:'Dom',wd1:'Lun',wd2:'Mar',wd3:'Mié',wd4:'Jue',wd5:'Vie',wd6:'Sáb',
+    metaFrom:'Desde 08:30 | 2x | 12h',metaBedtime:'Antes de dormir',metaIndef:'Indefinido',
+    time830am:'8:30 AM',time830pm:'8:30 PM',time1000pm:'10:00 PM',
+    sub1Done:'8:31 AM Dosis 1 aplicada',
+    conflictTitle:'Intervalo de gotas',conflictSnooze:'Entendido',conflictDoNow:'Aplicar ahora',
+    iopTitle:'Historial de PIO',iopRecentTitle:'Registros recientes',leftAbbr:'I',rightAbbr:'D',
+    fontTitle:'Tamaño del texto',fontNormal:'Normal',fontLarge:'Grande',fontLargest:'Muy grande',
+    fontPreview:'Esta frase se muestra en el tamaño seleccionado',
+    iopDates:['15.12.26','17.11.26','20.10.26','22.09.26','25.08.26','28.07.26','30.06.26','02.06.26']
+  },
+  ru: {
+    med1:'Косопт',med2:'Ксалатан',leftEye:'Лев.',
+    editTitle:'Редактировать капли',deleteLabel:'Удалить',saveLabel:'Сохранить',addLabel:'Добавить',
+    medName:'Название капель',scheduleType:'Время приёма',timesPerDay:'Раз в день',intervalLabel:'Интервал',startTime:'Время начала',
+    morning:'Утро',noon:'Полдень',evening:'Вечер',bedtime:'Перед сном',custom:'Настроить вручную',indefinite:'Бессрочно',
+    am:'AM',pm:'PM',
+    t1:'1x',t2:'2x',t3:'3x',t4:'4x',t5:'5x',t6:'6x',t7:'7x',t8:'8x',t9:'9x',t10:'10x',t11:'11x',t12:'12x',
+    h1:'1ч',h2:'2ч',h3:'3ч',h4:'4ч',h6:'6ч',h8:'8ч',h10:'10ч',h12:'12ч',
+    activeMeds:'Активные капли',todaySchedule:'Записи на сегодня',
+    noteAdd:'Заметка',extraDropAdd:'Доп. закапывание',iopAdd:'ВГД',expand:'Развернуть',
+    wd0:'Вс',wd1:'Пн',wd2:'Вт',wd3:'Ср',wd4:'Чт',wd5:'Пт',wd6:'Сб',
+    metaFrom:'С 08:30 | 2x | 12ч',metaBedtime:'Перед сном',metaIndef:'Бессрочно',
+    time830am:'8:30',time830pm:'20:30',time1000pm:'22:00',
+    sub1Done:'8:31 Доза 1 принята',
+    conflictTitle:'Интервал между каплями',conflictSnooze:'Понятно',conflictDoNow:'Закапать сейчас',
+    iopTitle:'История ВГД',iopRecentTitle:'Последние записи',leftAbbr:'Л',rightAbbr:'П',
+    fontTitle:'Размер шрифта',fontNormal:'Обычный',fontLarge:'Крупный',fontLargest:'Самый крупный',
+    fontPreview:'Это предложение отображается выбранным размером',
+    iopDates:['26.12.15','26.11.17','26.10.20','26.09.22','26.08.25','26.07.28','26.06.30','26.06.02']
+  },
+  de: {
+    med1:'Cosopt',med2:'Xalatan',leftEye:'Links',
+    editTitle:'Augentropfen bearbeiten',deleteLabel:'Löschen',saveLabel:'Speichern',addLabel:'Hinzufügen',
+    medName:'Name der Augentropfen',scheduleType:'Dosierzeiten',timesPerDay:'Mal pro Tag',intervalLabel:'Intervall',startTime:'Startzeit',
+    morning:'Morgens',noon:'Mittags',evening:'Abends',bedtime:'Vor dem Schlafen',custom:'Selbst festlegen',indefinite:'Unbefristet',
+    am:'Vorm.',pm:'Nachm.',
+    t1:'1×',t2:'2×',t3:'3×',t4:'4×',t5:'5×',t6:'6×',t7:'7×',t8:'8×',t9:'9×',t10:'10×',t11:'11×',t12:'12×',
+    h1:'1 Std.',h2:'2 Std.',h3:'3 Std.',h4:'4 Std.',h6:'6 Std.',h8:'8 Std.',h10:'10 Std.',h12:'12 Std.',
+    activeMeds:'Aktive Augentropfen',todaySchedule:'Heutiger Tropfen-Verlauf',
+    noteAdd:'Notiz',extraDropAdd:'Zusatzdosis',iopAdd:'IOD',expand:'Erweitern',
+    wd0:'So',wd1:'Mo',wd2:'Di',wd3:'Mi',wd4:'Do',wd5:'Fr',wd6:'Sa',
+    metaFrom:'Ab 08:30 | 2× | 12 Std.',metaBedtime:'Vor dem Schlafen',metaIndef:'Unbefristet',
+    time830am:'8:30',time830pm:'20:30',time1000pm:'22:00',
+    sub1Done:'8:31 Dosis 1 erledigt',
+    conflictTitle:'Hinweis zum Tropfen-Abstand',conflictSnooze:'Verstanden',conflictDoNow:'Jetzt anwenden',
+    iopTitle:'IOD-Verlauf',iopRecentTitle:'Letzte Einträge',leftAbbr:'L',rightAbbr:'R',
+    fontTitle:'Schriftgröße',fontNormal:'Normal',fontLarge:'Groß',fontLargest:'Sehr groß',
+    fontPreview:'Dieser Satz wird in der gewählten Größe angezeigt',
+    iopDates:['15.12.26','17.11.26','20.10.26','22.09.26','25.08.26','28.07.26','30.06.26','02.06.26']
+  },
+  it: {
+    med1:'Cosopt',med2:'Xalatan',leftEye:'Sin.',
+    editTitle:'Modifica collirio',deleteLabel:'Elimina',saveLabel:'Salva',addLabel:'Aggiungi',
+    medName:'Nome del collirio',scheduleType:'Orari delle dosi',timesPerDay:'Volte al giorno',intervalLabel:'Intervallo',startTime:'Ora di inizio',
+    morning:'Mattina',noon:'Mezzogiorno',evening:'Sera',bedtime:'Prima di dormire',custom:'Personalizza',indefinite:'Indefinita',
+    am:'AM',pm:'PM',
+    t1:'1×',t2:'2×',t3:'3×',t4:'4×',t5:'5×',t6:'6×',t7:'7×',t8:'8×',t9:'9×',t10:'10×',t11:'11×',t12:'12×',
+    h1:'1h',h2:'2h',h3:'3h',h4:'4h',h6:'6h',h8:'8h',h10:'10h',h12:'12h',
+    activeMeds:'Colliri attivi',todaySchedule:'Registro gocce di oggi',
+    noteAdd:'Nota',extraDropAdd:'Dose extra',iopAdd:'PIO',expand:'Espandi',
+    wd0:'Dom',wd1:'Lun',wd2:'Mar',wd3:'Mer',wd4:'Gio',wd5:'Ven',wd6:'Sab',
+    metaFrom:'Da 08:30 | 2× | 12h',metaBedtime:'Prima di dormire',metaIndef:'Indefinita',
+    time830am:'8:30',time830pm:'20:30',time1000pm:'22:00',
+    sub1Done:'8:31 Dose 1 eseguita',
+    conflictTitle:'Avviso intervallo gocce',conflictSnooze:'Capito',conflictDoNow:'Applica ora',
+    iopTitle:'Cronologia PIO',iopRecentTitle:'Registri recenti',leftAbbr:'S',rightAbbr:'D',
+    fontTitle:'Dimensione testo',fontNormal:'Normale',fontLarge:'Grande',fontLargest:'Molto grande',
+    fontPreview:'Questa frase è mostrata nella dimensione selezionata',
+    iopDates:['15.12.26','17.11.26','20.10.26','22.09.26','25.08.26','28.07.26','30.06.26','02.06.26']
+  },
+  pt: {
+    med1:'Cosopt',med2:'Xalatan',leftEye:'Esq.',
+    editTitle:'Editar colírio',deleteLabel:'Excluir',saveLabel:'Salvar',addLabel:'Adicionar',
+    medName:'Nome do colírio',scheduleType:'Horários da dose',timesPerDay:'Vezes por dia',intervalLabel:'Intervalo',startTime:'Hora de início',
+    morning:'Manhã',noon:'Meio-dia',evening:'Tarde',bedtime:'Antes de dormir',custom:'Personalizar',indefinite:'Indefinida',
+    am:'AM',pm:'PM',
+    t1:'1×',t2:'2×',t3:'3×',t4:'4×',t5:'5×',t6:'6×',t7:'7×',t8:'8×',t9:'9×',t10:'10×',t11:'11×',t12:'12×',
+    h1:'1h',h2:'2h',h3:'3h',h4:'4h',h6:'6h',h8:'8h',h10:'10h',h12:'12h',
+    activeMeds:'Colírios ativos',todaySchedule:'Registros de hoje',
+    noteAdd:'Nota',extraDropAdd:'Dose extra',iopAdd:'PIO',expand:'Expandir',
+    wd0:'Dom',wd1:'Seg',wd2:'Ter',wd3:'Qua',wd4:'Qui',wd5:'Sex',wd6:'Sáb',
+    metaFrom:'A partir de 08:30 | 2× | 12h',metaBedtime:'Antes de dormir',metaIndef:'Indefinida',
+    time830am:'8:30',time830pm:'20:30',time1000pm:'22:00',
+    sub1Done:'8:31 Dose 1 aplicada',
+    conflictTitle:'Aviso de intervalo entre colírios',conflictSnooze:'Entendi',conflictDoNow:'Aplicar agora',
+    iopTitle:'Histórico de PIO',iopRecentTitle:'Registros recentes',leftAbbr:'E',rightAbbr:'D',
+    fontTitle:'Tamanho do texto',fontNormal:'Normal',fontLarge:'Grande',fontLargest:'Muito grande',
+    fontPreview:'Esta frase é exibida no tamanho selecionado',
+    iopDates:['15.12.26','17.11.26','20.10.26','22.09.26','25.08.26','28.07.26','30.06.26','02.06.26']
+  }
 };
 
 function applyLang(lang) {
@@ -1512,6 +1683,14 @@ function applyLang(lang) {
       el.appendChild(document.createTextNode(line));
     });
   });
+  // IOP date list
+  const dateEls = document.querySelectorAll('[data-iop-date]');
+  if (mock.iopDates) {
+    dateEls.forEach((el) => {
+      const idx = parseInt(el.getAttribute('data-iop-date'), 10);
+      if (mock.iopDates[idx] != null) el.textContent = mock.iopDates[idx];
+    });
+  }
   // SEO meta sync
   const descText = flatten(dict.subtitle);
   ['metaDesc','ogDesc','twDesc'].forEach((id) => {
