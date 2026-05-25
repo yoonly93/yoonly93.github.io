@@ -199,8 +199,9 @@
           effective: "시행일: 2026년 5월 25일",
           html: `
             <h2>1. 수집하는 정보</h2>
-            <p><strong>(가-1) 기기 안에만 저장되는 정보</strong>: 점안 시간/주기 설정, 점안 완료 기록, 사용자 메모(자유 입력 텍스트, 증상·치료 관련 내용 포함 가능), 안압 기록(좌·우 mmHg 값, 측정 병원 이름 옵션). 이 정보는 Firebase Analytics 등 외부 서비스로 전송되지 않으며 앱 삭제 시 함께 삭제됩니다.</p>
-            <p><strong>(가-2) Firebase Analytics로 전송되는 정보</strong>: 안약 이름, 약 등록·수정·점안 완료 이벤트. 사용 패턴 분석을 통한 앱 개선 목적입니다.</p>
+            <p><strong>(가-1) 기기 안에만 저장되는 정보</strong>: 점안 시간/주기 설정, 점안 완료 기록, 안압 기록(좌·우 mmHg 값, 측정 병원 이름 옵션). 이 정보는 Firebase Analytics 등 외부 서비스로 전송되지 않으며 앱 삭제 시 함께 삭제됩니다.</p>
+            <p><strong>(가-2) Firebase Analytics로 전송되는 정보</strong>: 안약 이름, 사용자 메모, 약 등록·수정·점안 완료 이벤트. 사용 패턴 분석을 통한 앱 개선 목적입니다.</p>
+            <p><strong>(다) 민감정보 분류</strong>: 다음 정보는 건강 관련 민감정보로 분류됩니다: 안압 기록, 사용자 메모(건강 관련 내용이 포함될 수 있음). 앱 내에서 해당 기능을 처음 사용할 때 별도 안내를 표시합니다.</p>
             <p><strong>(나) 자동 수집 정보</strong>: 기기 식별자(Firebase 자동 생성 user_pseudo_id, iOS의 IDFV / Android의 Firebase Installation ID), 앱 사용 통계(화면 조회, 충돌 경고 등 이벤트), 언어/지역 설정, 기기 정보(모델, OS 버전), IP 기반 대략적 위치(국가 단위), 광고 식별자(iOS의 IDFA / Android의 GAID, 사용자 동의 시에만).</p>
             <h2>2. 이용 목적</h2>
             <p>점안 알림 스케줄링 등 서비스 제공, 안약 사용 패턴 분석을 통한 앱 개선, 광고 송출(무료 버전).</p>
@@ -301,8 +302,9 @@
           effective: "Effective Date: May 25, 2026",
           html: `
             <h2>1. Information We Collect</h2>
-            <p><strong>(a-1) Information stored only on your device</strong>: Dosing schedule settings, dosing completion records, user notes (free-text entries that may include symptom or treatment details), and IOP records (left/right mmHg values, optional hospital name). This information is never transmitted to Firebase Analytics or any external service, and is deleted together with the app on uninstall.</p>
-            <p><strong>(a-2) Information transmitted to Firebase Analytics</strong>: Eye drop names, medicine add/edit/dose-completion events. The purpose is app improvement through usage pattern analysis.</p>
+            <p><strong>(a-1) Information stored only on your device</strong>: Dosing schedule settings, dosing completion records, and IOP records (left/right mmHg values, optional hospital name). This information is never transmitted to Firebase Analytics or any external service, and is deleted together with the app on uninstall.</p>
+            <p><strong>(a-2) Information transmitted to Firebase Analytics</strong>: Eye drop names, user notes, medicine add/edit/dose-completion events. The purpose is app improvement through usage pattern analysis.</p>
+            <p><strong>(c) Sensitive information</strong>: The following are classified as sensitive health information: IOP records, user notes (which may contain health-related content). A separate notice is shown in the app when you first use each of these features.</p>
             <p><strong>(b) Automatically collected</strong>: Device identifiers (Firebase-generated user_pseudo_id, IDFV on iOS / Firebase Installation ID on Android), in-app usage events (screen views, conflict warnings, etc.), language/region, device model and OS version, approximate location at country level (IP-based), and the advertising identifier (IDFA on iOS / GAID on Android — only when you consent).</p>
             <h2>2. Purpose</h2>
             <p>To deliver scheduled reminders, analyze usage patterns to improve the app, and serve ads in the free version.</p>
@@ -403,8 +405,9 @@
           effective: "施行日: 2026年5月25日",
           html: `
             <h2>1. 収集する情報</h2>
-            <p><strong>(a-1) 端末内にのみ保存される情報</strong>: 点眼時刻・周期の設定、点眼完了の記録、ユーザーメモ（自由入力テキスト、症状・治療に関する内容を含む可能性あり）、眼圧記録（左右の mmHg 値、測定病院名は任意）。これらの情報は Firebase Analytics などの外部サービスへ送信されることはなく、アプリ削除時に併せて削除されます。</p>
-            <p><strong>(a-2) Firebase Analytics に送信される情報</strong>: 点眼薬名、薬の追加・編集・点眼完了イベント。利用傾向の分析によるアプリ改善が目的です。</p>
+            <p><strong>(a-1) 端末内にのみ保存される情報</strong>: 点眼時刻・周期の設定、点眼完了の記録、眼圧記録（左右の mmHg 値、測定病院名は任意）。これらの情報は Firebase Analytics などの外部サービスへ送信されることはなく、アプリ削除時に併せて削除されます。</p>
+            <p><strong>(a-2) Firebase Analytics に送信される情報</strong>: 点眼薬名、ユーザーメモ、薬の追加・編集・点眼完了イベント。利用傾向の分析によるアプリ改善が目的です。</p>
+            <p><strong>(c) 要配慮情報の分類</strong>: 以下の情報は健康に関する要配慮情報として扱われます：眼圧記録、ユーザーメモ（健康に関する内容を含む可能性があるため）。各機能を初めて利用する際にアプリ内で別途ご案内します。</p>
             <p><strong>(b) 自動的に収集される情報</strong>: 端末識別子（Firebase が自動生成する user_pseudo_id、iOS の IDFV / Android の Firebase Installation ID）、アプリ利用イベント（画面表示、競合警告など）、言語・地域設定、機種・OS バージョン、IP に基づく国単位の概算位置、広告識別子（iOS の IDFA / Android の GAID、ユーザーの同意がある場合のみ）。</p>
             <h2>2. 利用目的</h2>
             <p>点眼リマインダーの提供、利用傾向の分析によるアプリ改善、無料版での広告配信。</p>
@@ -505,8 +508,9 @@
           effective: "Date d'effet : 25 mai 2026",
           html: `
             <h2>1. Informations collectées</h2>
-            <p><strong>(a-1) Informations stockées uniquement sur votre appareil</strong> : paramètres d'horaire/fréquence d'instillation, historique des instillations, notes de l'utilisateur (texte libre pouvant contenir des informations sur les symptômes ou les traitements), mesures de TIO (valeurs gauche/droite en mmHg, nom de l'hôpital facultatif). Ces informations ne sont jamais transmises à Firebase Analytics ni à un service externe et sont supprimées avec l'application lors de la désinstallation.</p>
-            <p><strong>(a-2) Informations transmises à Firebase Analytics</strong> : nom du collyre, événements d'ajout/modification/instillation. Finalité : amélioration de l'application via l'analyse des habitudes d'utilisation.</p>
+            <p><strong>(a-1) Informations stockées uniquement sur votre appareil</strong> : paramètres d'horaire/fréquence d'instillation, historique des instillations, mesures de TIO (valeurs gauche/droite en mmHg, nom de l'hôpital facultatif). Ces informations ne sont jamais transmises à Firebase Analytics ni à un service externe et sont supprimées avec l'application lors de la désinstallation.</p>
+            <p><strong>(a-2) Informations transmises à Firebase Analytics</strong> : nom du collyre, notes de l'utilisateur, événements d'ajout/modification/instillation. Finalité : amélioration de l'application via l'analyse des habitudes d'utilisation.</p>
+            <p><strong>(c) Données sensibles</strong> : les informations suivantes sont classées comme données de santé sensibles : mesures de TIO, notes de l'utilisateur (pouvant contenir des informations liées à la santé). Une notification distincte s'affiche dans l'application lors de la première utilisation de chaque fonctionnalité.</p>
             <p><strong>(b) Collectées automatiquement</strong> : identifiants d'appareil (user_pseudo_id généré par Firebase, IDFV sur iOS / Firebase Installation ID sur Android), événements d'utilisation (vues d'écran, avertissements de conflit, etc.), langue/région, modèle et version OS, localisation approximative au niveau du pays (basée sur IP), identifiant publicitaire (IDFA sur iOS / GAID sur Android, uniquement avec votre consentement).</p>
             <h2>2. Finalités</h2>
             <p>Fournir les rappels programmés, analyser les schémas d'utilisation pour améliorer l'application, diffuser des publicités (version gratuite).</p>
@@ -607,8 +611,9 @@
           effective: "Fecha de vigencia: 25 de mayo de 2026",
           html: `
             <h2>1. Información que recopilamos</h2>
-            <p><strong>(a-1) Información almacenada solo en su dispositivo</strong>: configuración de horario/frecuencia de instilación, registros de dosis aplicadas, notas del usuario (texto libre que puede incluir información sobre síntomas o tratamientos), mediciones de PIO (valores izquierdo/derecho en mmHg, nombre del hospital opcional). Esta información nunca se transmite a Firebase Analytics ni a ningún servicio externo y se elimina junto con la app al desinstalarla.</p>
-            <p><strong>(a-2) Información transmitida a Firebase Analytics</strong>: nombre de la gota, eventos de adición/edición/instilación. Finalidad: mejora de la aplicación mediante el análisis de patrones de uso.</p>
+            <p><strong>(a-1) Información almacenada solo en su dispositivo</strong>: configuración de horario/frecuencia de instilación, registros de dosis aplicadas, mediciones de PIO (valores izquierdo/derecho en mmHg, nombre del hospital opcional). Esta información nunca se transmite a Firebase Analytics ni a ningún servicio externo y se elimina junto con la app al desinstalarla.</p>
+            <p><strong>(a-2) Información transmitida a Firebase Analytics</strong>: nombre de la gota, notas del usuario, eventos de adición/edición/instilación. Finalidad: mejora de la aplicación mediante el análisis de patrones de uso.</p>
+            <p><strong>(c) Información sensible</strong>: la siguiente información se clasifica como datos de salud sensibles: mediciones de PIO, notas del usuario (que pueden contener información relacionada con la salud). Se muestra un aviso específico en la app la primera vez que utiliza cada función.</p>
             <p><strong>(b) Información recopilada automáticamente</strong>: identificadores del dispositivo (user_pseudo_id generado por Firebase, IDFV en iOS / Firebase Installation ID en Android), eventos de uso (vistas de pantalla, avisos de conflicto, etc.), idioma/región, modelo y versión del SO, ubicación aproximada a nivel de país (basada en IP), identificador publicitario (IDFA en iOS / GAID en Android, solo con su consentimiento).</p>
             <h2>2. Finalidad</h2>
             <p>Prestar recordatorios programados, analizar patrones de uso para mejorar la aplicación y servir anuncios (versión gratuita).</p>
@@ -709,8 +714,9 @@
           effective: "Дата вступления в силу: 25 мая 2026 г.",
           html: `
             <h2>1. Сбор информации</h2>
-            <p><strong>(а-1) Информация, хранящаяся только на вашем устройстве</strong>: настройки времени и частоты закапывания, журнал выполненных закапываний, заметки пользователя (свободный текст, может содержать сведения о симптомах или лечении), записи ВГД (значения для левого/правого глаза в мм рт. ст., название клиники по желанию). Эта информация не передаётся в Firebase Analytics или другие внешние сервисы и удаляется вместе с приложением при его удалении.</p>
-            <p><strong>(а-2) Информация, передаваемая в Firebase Analytics</strong>: название капель, события добавления/изменения/закапывания. Цель — улучшение приложения через анализ закономерностей использования.</p>
+            <p><strong>(а-1) Информация, хранящаяся только на вашем устройстве</strong>: настройки времени и частоты закапывания, журнал выполненных закапываний, записи ВГД (значения для левого/правого глаза в мм рт. ст., название клиники по желанию). Эта информация не передаётся в Firebase Analytics или другие внешние сервисы и удаляется вместе с приложением при его удалении.</p>
+            <p><strong>(а-2) Информация, передаваемая в Firebase Analytics</strong>: название капель, заметки пользователя, события добавления/изменения/закапывания. Цель — улучшение приложения через анализ закономерностей использования.</p>
+            <p><strong>(в) Чувствительная информация</strong>: следующие данные классифицируются как чувствительная медицинская информация: записи ВГД, заметки пользователя (могут содержать сведения о здоровье). При первом использовании каждой функции в приложении отображается отдельное уведомление.</p>
             <p><strong>(б) Автоматически собираемые данные</strong>: идентификаторы устройства (генерируемый Firebase user_pseudo_id, IDFV на iOS / Firebase Installation ID на Android), события использования (просмотры экранов, предупреждения о конфликте и т. д.), язык/регион, модель и версия ОС, приблизительное местоположение на уровне страны (по IP), рекламный идентификатор (IDFA на iOS / GAID на Android, только с вашего согласия).</p>
             <h2>2. Цели обработки</h2>
             <p>Предоставление напоминаний, анализ паттернов использования для улучшения приложения, показ рекламы (в бесплатной версии).</p>
@@ -811,8 +817,9 @@
           effective: "Inkrafttreten: 25. Mai 2026",
           html: `
             <h2>1. Erhobene Daten</h2>
-            <p><strong>(a-1) Daten, die nur auf Ihrem Gerät gespeichert werden</strong>: Einstellungen zu Dosierzeiten/-rhythmen, Protokolle abgeschlossener Dosierungen, Benutzernotizen (Freitexteingabe, kann Angaben zu Symptomen oder Behandlungen enthalten), IOD-Einträge (Werte links/rechts in mmHg, Klinikname optional). Diese Daten werden nicht an Firebase Analytics oder andere externe Dienste übermittelt und werden zusammen mit der App beim Deinstallieren gelöscht.</p>
-            <p><strong>(a-2) Daten, die an Firebase Analytics übermittelt werden</strong>: Name des Augentropfens, Hinzufügen-/Bearbeiten-/Dosierungs-Ereignisse. Zweck: App-Verbesserung durch Analyse von Nutzungsmustern.</p>
+            <p><strong>(a-1) Daten, die nur auf Ihrem Gerät gespeichert werden</strong>: Einstellungen zu Dosierzeiten/-rhythmen, Protokolle abgeschlossener Dosierungen, IOD-Einträge (Werte links/rechts in mmHg, Klinikname optional). Diese Daten werden nicht an Firebase Analytics oder andere externe Dienste übermittelt und werden zusammen mit der App beim Deinstallieren gelöscht.</p>
+            <p><strong>(a-2) Daten, die an Firebase Analytics übermittelt werden</strong>: Name des Augentropfens, Benutzernotizen, Hinzufügen-/Bearbeiten-/Dosierungs-Ereignisse. Zweck: App-Verbesserung durch Analyse von Nutzungsmustern.</p>
+            <p><strong>(c) Sensible Daten</strong>: Folgende Informationen werden als sensible Gesundheitsdaten eingestuft: IOD-Einträge, Benutzernotizen (können gesundheitsbezogene Inhalte enthalten). Beim erstmaligen Nutzen jeder Funktion wird ein gesonderter Hinweis in der App angezeigt.</p>
             <p><strong>(b) Automatisch erhobene Daten</strong>: Gerätekennungen (von Firebase erzeugte user_pseudo_id, IDFV auf iOS / Firebase Installation ID auf Android), In-App-Nutzungsereignisse (Bildschirmaufrufe, Konflikthinweise usw.), Sprache/Region, Modell und Betriebssystemversion, grobe IP-basierte Standortinformationen (Landesebene), Werbe-Identifier (IDFA auf iOS / GAID auf Android — nur mit Ihrer Einwilligung).</p>
             <h2>2. Zwecke</h2>
             <p>Bereitstellung geplanter Erinnerungen, Analyse von Nutzungsmustern zur Verbesserung der App, Anzeigenauslieferung (kostenlose Version).</p>
@@ -913,8 +920,9 @@
           effective: "Data di entrata in vigore: 25 maggio 2026",
           html: `
             <h2>1. Informazioni raccolte</h2>
-            <p><strong>(a-1) Informazioni memorizzate solo sul tuo dispositivo</strong>: impostazioni di orario/frequenza di applicazione, registri delle dosi completate, note dell'utente (testo libero che può contenere informazioni su sintomi o trattamenti), registri PIO (valori sinistro/destro in mmHg, nome dell'ospedale facoltativo). Queste informazioni non vengono mai trasmesse a Firebase Analytics o ad altri servizi esterni e vengono eliminate insieme all'app alla disinstallazione.</p>
-            <p><strong>(a-2) Informazioni trasmesse a Firebase Analytics</strong>: nome del collirio, eventi di aggiunta/modifica/applicazione. Finalità: miglioramento dell'app tramite analisi dei modelli d'uso.</p>
+            <p><strong>(a-1) Informazioni memorizzate solo sul tuo dispositivo</strong>: impostazioni di orario/frequenza di applicazione, registri delle dosi completate, registri PIO (valori sinistro/destro in mmHg, nome dell'ospedale facoltativo). Queste informazioni non vengono mai trasmesse a Firebase Analytics o ad altri servizi esterni e vengono eliminate insieme all'app alla disinstallazione.</p>
+            <p><strong>(a-2) Informazioni trasmesse a Firebase Analytics</strong>: nome del collirio, note dell'utente, eventi di aggiunta/modifica/applicazione. Finalità: miglioramento dell'app tramite analisi dei modelli d'uso.</p>
+            <p><strong>(c) Informazioni sensibili</strong>: le seguenti informazioni sono classificate come dati sanitari sensibili: registri PIO, note dell'utente (che possono contenere contenuti relativi alla salute). Un avviso specifico viene mostrato nell'app al primo utilizzo di ciascuna funzionalità.</p>
             <p><strong>(b) Raccolte automaticamente</strong>: identificatori del dispositivo (user_pseudo_id generato da Firebase, IDFV su iOS / Firebase Installation ID su Android), eventi d'uso (visualizzazioni di schermate, avvisi di conflitto ecc.), lingua/regione, modello e versione del SO, posizione approssimativa a livello paese (basata su IP), identificatore pubblicitario (IDFA su iOS / GAID su Android, solo con il tuo consenso).</p>
             <h2>2. Finalità</h2>
             <p>Fornire promemoria pianificati, analizzare i modelli d'uso per migliorare l'app, erogare pubblicità (versione gratuita).</p>
@@ -1015,8 +1023,9 @@
           effective: "Data de vigência: 25 de maio de 2026",
           html: `
             <h2>1. Informações coletadas</h2>
-            <p><strong>(a-1) Informações armazenadas apenas no seu dispositivo</strong>: configurações de horário/frequência de aplicação, registros de doses concluídas, anotações do usuário (texto livre que pode conter informações sobre sintomas ou tratamentos), registros de PIO (valores esquerdo/direito em mmHg, nome do hospital opcional). Estas informações não são transmitidas ao Firebase Analytics ou a outros serviços externos e são apagadas junto com o app na desinstalação.</p>
-            <p><strong>(a-2) Informações transmitidas ao Firebase Analytics</strong>: nome do colírio, eventos de adicionar/editar/aplicar. Finalidade: melhoria do app por meio da análise de padrões de uso.</p>
+            <p><strong>(a-1) Informações armazenadas apenas no seu dispositivo</strong>: configurações de horário/frequência de aplicação, registros de doses concluídas, registros de PIO (valores esquerdo/direito em mmHg, nome do hospital opcional). Estas informações não são transmitidas ao Firebase Analytics ou a outros serviços externos e são apagadas junto com o app na desinstalação.</p>
+            <p><strong>(a-2) Informações transmitidas ao Firebase Analytics</strong>: nome do colírio, anotações do usuário, eventos de adicionar/editar/aplicar. Finalidade: melhoria do app por meio da análise de padrões de uso.</p>
+            <p><strong>(c) Informações sensíveis</strong>: as seguintes informações são classificadas como dados de saúde sensíveis: registros de PIO, anotações do usuário (que podem conter conteúdo relacionado à saúde). Um aviso específico é exibido no app na primeira vez que você utiliza cada funcionalidade.</p>
             <p><strong>(b) Coletadas automaticamente</strong>: identificadores do dispositivo (user_pseudo_id gerado pelo Firebase, IDFV no iOS / Firebase Installation ID no Android), eventos de uso (visualizações de tela, avisos de conflito etc.), idioma/região, modelo e versão do SO, localização aproximada em nível de país (baseada em IP), identificador de publicidade (IDFA no iOS / GAID no Android, apenas com seu consentimento).</p>
             <h2>2. Finalidade</h2>
             <p>Fornecer lembretes programados, analisar padrões de uso para melhorar o aplicativo e exibir anúncios (versão gratuita).</p>
