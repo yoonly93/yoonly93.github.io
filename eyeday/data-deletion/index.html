@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eyeday — Data Deletion</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #DBEAFE 0%, #F8FAFC 50%, #EFF6FF 100%);
+      min-height: 100vh;
+      color: #1E293B;
+      padding: 32px 16px 64px;
+      line-height: 1.6;
+    }
+    .container { max-width: 760px; margin: 0 auto; }
+    h1 { font-size: 28px; font-weight: 700; color: #3B82F6; margin-bottom: 24px; }
+    .controls {
+      display: flex; gap: 10px; align-items: center;
+      background: #fff; border-radius: 12px; padding: 14px 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04); margin-bottom: 20px;
+    }
+    .controls label { font-size: 13px; color: #475569; }
+    .controls select {
+      font-family: inherit; font-size: 13px; padding: 6px 10px;
+      border-radius: 8px; border: 1px solid #E2E8F0; background: #fff; color: #1E293B;
+    }
+    article {
+      background: #fff; border-radius: 16px; padding: 28px 28px 32px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+    }
+    article h2 {
+      font-size: 18px; font-weight: 600; color: #1E293B;
+      margin-top: 22px; margin-bottom: 8px;
+    }
+    article h2:first-child { margin-top: 0; }
+    article p { font-size: 14.5px; color: #334155; margin-bottom: 8px; }
+    article ul { padding-left: 20px; margin-bottom: 8px; }
+    article li { font-size: 14.5px; color: #334155; margin-bottom: 4px; }
+    article .updated {
+      font-size: 13px; color: #64748B; margin-bottom: 16px;
+      padding-bottom: 16px; border-bottom: 1px solid #F1F5F9;
+    }
+    a { color: #2563EB; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Eyeday — Data Deletion</h1>
+    <div class="controls">
+      <label for="lang">Language</label>
+      <select id="lang">
+        <option value="ko">한국어</option>
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="ru">Русский</option>
+        <option value="de">Deutsch</option>
+        <option value="it">Italiano</option>
+        <option value="pt">Português</option>
+      </select>
+    </div>
+    <article id="content"></article>
+  </div>
+
+<script>
+const DOCS = {
+  ko: `
+<h2>앱: Eyeday</h2>
+<p class="updated">최종 업데이트: 2026년 5월 28일</p>
+
+<h2>저장되는 데이터</h2>
+<p>Eyeday는 다음 사용자 데이터를 <strong>기기 안에만</strong> 저장합니다. 외부 서버에는 전송되지 않습니다.</p>
+<ul>
+  <li>안약 정보 (이름, 투약 시간, 횟수, 간격, 기간)</li>
+  <li>점안 기록 (완료한 점안의 시간·날짜)</li>
+  <li>안압(IOP) 기록 (좌·우 수치, 측정일, 병원 이름)</li>
+  <li>사용자 메모 (자유 입력 텍스트)</li>
+  <li>앱 설정 (언어, 글씨 크기 등)</li>
+</ul>
+
+<h2>데이터 삭제 방법</h2>
+
+<h2>1) 앱 안에서 개별 삭제</h2>
+<ul>
+  <li>안약: 점안중인 안약 카드의 삭제(휴지통) 버튼</li>
+  <li>점안 기록: 타임라인 항목 길게 누르기 → 점안 취소</li>
+  <li>안압 기록: 안압 기록 탭 → 우상단 삭제</li>
+  <li>메모: 메모 항목 → 삭제</li>
+</ul>
+
+<h2>2) 모든 데이터를 한 번에 삭제</h2>
+<p>기기에서 Eyeday 앱을 삭제하시면 위에 나열된 모든 사용자 데이터가 즉시 함께 삭제됩니다.</p>
+
+<h2>3) Firebase Analytics (익명 데이터)</h2>
+<p>앱은 서비스 개선을 위해 익명 사용 통계(앱 사용 빈도, 기기 모델, 언어 등)를 Firebase Analytics로 전송합니다. 이 데이터는 개인을 식별할 수 있는 정보가 아니며 Google 보존 정책에 따라 최대 14개월 후 자동 삭제됩니다.</p>
+<p>이 익명 데이터를 즉시 삭제하고 싶으시면 wildkindground@gmail.com으로 요청해주세요.</p>
+
+<h2>문의</h2>
+<p>데이터 삭제와 관련해 추가 문의가 있으시면 <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a>으로 연락해주세요.</p>
+`,
+  en: `
+<h2>App: Eyeday</h2>
+<p class="updated">Last updated: May 28, 2026</p>
+
+<h2>What data is stored</h2>
+<p>Eyeday stores the following user data <strong>only on your device</strong>. It is not transmitted to external servers.</p>
+<ul>
+  <li>Eye drop info (name, dose times, frequency, interval, duration)</li>
+  <li>Drop records (time and date of each completed dose)</li>
+  <li>IOP records (left/right readings, date, clinic name)</li>
+  <li>Notes (free-form text)</li>
+  <li>App settings (language, font size, etc.)</li>
+</ul>
+
+<h2>How to delete your data</h2>
+
+<h2>1) Delete individual items inside the app</h2>
+<ul>
+  <li>Eye drops: trash button on each active eye-drop card</li>
+  <li>Drop records: long-press a timeline item → undo dose</li>
+  <li>IOP records: open an IOP record → delete in the top-right</li>
+  <li>Notes: open a note → delete</li>
+</ul>
+
+<h2>2) Delete everything at once</h2>
+<p>Uninstall Eyeday from your device. All user data listed above is immediately removed.</p>
+
+<h2>3) Firebase Analytics (anonymous data)</h2>
+<p>Eyeday sends anonymous usage statistics (app usage frequency, device model, language, etc.) to Firebase Analytics to help improve the service. This data cannot identify you personally and is auto-deleted after up to 14 months per Google's retention policy.</p>
+<p>To request immediate deletion of this anonymous data, email wildkindground@gmail.com.</p>
+
+<h2>Contact</h2>
+<p>For questions about data deletion, contact <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a>.</p>
+`,
+  ja: `
+<h2>アプリ: Eyeday</h2>
+<p class="updated">最終更新日: 2026年5月28日</p>
+
+<h2>保存されるデータ</h2>
+<p>Eyeday は以下のユーザーデータを<strong>端末内にのみ</strong>保存します。外部サーバーには送信されません。</p>
+<ul>
+  <li>目薬情報 (名称、投薬時間、回数、間隔、期間)</li>
+  <li>点眼記録 (完了した点眼の時刻・日付)</li>
+  <li>眼圧 (IOP) 記録 (左右の値、測定日、病院名)</li>
+  <li>メモ (自由入力テキスト)</li>
+  <li>アプリ設定 (言語、文字サイズなど)</li>
+</ul>
+
+<h2>データの削除方法</h2>
+
+<h2>1) アプリ内で個別に削除</h2>
+<ul>
+  <li>目薬: 各カードのゴミ箱ボタン</li>
+  <li>点眼記録: タイムライン項目を長押し → 点眼取消</li>
+  <li>眼圧記録: 記録を開く → 右上の削除</li>
+  <li>メモ: メモを開く → 削除</li>
+</ul>
+
+<h2>2) すべてを一括で削除</h2>
+<p>端末から Eyeday アプリをアンインストールすると、上記のすべてのユーザーデータが即座に削除されます。</p>
+
+<h2>3) Firebase Analytics (匿名データ)</h2>
+<p>アプリはサービス改善のため、匿名の利用統計 (利用頻度、端末モデル、言語など) を Firebase Analytics に送信します。このデータは個人を特定できる情報ではなく、Google の保存ポリシーに従って最大14か月後に自動削除されます。</p>
+<p>この匿名データの即時削除をご希望の場合は wildkindground@gmail.com までご連絡ください。</p>
+
+<h2>お問い合わせ</h2>
+<p>データ削除に関するご質問は <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a> までお問い合わせください。</p>
+`,
+  fr: `
+<h2>App : Eyeday</h2>
+<p class="updated">Dernière mise à jour : 28 mai 2026</p>
+
+<h2>Données stockées</h2>
+<p>Eyeday stocke les données utilisateur suivantes <strong>uniquement sur votre appareil</strong>. Elles ne sont pas transmises à des serveurs externes.</p>
+<ul>
+  <li>Informations sur les collyres (nom, horaires, fréquence, intervalle, durée)</li>
+  <li>Historique des gouttes (heure et date de chaque dose appliquée)</li>
+  <li>Mesures de TIO (œil gauche/droit, date, nom de la clinique)</li>
+  <li>Notes (texte libre)</li>
+  <li>Paramètres de l'app (langue, taille de police, etc.)</li>
+</ul>
+
+<h2>Comment supprimer vos données</h2>
+
+<h2>1) Supprimer les éléments individuellement</h2>
+<ul>
+  <li>Collyres : bouton corbeille sur chaque carte</li>
+  <li>Historique : appui long sur un élément → annuler la dose</li>
+  <li>Mesures de TIO : ouvrir une mesure → supprimer en haut à droite</li>
+  <li>Notes : ouvrir une note → supprimer</li>
+</ul>
+
+<h2>2) Tout supprimer en une fois</h2>
+<p>Désinstallez Eyeday de votre appareil. Toutes les données utilisateur ci-dessus sont immédiatement supprimées.</p>
+
+<h2>3) Firebase Analytics (données anonymes)</h2>
+<p>L'app envoie des statistiques d'usage anonymes (fréquence d'utilisation, modèle d'appareil, langue, etc.) à Firebase Analytics pour améliorer le service. Ces données ne permettent pas de vous identifier et sont supprimées automatiquement après 14 mois maximum selon la politique de conservation de Google.</p>
+<p>Pour demander une suppression immédiate de ces données anonymes, écrivez à wildkindground@gmail.com.</p>
+
+<h2>Contact</h2>
+<p>Pour toute question sur la suppression des données, contactez <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a>.</p>
+`,
+  es: `
+<h2>App: Eyeday</h2>
+<p class="updated">Última actualización: 28 de mayo de 2026</p>
+
+<h2>Datos almacenados</h2>
+<p>Eyeday almacena los siguientes datos de usuario <strong>solo en su dispositivo</strong>. No se envían a servidores externos.</p>
+<ul>
+  <li>Información de los colirios (nombre, horarios, frecuencia, intervalo, duración)</li>
+  <li>Registros de aplicación (hora y fecha de cada dosis completada)</li>
+  <li>Registros de PIO (lectura izquierda/derecha, fecha, nombre de la clínica)</li>
+  <li>Notas (texto libre)</li>
+  <li>Ajustes de la app (idioma, tamaño de letra, etc.)</li>
+</ul>
+
+<h2>Cómo eliminar sus datos</h2>
+
+<h2>1) Eliminar elementos individualmente</h2>
+<ul>
+  <li>Colirios: botón de papelera en cada tarjeta</li>
+  <li>Registros: mantenga pulsado un elemento de la línea de tiempo → deshacer dosis</li>
+  <li>Registros de PIO: abra el registro → eliminar arriba a la derecha</li>
+  <li>Notas: abra la nota → eliminar</li>
+</ul>
+
+<h2>2) Eliminar todo a la vez</h2>
+<p>Desinstale Eyeday de su dispositivo. Todos los datos de usuario listados se eliminarán inmediatamente.</p>
+
+<h2>3) Firebase Analytics (datos anónimos)</h2>
+<p>La app envía estadísticas anónimas (frecuencia de uso, modelo del dispositivo, idioma, etc.) a Firebase Analytics para mejorar el servicio. Estos datos no permiten identificarle personalmente y se eliminan automáticamente tras 14 meses según la política de retención de Google.</p>
+<p>Para solicitar la eliminación inmediata de estos datos anónimos, escriba a wildkindground@gmail.com.</p>
+
+<h2>Contacto</h2>
+<p>Para preguntas sobre la eliminación de datos, contacte <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a>.</p>
+`,
+  ru: `
+<h2>Приложение: Eyeday</h2>
+<p class="updated">Последнее обновление: 28 мая 2026</p>
+
+<h2>Какие данные хранятся</h2>
+<p>Eyeday хранит следующие пользовательские данные <strong>только на вашем устройстве</strong>. Они не отправляются на внешние серверы.</p>
+<ul>
+  <li>Информация о каплях (название, время приёма, частота, интервал, длительность)</li>
+  <li>Записи о закапываниях (время и дата каждой выполненной дозы)</li>
+  <li>Записи ВГД (левый/правый глаз, дата, название клиники)</li>
+  <li>Заметки (произвольный текст)</li>
+  <li>Настройки приложения (язык, размер шрифта и т. д.)</li>
+</ul>
+
+<h2>Как удалить данные</h2>
+
+<h2>1) Удаление по отдельности в приложении</h2>
+<ul>
+  <li>Капли: кнопка корзины на карточке капель</li>
+  <li>Записи: долгое нажатие на элемент таймлайна → отменить дозу</li>
+  <li>Записи ВГД: открыть запись → удалить в правом верхнем углу</li>
+  <li>Заметки: открыть заметку → удалить</li>
+</ul>
+
+<h2>2) Удалить всё сразу</h2>
+<p>Удалите приложение Eyeday с устройства. Все указанные выше пользовательские данные будут немедленно удалены.</p>
+
+<h2>3) Firebase Analytics (анонимные данные)</h2>
+<p>Приложение отправляет анонимную статистику использования (частота использования, модель устройства, язык и т. д.) в Firebase Analytics для улучшения сервиса. Эти данные не позволяют идентифицировать вас лично и автоматически удаляются максимум через 14 месяцев согласно политике хранения Google.</p>
+<p>Чтобы запросить немедленное удаление этих анонимных данных, напишите на wildkindground@gmail.com.</p>
+
+<h2>Контакты</h2>
+<p>По вопросам об удалении данных пишите на <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a>.</p>
+`,
+  de: `
+<h2>App: Eyeday</h2>
+<p class="updated">Zuletzt aktualisiert: 28. Mai 2026</p>
+
+<h2>Welche Daten gespeichert werden</h2>
+<p>Eyeday speichert die folgenden Nutzerdaten <strong>nur auf Ihrem Gerät</strong>. Sie werden nicht an externe Server übertragen.</p>
+<ul>
+  <li>Augentropfen-Daten (Name, Dosierungszeiten, Häufigkeit, Intervall, Dauer)</li>
+  <li>Tropfen-Protokoll (Zeit und Datum jeder erfassten Dosis)</li>
+  <li>IOD-Einträge (Links/Rechts-Werte, Datum, Name der Klinik)</li>
+  <li>Notizen (Freitext)</li>
+  <li>App-Einstellungen (Sprache, Schriftgröße usw.)</li>
+</ul>
+
+<h2>So löschen Sie Ihre Daten</h2>
+
+<h2>1) Einzelne Einträge in der App löschen</h2>
+<ul>
+  <li>Augentropfen: Papierkorb-Symbol auf jeder Karte</li>
+  <li>Protokoll: langes Drücken auf einen Eintrag → Dosis zurücknehmen</li>
+  <li>IOD-Einträge: Eintrag öffnen → oben rechts löschen</li>
+  <li>Notizen: Notiz öffnen → löschen</li>
+</ul>
+
+<h2>2) Alles auf einmal löschen</h2>
+<p>Deinstallieren Sie Eyeday von Ihrem Gerät. Alle oben aufgeführten Nutzerdaten werden sofort entfernt.</p>
+
+<h2>3) Firebase Analytics (anonyme Daten)</h2>
+<p>Die App sendet anonyme Nutzungsstatistiken (Nutzungshäufigkeit, Gerätemodell, Sprache usw.) an Firebase Analytics, um den Dienst zu verbessern. Diese Daten ermöglichen keine persönliche Identifikation und werden gemäß Googles Aufbewahrungsrichtlinie nach maximal 14 Monaten automatisch gelöscht.</p>
+<p>Um die sofortige Löschung dieser anonymen Daten anzufordern, schreiben Sie an wildkindground@gmail.com.</p>
+
+<h2>Kontakt</h2>
+<p>Bei Fragen zur Datenlöschung wenden Sie sich an <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a>.</p>
+`,
+  it: `
+<h2>App: Eyeday</h2>
+<p class="updated">Ultimo aggiornamento: 28 maggio 2026</p>
+
+<h2>Dati memorizzati</h2>
+<p>Eyeday memorizza i seguenti dati utente <strong>solo sul tuo dispositivo</strong>. Non vengono trasmessi a server esterni.</p>
+<ul>
+  <li>Informazioni sui colliri (nome, orari, frequenza, intervallo, durata)</li>
+  <li>Registro dei colliri applicati (ora e data di ciascuna dose)</li>
+  <li>Registri PIO (valori sinistro/destro, data, nome della clinica)</li>
+  <li>Note (testo libero)</li>
+  <li>Impostazioni app (lingua, dimensione testo, ecc.)</li>
+</ul>
+
+<h2>Come eliminare i tuoi dati</h2>
+
+<h2>1) Eliminare singoli elementi nell'app</h2>
+<ul>
+  <li>Colliri: pulsante cestino su ciascuna scheda</li>
+  <li>Registro: tieni premuto un elemento della timeline → annulla dose</li>
+  <li>Registri PIO: apri un registro → elimina in alto a destra</li>
+  <li>Note: apri una nota → elimina</li>
+</ul>
+
+<h2>2) Eliminare tutto in una volta</h2>
+<p>Disinstalla Eyeday dal tuo dispositivo. Tutti i dati utente sopra elencati vengono rimossi immediatamente.</p>
+
+<h2>3) Firebase Analytics (dati anonimi)</h2>
+<p>L'app invia statistiche di utilizzo anonime (frequenza di utilizzo, modello del dispositivo, lingua, ecc.) a Firebase Analytics per migliorare il servizio. Questi dati non consentono di identificarti personalmente e vengono eliminati automaticamente dopo un massimo di 14 mesi secondo la politica di conservazione di Google.</p>
+<p>Per richiedere l'eliminazione immediata di questi dati anonimi, scrivi a wildkindground@gmail.com.</p>
+
+<h2>Contatti</h2>
+<p>Per domande sulla cancellazione dei dati, contatta <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a>.</p>
+`,
+  pt: `
+<h2>App: Eyeday</h2>
+<p class="updated">Última atualização: 28 de maio de 2026</p>
+
+<h2>Quais dados são armazenados</h2>
+<p>O Eyeday armazena os seguintes dados do usuário <strong>apenas no seu dispositivo</strong>. Eles não são transmitidos para servidores externos.</p>
+<ul>
+  <li>Informações dos colírios (nome, horários, frequência, intervalo, duração)</li>
+  <li>Registros de aplicação (hora e data de cada dose aplicada)</li>
+  <li>Registros de PIO (valores esquerdo/direito, data, nome da clínica)</li>
+  <li>Notas (texto livre)</li>
+  <li>Configurações do app (idioma, tamanho do texto, etc.)</li>
+</ul>
+
+<h2>Como excluir seus dados</h2>
+
+<h2>1) Excluir itens individuais no app</h2>
+<ul>
+  <li>Colírios: botão de lixeira em cada cartão</li>
+  <li>Registros: pressione e segure um item da linha do tempo → desfazer dose</li>
+  <li>Registros de PIO: abra um registro → excluir no canto superior direito</li>
+  <li>Notas: abra uma nota → excluir</li>
+</ul>
+
+<h2>2) Excluir tudo de uma vez</h2>
+<p>Desinstale o Eyeday do seu dispositivo. Todos os dados do usuário listados acima são removidos imediatamente.</p>
+
+<h2>3) Firebase Analytics (dados anônimos)</h2>
+<p>O app envia estatísticas anônimas de uso (frequência de uso, modelo do dispositivo, idioma, etc.) ao Firebase Analytics para melhorar o serviço. Esses dados não permitem identificá-lo pessoalmente e são excluídos automaticamente após no máximo 14 meses, conforme a política de retenção do Google.</p>
+<p>Para solicitar a exclusão imediata desses dados anônimos, envie um e-mail para wildkindground@gmail.com.</p>
+
+<h2>Contato</h2>
+<p>Para dúvidas sobre exclusão de dados, entre em contato com <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a>.</p>
+`,
+};
+
+const LANGS = Object.keys(DOCS);
+
+function pickInitialLang() {
+  const params = new URLSearchParams(location.search);
+  const param = params.get('lang');
+  if (param && LANGS.includes(param)) return param;
+  const nav = (navigator.language || 'ko').toLowerCase();
+  for (const l of LANGS) { if (nav.startsWith(l)) return l; }
+  return 'ko';
+}
+
+function render(lang) {
+  document.documentElement.lang = lang;
+  document.getElementById('content').innerHTML = DOCS[lang] || DOCS.ko;
+  const sel = document.getElementById('lang');
+  if (sel) sel.value = lang;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  render(pickInitialLang());
+  document.getElementById('lang').addEventListener('change', (e) => render(e.target.value));
+});
+</script>
+</body>
+</html>
