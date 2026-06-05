@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eyeday Contact</title>
+  <meta name="robots" content="noindex">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #DBEAFE 0%, #F8FAFC 50%, #EFF6FF 100%);
+      min-height: 100vh;
+      color: #1E293B;
+      padding: 32px 16px 64px;
+      line-height: 1.6;
+    }
+    .container { max-width: 560px; margin: 0 auto; }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      margin-bottom: 20px;
+    }
+    .lang-select { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .lang-select label { font-size: 13px; color: #475569; }
+    .lang-select select {
+      font-family: inherit;
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #E2E8F0;
+      background: #fff;
+      color: #1E293B;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #3B82F6;
+      margin-bottom: 8px;
+    }
+    .lead {
+      font-size: 14.5px;
+      color: #64748B;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px 24px 30px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+    }
+    .field { margin-bottom: 20px; }
+    .field:last-of-type { margin-bottom: 24px; }
+    label.field-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1E293B;
+      margin-bottom: 8px;
+    }
+    .type-group { display: flex; gap: 8px; }
+    .type-btn {
+      flex: 1;
+      padding: 11px 4px;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      background: #fff;
+      color: #475569;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .type-btn.active {
+      background: #3B82F6;
+      border-color: #3B82F6;
+      color: #fff;
+    }
+    input, textarea {
+      width: 100%;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 15px;
+      color: #1E293B;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    input:focus, textarea:focus { border-color: #3B82F6; }
+    textarea { resize: vertical; min-height: 140px; line-height: 1.55; }
+    .err { color: #EF4444; font-size: 13px; margin-top: 6px; display: none; }
+    .field.invalid .err { display: block; }
+    .field.invalid input, .field.invalid textarea { border-color: #EF4444; }
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #3B82F6;
+      color: #fff;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .submit-btn:hover { background: #2563EB; }
+    .submit-btn:disabled { opacity: 0.6; cursor: default; }
+    .banner {
+      display: none;
+      padding: 13px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .banner.success { display: block; background: #DCFCE7; color: #15803D; }
+    .banner.error { display: block; background: #FEE2E2; color: #B91C1C; }
+    .back-link {
+      display: inline-block;
+      margin-top: 22px;
+      font-size: 14px;
+      color: #3B82F6;
+      text-decoration: none;
+    }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="controls">
+      <div class="lang-select">
+        <label id="langLabel" for="languageSelect">Language</label>
+        <select id="languageSelect">
+          <option value="en">English</option>
+          <option value="ko">한국어</option>
+          <option value="ja">日本語</option>
+          <option value="fr">Français</option>
+          <option value="es">Español</option>
+          <option value="ru">Русский</option>
+          <option value="de">Deutsch</option>
+          <option value="it">Italiano</option>
+          <option value="pt">Português</option>
+        </select>
+      </div>
+    </div>
+
+    <h1 id="title">Contact</h1>
+    <p class="lead" id="lead"></p>
+
+    <div class="card">
+      <div class="banner" id="banner"></div>
+      <form id="contactForm" novalidate>
+        <div class="field">
+          <label class="field-label" id="typeLabel"></label>
+          <div class="type-group" id="typeGroup">
+            <button type="button" class="type-btn active" data-type="bug" id="typeBug"></button>
+            <button type="button" class="type-btn" data-type="feedback" id="typeFeedback"></button>
+            <button type="button" class="type-btn" data-type="other" id="typeOther"></button>
+          </div>
+        </div>
+
+        <div class="field" id="emailField">
+          <label class="field-label" for="email" id="emailLabel"></label>
+          <input type="email" id="email" name="email" autocomplete="email" />
+          <div class="err" id="emailErr"></div>
+        </div>
+
+        <div class="field" id="messageField">
+          <label class="field-label" for="message" id="messageLabel"></label>
+          <textarea id="message" name="message"></textarea>
+          <div class="err" id="messageErr"></div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn"></button>
+      </form>
+    </div>
+
+    <a href="../../" class="back-link" id="backLink"></a>
+  </div>
+
+  <script>
+    var WEB3FORMS_ACCESS_KEY = "cebd2e85-4cfb-4917-8943-8a789ba9f2a3";
+
+    var UI = {
+      ko: { langLabel:"언어", title:"문의", lead:"버그 신고, 피드백, 기타 문의를 남겨주세요", typeLabel:"문의 유형", bug:"버그", feedback:"피드백", other:"기타", emailLabel:"이메일 주소", emailPlaceholder:"you@example.com", messageLabel:"메시지", messagePlaceholder:"내용을 입력해주세요", submit:"보내기", sending:"전송 중", success:"문의가 전송되었어요 감사합니다", error:"전송에 실패했어요 잠시 후 다시 시도해주세요", emailRequired:"이메일 주소를 입력해주세요", emailInvalid:"올바른 이메일 주소를 입력해주세요", messageRequired:"메시지를 입력해주세요", back:"← 홈으로" },
+      en: { langLabel:"Language", title:"Contact", lead:"Report a bug, share feedback, or send us a question", typeLabel:"Inquiry type", bug:"Bug", feedback:"Feedback", other:"Other", emailLabel:"Email address", emailPlaceholder:"you@example.com", messageLabel:"Message", messagePlaceholder:"Write your message", submit:"Send", sending:"Sending", success:"Your message has been sent, thank you", error:"Failed to send, please try again later", emailRequired:"Please enter your email address", emailInvalid:"Please enter a valid email address", messageRequired:"Please enter a message", back:"← Back to home" },
+      ja: { langLabel:"言語", title:"お問い合わせ", lead:"バグ報告、フィードバック、その他のお問い合わせをお寄せください", typeLabel:"お問い合わせの種類", bug:"バグ", feedback:"フィードバック", other:"その他", emailLabel:"メールアドレス", emailPlaceholder:"you@example.com", messageLabel:"メッセージ", messagePlaceholder:"内容をご記入ください", submit:"送信", sending:"送信中", success:"お問い合わせを送信しました ありがとうございます", error:"送信に失敗しました しばらくしてから再度お試しください", emailRequired:"メールアドレスを入力してください", emailInvalid:"正しいメールアドレスを入力してください", messageRequired:"メッセージを入力してください", back:"← ホームへ" },
+      fr: { langLabel:"Langue", title:"Contact", lead:"Signalez un bug, partagez vos retours ou posez votre question", typeLabel:"Type de demande", bug:"Bug", feedback:"Commentaire", other:"Autre", emailLabel:"Adresse e-mail", emailPlaceholder:"you@example.com", messageLabel:"Message", messagePlaceholder:"Écrivez votre message", submit:"Envoyer", sending:"Envoi en cours", success:"Votre message a été envoyé, merci", error:"Échec de l'envoi, veuillez réessayer plus tard", emailRequired:"Veuillez saisir votre adresse e-mail", emailInvalid:"Veuillez saisir une adresse e-mail valide", messageRequired:"Veuillez saisir un message", back:"← Retour à l'accueil" },
+      es: { langLabel:"Idioma", title:"Contacto", lead:"Informa de un error, comparte tu opinión o envíanos una pregunta", typeLabel:"Tipo de consulta", bug:"Error", feedback:"Comentarios", other:"Otro", emailLabel:"Correo electrónico", emailPlaceholder:"you@example.com", messageLabel:"Mensaje", messagePlaceholder:"Escribe tu mensaje", submit:"Enviar", sending:"Enviando", success:"Tu mensaje ha sido enviado, gracias", error:"No se pudo enviar, inténtalo de nuevo más tarde", emailRequired:"Introduce tu correo electrónico", emailInvalid:"Introduce un correo electrónico válido", messageRequired:"Escribe un mensaje", back:"← Volver al inicio" },
+      ru: { langLabel:"Язык", title:"Контакты", lead:"Сообщите об ошибке, поделитесь отзывом или задайте вопрос", typeLabel:"Тип обращения", bug:"Ошибка", feedback:"Отзыв", other:"Другое", emailLabel:"Адрес электронной почты", emailPlaceholder:"you@example.com", messageLabel:"Сообщение", messagePlaceholder:"Напишите ваше сообщение", submit:"Отправить", sending:"Отправка", success:"Ваше сообщение отправлено, спасибо", error:"Не удалось отправить, повторите попытку позже", emailRequired:"Введите адрес электронной почты", emailInvalid:"Введите корректный адрес электронной почты", messageRequired:"Введите сообщение", back:"← На главную" },
+      de: { langLabel:"Sprache", title:"Kontakt", lead:"Melde einen Fehler, gib Feedback oder stell uns eine Frage", typeLabel:"Art der Anfrage", bug:"Fehler", feedback:"Feedback", other:"Sonstiges", emailLabel:"E-Mail-Adresse", emailPlaceholder:"you@example.com", messageLabel:"Nachricht", messagePlaceholder:"Schreibe deine Nachricht", submit:"Senden", sending:"Wird gesendet", success:"Deine Nachricht wurde gesendet, danke", error:"Senden fehlgeschlagen, bitte versuche es später erneut", emailRequired:"Bitte gib deine E-Mail-Adresse ein", emailInvalid:"Bitte gib eine gültige E-Mail-Adresse ein", messageRequired:"Bitte gib eine Nachricht ein", back:"← Zur Startseite" },
+      it: { langLabel:"Lingua", title:"Contatti", lead:"Segnala un bug, lascia un feedback o inviaci una domanda", typeLabel:"Tipo di richiesta", bug:"Bug", feedback:"Feedback", other:"Altro", emailLabel:"Indirizzo email", emailPlaceholder:"you@example.com", messageLabel:"Messaggio", messagePlaceholder:"Scrivi il tuo messaggio", submit:"Invia", sending:"Invio in corso", success:"Il tuo messaggio è stato inviato, grazie", error:"Invio non riuscito, riprova più tardi", emailRequired:"Inserisci il tuo indirizzo email", emailInvalid:"Inserisci un indirizzo email valido", messageRequired:"Inserisci un messaggio", back:"← Torna alla home" },
+      pt: { langLabel:"Idioma", title:"Contato", lead:"Relate um bug, envie um feedback ou faça uma pergunta", typeLabel:"Tipo de contato", bug:"Bug", feedback:"Feedback", other:"Outro", emailLabel:"Endereço de e-mail", emailPlaceholder:"you@example.com", messageLabel:"Mensagem", messagePlaceholder:"Escreva sua mensagem", submit:"Enviar", sending:"Enviando", success:"Sua mensagem foi enviada, obrigado", error:"Falha ao enviar, tente novamente mais tarde", emailRequired:"Digite seu endereço de e-mail", emailInvalid:"Digite um endereço de e-mail válido", messageRequired:"Digite uma mensagem", back:"← Voltar ao início" }
+    };
+
+    var SUPPORTED = Object.keys(UI);
+    var $ = function (id) { return document.getElementById(id); };
+    var currentLang = "en";
+    var selectedType = "bug";
+
+    function detectLang() {
+      var saved = null;
+      try { saved = localStorage.getItem("eyeday_lang"); } catch (e) {}
+      if (saved && SUPPORTED.indexOf(saved) !== -1) return saved;
+      var qs = new URLSearchParams(window.location.search).get("lang");
+      if (qs && SUPPORTED.indexOf(qs) !== -1) return qs;
+      var nav = (navigator.language || "en").slice(0, 2).toLowerCase();
+      return SUPPORTED.indexOf(nav) !== -1 ? nav : "en";
+    }
+
+    function applyLang(lang) {
+      currentLang = lang;
+      var t = UI[lang];
+      document.documentElement.lang = lang;
+      $("langLabel").textContent = t.langLabel;
+      $("title").textContent = t.title;
+      $("lead").textContent = t.lead;
+      $("typeLabel").textContent = t.typeLabel;
+      $("typeBug").textContent = t.bug;
+      $("typeFeedback").textContent = t.feedback;
+      $("typeOther").textContent = t.other;
+      $("emailLabel").textContent = t.emailLabel;
+      $("email").placeholder = t.emailPlaceholder;
+      $("messageLabel").textContent = t.messageLabel;
+      $("message").placeholder = t.messagePlaceholder;
+      $("submitBtn").textContent = t.submit;
+      $("backLink").textContent = t.back;
+      document.title = "Eyeday " + t.title;
+      try { localStorage.setItem("eyeday_lang", lang); } catch (e) {}
+    }
+
+    $("languageSelect").addEventListener("change", function () { applyLang(this.value); });
+
+    $("typeGroup").addEventListener("click", function (e) {
+      var btn = e.target.closest(".type-btn");
+      if (!btn) return;
+      selectedType = btn.getAttribute("data-type");
+      Array.prototype.forEach.call(document.querySelectorAll(".type-btn"), function (b) {
+        b.classList.toggle("active", b === btn);
+      });
+    });
+
+    function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+    function showBanner(kind, msg) { var b = $("banner"); b.className = "banner " + kind; b.textContent = msg; }
+    function clearBanner() { $("banner").className = "banner"; }
+
+    $("contactForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var t = UI[currentLang];
+      clearBanner();
+
+      var emailField = $("emailField");
+      var messageField = $("messageField");
+      emailField.classList.remove("invalid");
+      messageField.classList.remove("invalid");
+
+      var email = $("email").value.trim();
+      var message = $("message").value.trim();
+      var ok = true;
+
+      if (!email) { $("emailErr").textContent = t.emailRequired; emailField.classList.add("invalid"); ok = false; }
+      else if (!isValidEmail(email)) { $("emailErr").textContent = t.emailInvalid; emailField.classList.add("invalid"); ok = false; }
+      if (!message) { $("messageErr").textContent = t.messageRequired; messageField.classList.add("invalid"); ok = false; }
+      if (!ok) return;
+
+      var typeLabelText = t[selectedType];
+      var payload = {
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: "[Eyeday] " + typeLabelText + " — " + email,
+        from_name: "Eyeday Contact",
+        email: email,
+        inquiry_type: typeLabelText,
+        language: currentLang,
+        message: message
+      };
+
+      var btn = $("submitBtn");
+      btn.disabled = true;
+      btn.textContent = t.sending;
+
+      fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.success) { showBanner("success", t.success); $("contactForm").reset(); }
+          else { showBanner("error", t.error); }
+        })
+        .catch(function () { showBanner("error", t.error); })
+        .finally(function () { btn.disabled = false; btn.textContent = UI[currentLang].submit; });
+    });
+
+    (function init() {
+      var lang = detectLang();
+      $("languageSelect").value = lang;
+      applyLang(lang);
+    })();
+  </script>
+</body>
+</html>
