@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LYB — 개인정보처리방침 / Privacy Policy</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+        line-height: 1.7;
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 32px 20px 64px;
+        color: #1a1a1a;
+        background: #fff;
+      }
+      @media (prefers-color-scheme: dark) {
+        body { color: #eaeaea; background: #0e0e0e; }
+        a { color: #5aaeff; }
+      }
+      h1 { font-size: 24px; }
+      h2 { font-size: 18px; margin-top: 32px; }
+      .updated { color: #888; font-size: 14px; }
+      .lang { display: none; }
+      .lang.active { display: block; }
+    </style>
+  </head>
+  <body>
+    <!-- 한국어 -->
+    <section class="lang" data-lang="ko">
+      <h1>개인정보처리방침</h1>
+      <p class="updated">최종 업데이트: 2026-06-20</p>
+      <p>
+        LYB(Lock Your Body, 이하 "앱")은 사용자의 개인정보를 중요하게 생각합니다. 본 방침은
+        앱이 어떤 정보를 어떻게 다루는지 설명합니다.
+      </p>
+      <h2>1. 수집하는 정보</h2>
+      <p>
+        앱은 회원가입이나 로그인이 없으며, 사용자가 입력한 목표·설정 데이터는 모두
+        <strong>기기 내부에만 저장</strong>됩니다. 앱 운영자는 이 데이터를 수집하거나 외부
+        서버로 전송하지 않습니다.
+      </p>
+      <ul>
+        <li><strong>위치 정보</strong>: 목표 위치 도달 여부 판정에만 사용되며 기기에서만 처리됩니다. 외부로 전송되지 않습니다.</li>
+        <li><strong>Screen Time 정보</strong>: 앱 차단을 위해 Apple의 Family Controls 프레임워크 안에서만 처리됩니다. 어떤 앱을 선택했는지 등의 내용은 앱 운영자가 알 수 없습니다.</li>
+      </ul>
+      <h2>2. 광고</h2>
+      <p>
+        앱은 Google AdMob 광고를 표시할 수 있습니다. AdMob은 광고 제공을 위해 기기 식별자 등의
+        정보를 처리할 수 있으며, 자세한 내용은
+        <a href="https://policies.google.com/privacy">Google 개인정보처리방침</a>을 참고하세요.
+        유료 버전을 구매하면 광고가 표시되지 않습니다.
+      </p>
+      <h2>3. 정보의 보관 및 삭제</h2>
+      <p>모든 데이터는 기기에 저장되며, 앱을 삭제하면 함께 삭제됩니다. 별도의 서버 보관본은 없습니다.</p>
+      <h2>4. 아동의 개인정보</h2>
+      <p>앱은 만 14세 미만 아동을 주 대상으로 하지 않습니다.</p>
+      <h2>5. 문의</h2>
+      <p>개인정보 관련 문의: <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+    </section>
+
+    <!-- English -->
+    <section class="lang" data-lang="en">
+      <h1>Privacy Policy</h1>
+      <p class="updated">Last updated: 2026-06-20</p>
+      <p>
+        LYB (Lock Your Body, the "App") respects your privacy. This policy explains what
+        information the App handles and how.
+      </p>
+      <h2>1. Information We Collect</h2>
+      <p>
+        The App has no sign-up or login. All goal and settings data you enter is
+        <strong>stored only on your device</strong>. The developer does not collect this data
+        or send it to any external server.
+      </p>
+      <ul>
+        <li><strong>Location</strong>: Used only to determine whether you reached your goal location, and processed only on your device. It is not transmitted anywhere.</li>
+        <li><strong>Screen Time data</strong>: Used to block apps, processed only within Apple's Family Controls framework. The developer cannot see which apps you selected.</li>
+      </ul>
+      <h2>2. Advertising</h2>
+      <p>
+        The App may show Google AdMob ads. AdMob may process information such as device
+        identifiers to serve ads; see the
+        <a href="https://policies.google.com/privacy">Google Privacy Policy</a> for details.
+        Ads are not shown if you purchase the paid version.
+      </p>
+      <h2>3. Data Retention and Deletion</h2>
+      <p>All data is stored on your device and is deleted when you uninstall the App. There is no server-side copy.</p>
+      <h2>4. Children's Privacy</h2>
+      <p>The App is not directed to children under 14.</p>
+      <h2>5. Contact</h2>
+      <p>Privacy inquiries: <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+    </section>
+
+    <script>
+      // 사용자 언어가 한국어면 한국어, 아니면 영어로 표시.
+      var ko = (navigator.language || navigator.userLanguage || 'en').toLowerCase().indexOf('ko') === 0;
+      var lang = ko ? 'ko' : 'en';
+      document.documentElement.lang = lang;
+      document.querySelectorAll('.lang').forEach(function (el) {
+        el.classList.toggle('active', el.getAttribute('data-lang') === lang);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LYB</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+        line-height: 1.7;
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 48px 20px;
+        color: #1a1a1a;
+        background: #fff;
+      }
+      @media (prefers-color-scheme: dark) {
+        body { color: #eaeaea; background: #0e0e0e; }
+        a { color: #5aaeff; }
+      }
+      h1 { font-size: 28px; }
+      ul { padding-left: 18px; }
+      li { margin: 8px 0; }
+      .muted { color: #888; font-size: 14px; }
+      .lang { display: none; }
+      .lang.active { display: block; }
+    </style>
+  </head>
+  <body>
+    <section class="lang" data-lang="ko">
+      <h1>LYB (Lock Your Body)</h1>
+      <p>위치 기반 목표 달성 트래커. 정해진 시간까지 정해진 장소에 가야 차단된 앱이 풀립니다.</p>
+      <ul>
+        <li><a href="./privacy.html">개인정보처리방침</a></li>
+        <li><a href="./terms.html">이용약관</a></li>
+      </ul>
+      <p class="muted">문의: <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+    </section>
+
+    <section class="lang" data-lang="en">
+      <h1>LYB (Lock Your Body)</h1>
+      <p>A location-based goal tracker. Reach a set place by a set time, or your chosen apps stay blocked.</p>
+      <ul>
+        <li><a href="./privacy.html">Privacy Policy</a></li>
+        <li><a href="./terms.html">Terms of Service</a></li>
+      </ul>
+      <p class="muted">Contact: <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+    </section>
+
+    <script>
+      var ko = (navigator.language || navigator.userLanguage || 'en').toLowerCase().indexOf('ko') === 0;
+      var lang = ko ? 'ko' : 'en';
+      document.documentElement.lang = lang;
+      document.querySelectorAll('.lang').forEach(function (el) {
+        el.classList.toggle('active', el.getAttribute('data-lang') === lang);
+      });
+    </script>
+  </body>
+</html>
