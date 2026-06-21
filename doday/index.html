@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>doday</title>
+  <meta name="description" id="metaDesc" content="하루 한 번, 오늘의 습관을 종이 달력에 ○ △ ✕ 로 기록하는 가장 단순한 습관 트래커." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="doday" />
+  <meta property="og:title" content="doday" />
+  <meta property="og:description" id="ogDesc" content="하루 한 번, 오늘의 습관을 종이 달력에 ○ △ ✕ 로." />
+  <meta property="og:image" content="https://yoonly93.github.io/doday/icon.png" />
+  <meta property="og:url" content="https://yoonly93.github.io/doday/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://yoonly93.github.io/doday/icon.png" />
+  <link rel="alternate" hreflang="ko" href="https://yoonly93.github.io/doday/?lang=ko" />
+  <link rel="alternate" hreflang="ja" href="https://yoonly93.github.io/doday/?lang=ja" />
+  <link rel="alternate" hreflang="en" href="https://yoonly93.github.io/doday/?lang=en" />
+  <link rel="alternate" hreflang="x-default" href="https://yoonly93.github.io/doday/" />
+  <style>
+    :root {
+      --fg: #09090b;
+      --bg: #fafafa;
+      --card: #ffffff;
+      --muted: #71717a;
+      --border: #ececec;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+      -webkit-font-smoothing: antialiased;
+    }
+    .lang-switch {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 50;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--fg);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 32px 8px 12px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2309090b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+    .lang-switch:focus { outline: none; }
+    .hero {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 72px 24px 24px;
+      text-align: center;
+    }
+    .app-icon {
+      width: 104px; height: 104px;
+      border-radius: 24px;
+      margin: 0 auto 22px;
+      box-shadow: 0 12px 30px rgba(9,9,11,0.14);
+      overflow: hidden;
+      background: #fff;
+    }
+    .app-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    h1 { font-size: 44px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
+    .tagline { font-size: 18px; color: var(--muted); max-width: 460px; margin: 0 auto 28px; }
+    .marks { font-size: 26px; letter-spacing: 8px; margin-bottom: 28px; }
+    .store-btn {
+      display: inline-block;
+      background: var(--fg);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 14px 26px;
+      border-radius: 14px;
+    }
+    .store-note { font-size: 13px; color: var(--muted); margin-top: 10px; }
+    .features {
+      max-width: 720px;
+      margin: 36px auto 0;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .feature {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 20px;
+    }
+    .feature .ico { font-size: 22px; margin-bottom: 10px; }
+    .feature h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .feature p { font-size: 14px; color: var(--muted); }
+    footer {
+      max-width: 720px;
+      margin: 56px auto 0;
+      padding: 24px 24px 56px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .footer-links { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+    .footer-links a { font-size: 15px; font-weight: 600; color: var(--fg); text-decoration: none; }
+    .footer-links a:hover { text-decoration: underline; }
+    .copyright { font-size: 13px; color: var(--muted); }
+    @media (max-width: 520px) {
+      h1 { font-size: 36px; }
+      .features { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <select id="langSwitch" class="lang-switch" aria-label="Language">
+    <option value="ko">한국어</option>
+    <option value="ja">日本語</option>
+    <option value="en">English</option>
+  </select>
+
+  <header class="hero">
+    <div class="app-icon"><img src="icon.png" alt="doday app icon" /></div>
+    <h1>doday</h1>
+    <p class="tagline" id="tagline"></p>
+    <div class="marks" aria-hidden="true">○ △ ✕</div>
+    <a class="store-btn" id="storeBtn" href="#"></a>
+    <p class="store-note" id="storeNote"></p>
+  </header>
+
+  <section class="features" id="features"></section>
+
+  <footer>
+    <div class="footer-links">
+      <a id="privacyLink" href="https://yoonly93.github.io/doday-privacy/"></a>
+      <a id="contactLink" href="./contact/"></a>
+    </div>
+    <p class="copyright">© 2026 doday</p>
+  </footer>
+
+  <script>
+    // App Store 출시 후 실제 URL로 교체.
+    var APP_STORE_URL = "#";
+
+    var UI = {
+      ko: {
+        tagline: "하루 한 번, 오늘의 습관을 종이 달력에 ○ △ ✕ 로 기록하는 가장 단순한 습관 트래커.",
+        store: "App Store에서 보기",
+        storeNote: "iOS 전용",
+        privacy: "개인정보처리방침",
+        contact: "문의하기",
+        features: [
+          { ico: "✍️", h: "하루 한 번 기록", p: "오늘의 목표를 ○ 성공 · △ 부분 · ✕ 실패로 가볍게 남겨요." },
+          { ico: "📄", h: "찢는 종이 달력 무드", p: "손으로 쓴 듯한 종이 달력 감성으로 매일을 기록합니다." },
+          { ico: "🗓️", h: "월간 캘린더", p: "지난 기록을 한눈에 모아보고 흐름을 돌아봐요." },
+          { ico: "✨", h: "프리미엄", p: "광고 완전 제거 · 목표 무제한(일회성 구매)." }
+        ]
+      },
+      ja: {
+        tagline: "1日1回、今日の習慣を紙のカレンダーに ○ △ ✕ で記録する、いちばんシンプルな習慣トラッカー。",
+        store: "App Store で見る",
+        storeNote: "iOS 専用",
+        privacy: "プライバシーポリシー",
+        contact: "お問い合わせ",
+        features: [
+          { ico: "✍️", h: "1日1回の記録", p: "今日の目標を ○ 成功・△ 部分・✕ 失敗 で気軽に記録。" },
+          { ico: "📄", h: "紙のカレンダーの雰囲気", p: "手書き風の紙のカレンダーで毎日を残します。" },
+          { ico: "🗓️", h: "月間カレンダー", p: "過去の記録を一覧で振り返れます。" },
+          { ico: "✨", h: "プレミアム", p: "広告を完全に削除・目標は無制限（買い切り）。" }
+        ]
+      },
+      en: {
+        tagline: "Once a day, mark today's habit on a paper calendar with ○ △ ✕ — the simplest habit tracker.",
+        store: "View on the App Store",
+        storeNote: "iOS only",
+        privacy: "Privacy Policy",
+        contact: "Contact",
+        features: [
+          { ico: "✍️", h: "One mark a day", p: "Log today's goal as ○ success, △ partial, or ✕ miss." },
+          { ico: "📄", h: "Paper calendar mood", p: "A handwritten, tear-off paper calendar feel for every day." },
+          { ico: "🗓️", h: "Monthly calendar", p: "See your past records at a glance and look back on your flow." },
+          { ico: "✨", h: "Premium", p: "Remove ads for good and add unlimited goals (one-time)." }
+        ]
+      }
+    };
+
+    var SUPPORTED = ["ko", "ja", "en"];
+    var $ = function (id) { return document.getElementById(id); };
+
+    function detectLang() {
+      try { var s = localStorage.getItem("doday_lang"); if (s && SUPPORTED.indexOf(s) !== -1) return s; } catch (e) {}
+      var qs = new URLSearchParams(location.search).get("lang");
+      if (qs && SUPPORTED.indexOf(qs) !== -1) return qs;
+      var nav = (navigator.language || "en").slice(0, 2).toLowerCase();
+      return SUPPORTED.indexOf(nav) !== -1 ? nav : "en";
+    }
+
+    function apply(lang) {
+      var t = UI[lang];
+      document.documentElement.lang = lang;
+      $("tagline").textContent = t.tagline;
+      $("storeBtn").textContent = t.store;
+      $("storeBtn").href = APP_STORE_URL;
+      $("storeNote").textContent = t.storeNote;
+      $("privacyLink").textContent = t.privacy;
+      $("contactLink").textContent = t.contact;
+      $("metaDesc").setAttribute("content", t.tagline);
+      $("langSwitch").value = lang;
+      $("features").innerHTML = t.features.map(function (f) {
+        return '<div class="feature"><div class="ico">' + f.ico + '</div><h3>' + f.h + '</h3><p>' + f.p + '</p></div>';
+      }).join("");
+      try { localStorage.setItem("doday_lang", lang); } catch (e) {}
+    }
+
+    $("langSwitch").addEventListener("change", function () { apply(this.value); });
+    apply(detectLang());
+  </script>
+</body>
+</html>
