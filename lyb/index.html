@@ -1,60 +1,275 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>LYB</title>
-    <style>
-      :root { color-scheme: light dark; }
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
-        line-height: 1.7;
-        max-width: 720px;
-        margin: 0 auto;
-        padding: 48px 20px;
-        color: #1a1a1a;
-        background: #fff;
-      }
-      @media (prefers-color-scheme: dark) {
-        body { color: #eaeaea; background: #0e0e0e; }
-        a { color: #5aaeff; }
-      }
-      h1 { font-size: 28px; }
-      ul { padding-left: 18px; }
-      li { margin: 8px 0; }
-      .muted { color: #888; font-size: 14px; }
-      .lang { display: none; }
-      .lang.active { display: block; }
-    </style>
-  </head>
-  <body>
-    <section class="lang" data-lang="ko">
-      <h1>LYB (Lock Your Body)</h1>
-      <p>위치 기반 목표 달성 트래커. 정해진 시간까지 정해진 장소에 가야 차단된 앱이 풀립니다.</p>
-      <ul>
-        <li><a href="./privacy.html">개인정보처리방침</a></li>
-        <li><a href="./terms.html">이용약관</a></li>
-      </ul>
-      <p class="muted">문의: <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LYB — Lock Your Body</title>
+  <meta name="description" content="위치 기반 목표 달성 트래커. 정해진 시간까지 정해진 장소에 가야 차단된 앱이 풀립니다." />
+  <meta property="og:title" content="LYB — Lock Your Body" />
+  <meta property="og:description" content="A location-based goal tracker. Reach a set place by a set time, or your chosen apps stay blocked." />
+  <meta property="og:image" content="https://yoonly93.github.io/lyb/icon.png" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="./icon.png" />
+  <link rel="apple-touch-icon" href="./icon.png" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #FBF6EE;
+      --bg2: #F4E8D6;
+      --card: #FFFFFF;
+      --ink: #3A2E22;
+      --muted: #8C7A64;
+      --accent: #C9954A;
+      --accent-dark: #A9762F;
+      --line: #ECE0CE;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI', Roboto, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 22px; }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 72px 22px 56px;
+      background: linear-gradient(160deg, var(--bg2) 0%, var(--bg) 70%);
+    }
+    .hero img.app-icon {
+      width: 104px; height: 104px;
+      border-radius: 24px;
+      box-shadow: 0 10px 28px rgba(169,118,47,0.22);
+      background: #fff;
+    }
+    .hero h1 {
+      font-size: 34px; font-weight: 800; letter-spacing: -0.5px;
+      margin: 22px 0 6px;
+    }
+    .hero .tagline { font-size: 17px; color: var(--accent-dark); font-weight: 600; margin-bottom: 14px; }
+    .hero .lead { font-size: 16px; color: var(--muted); max-width: 520px; margin: 0 auto; }
+    .badges { margin-top: 28px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--ink); color: #fff;
+      padding: 12px 20px; border-radius: 12px;
+      font-size: 15px; font-weight: 600; text-decoration: none;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+    .badge:hover { transform: translateY(-2px); }
+    .badge.secondary { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+
+    /* Sections */
+    section.block { padding: 56px 0; }
+    .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    h2.section-title { font-size: 25px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 28px; }
+
+    .features { display: grid; gap: 16px; }
+    .feature {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 16px; padding: 22px 22px;
+    }
+    .feature .num {
+      flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%;
+      background: var(--accent); color: #fff; font-weight: 700; font-size: 15px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .feature h3 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+    .feature p { font-size: 15px; color: var(--muted); }
+
+    /* How it works */
+    .steps { display: grid; gap: 14px; }
+    .step { display: flex; gap: 14px; align-items: baseline; font-size: 15.5px; }
+    .step .dot { flex-shrink: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); margin-top: 8px; }
+    .step b { color: var(--ink); }
+    .step span { color: var(--muted); }
+
+    .note {
+      margin-top: 22px; background: var(--bg2); border-radius: 14px; padding: 18px 20px;
+      font-size: 14px; color: #6e5b44;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--line);
+      background: var(--bg2);
+      padding: 40px 22px 48px;
+      text-align: center;
+    }
+    footer .foot-links { display: flex; gap: 8px 26px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px; }
+    footer .foot-links a {
+      color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 600;
+    }
+    footer .foot-links a:hover { color: var(--accent-dark); text-decoration: underline; }
+    footer .copyright { font-size: 13px; color: var(--muted); }
+    footer .copyright a { color: var(--muted); }
+
+    .lang-switch { display: inline-flex; gap: 6px; margin-bottom: 16px; }
+    .lang-switch button {
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      padding: 6px 13px; border-radius: 999px; cursor: pointer;
+      border: 1px solid var(--line); background: #fff; color: var(--muted);
+    }
+    .lang-switch button.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+    [data-lang] { display: none; }
+    [data-lang].active { display: block; }
+    .feature [data-lang], .step [data-lang], .badge [data-lang] { display: none; }
+    .feature [data-lang].active, .step [data-lang].active, .badge [data-lang].active { display: inline; }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <img class="app-icon" src="./icon.png" alt="LYB app icon" />
+    <h1>LYB</h1>
+    <p class="tagline">Lock Your Body</p>
+    <p class="lead">
+      <span data-lang="ko" class="active">정해진 시간까지 정해진 장소에 도착하지 못하면, 당신이 고른 앱들이 잠깁니다. 몸을 움직이게 만드는 위치 기반 목표 트래커.</span>
+      <span data-lang="en">If you don't reach your place by your time, the apps you chose stay locked. A location-based goal tracker that actually gets you moving.</span>
+    </p>
+    <div class="badges">
+      <a class="badge" href="#" id="appstoreBtn">
+        <span data-lang="ko" class="active">App Store에서 보기</span>
+        <span data-lang="en">View on the App Store</span>
+      </a>
+      <a class="badge secondary" href="#how">
+        <span data-lang="ko" class="active">작동 방식</span>
+        <span data-lang="en">How it works</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Features -->
+    <section class="block">
+      <div class="eyebrow">
+        <span data-lang="ko" class="active">기능</span><span data-lang="en">Features</span>
+      </div>
+      <h2 class="section-title">
+        <span data-lang="ko" class="active">의지가 아니라 구조로 움직이게</span>
+        <span data-lang="en">Move by design, not by willpower</span>
+      </h2>
+      <div class="features">
+        <div class="feature">
+          <div class="num">1</div>
+          <div>
+            <h3><span data-lang="ko" class="active">장소 + 시간 목표</span><span data-lang="en">Place + time goals</span></h3>
+            <p>
+              <span data-lang="ko" class="active">"아침 8시까지 헬스장"처럼 가야 할 장소와 시간을 정하세요. LYB가 도착 여부를 판정합니다.</span>
+              <span data-lang="en">Set a place and a deadline — "the gym by 8am." LYB checks whether you actually made it.</span>
+            </p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="num">2</div>
+          <div>
+            <h3><span data-lang="ko" class="active">못 가면 앱이 잠김</span><span data-lang="en">Miss it, apps lock</span></h3>
+            <p>
+              <span data-lang="ko" class="active">시간 안에 도착하지 못하면 직접 고른 앱들이 차단됩니다. 풀려면 광고를 보거나 받아쓰기를 완료해야 해요.</span>
+              <span data-lang="en">If you don't make it in time, the apps you picked get blocked. To unlock, watch an ad or finish a typing task.</span>
+            </p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="num">3</div>
+          <div>
+            <h3><span data-lang="ko" class="active">기기 안에서만 처리</span><span data-lang="en">Stays on your device</span></h3>
+            <p>
+              <span data-lang="ko" class="active">위치와 Screen Time 정보는 기기에서만 처리됩니다. 로그인도, 서버 전송도 없습니다.</span>
+              <span data-lang="en">Location and Screen Time data are processed on-device only. No login, nothing sent to a server.</span>
+            </p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="num">4</div>
+          <div>
+            <h3><span data-lang="ko" class="active">광고 없는 유료 버전</span><span data-lang="en">Ad-free paid version</span></h3>
+            <p>
+              <span data-lang="ko" class="active">유료 버전은 광고를 없애고 목표 개수 제한을 풀어줍니다. 월간·연간·평생 이용권 중에서 선택하세요.</span>
+              <span data-lang="en">Go paid to remove ads and lift the goal limit. Choose monthly, yearly, or a lifetime pass.</span>
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="lang" data-lang="en">
-      <h1>LYB (Lock Your Body)</h1>
-      <p>A location-based goal tracker. Reach a set place by a set time, or your chosen apps stay blocked.</p>
-      <ul>
-        <li><a href="./privacy.html">Privacy Policy</a></li>
-        <li><a href="./terms.html">Terms of Service</a></li>
-      </ul>
-      <p class="muted">Contact: <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+    <!-- How it works -->
+    <section class="block" id="how">
+      <div class="eyebrow">
+        <span data-lang="ko" class="active">작동 방식</span><span data-lang="en">How it works</span>
+      </div>
+      <h2 class="section-title">
+        <span data-lang="ko" class="active">세 단계면 끝</span>
+        <span data-lang="en">Three steps</span>
+      </h2>
+      <div class="steps">
+        <div class="step"><span class="dot"></span><span>
+          <b data-lang="ko" class="active">목표를 만든다 — </b><b data-lang="en">Create a goal — </b>
+          <span data-lang="ko" class="active">가야 할 장소와 마감 시간, 그리고 잠글 앱을 고릅니다.</span>
+          <span data-lang="en">pick the place, the deadline, and which apps to lock.</span>
+        </span></div>
+        <div class="step"><span class="dot"></span><span>
+          <b data-lang="ko" class="active">시간이 되면 판정 — </b><b data-lang="en">Deadline check — </b>
+          <span data-lang="ko" class="active">마감 시간에 그 장소에 있는지 LYB가 확인합니다.</span>
+          <span data-lang="en">LYB verifies whether you're at the place by the deadline.</span>
+        </span></div>
+        <div class="step"><span class="dot"></span><span>
+          <b data-lang="ko" class="active">성공 또는 페널티 — </b><b data-lang="en">Win or pay — </b>
+          <span data-lang="ko" class="active">도착했으면 자유롭게, 놓쳤으면 앱이 잠기고 광고/받아쓰기로 해제합니다.</span>
+          <span data-lang="en">made it, you're free; missed it, apps lock until an ad or typing task.</span>
+        </span></div>
+      </div>
+      <div class="note">
+        <span data-lang="ko" class="active">참고: 차단 기능은 강제 차단이 아니라 심리적 마찰과 페널티를 위한 것입니다. iOS 정책상 설정에서 권한을 해제하면 우회할 수 있습니다.</span>
+        <span data-lang="en">Note: blocking is designed for psychological friction and a penalty, not a hard lock. Per iOS policy, revoking permissions in Settings can bypass it.</span>
+      </div>
     </section>
+  </main>
 
-    <script>
-      var ko = (navigator.language || navigator.userLanguage || 'en').toLowerCase().indexOf('ko') === 0;
-      var lang = ko ? 'ko' : 'en';
+  <!-- Footer -->
+  <footer>
+    <div class="lang-switch">
+      <button type="button" data-set-lang="ko" class="active">한국어</button>
+      <button type="button" data-set-lang="en">English</button>
+    </div>
+    <div class="foot-links">
+      <a href="./privacy.html"><span data-lang="ko" class="active">개인정보처리방침</span><span data-lang="en">Privacy Policy</span></a>
+      <a href="./terms.html"><span data-lang="ko" class="active">이용약관</span><span data-lang="en">Terms of Service</span></a>
+      <a href="./contact/"><span data-lang="ko" class="active">문의하기</span><span data-lang="en">Contact</span></a>
+    </div>
+    <p class="copyright">© 2026 LYB · <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a></p>
+  </footer>
+
+  <script>
+    var SUPPORTED = ['ko', 'en'];
+    function detectLang() {
+      var saved = null;
+      try { saved = localStorage.getItem('lyb_lang'); } catch (e) {}
+      if (saved && SUPPORTED.indexOf(saved) !== -1) return saved;
+      var nav = (navigator.language || 'en').slice(0, 2).toLowerCase();
+      return SUPPORTED.indexOf(nav) !== -1 ? nav : 'en';
+    }
+    function applyLang(lang) {
       document.documentElement.lang = lang;
-      document.querySelectorAll('.lang').forEach(function (el) {
-        el.classList.toggle('active', el.getAttribute('data-lang') === lang);
-      });
-    </script>
-  </body>
+      var nodes = document.querySelectorAll('[data-lang]');
+      for (var i = 0; i < nodes.length; i++) {
+        nodes[i].classList.toggle('active', nodes[i].getAttribute('data-lang') === lang);
+      }
+      var btns = document.querySelectorAll('[data-set-lang]');
+      for (var j = 0; j < btns.length; j++) {
+        btns[j].classList.toggle('active', btns[j].getAttribute('data-set-lang') === lang);
+      }
+      try { localStorage.setItem('lyb_lang', lang); } catch (e) {}
+    }
+    document.querySelector('.lang-switch').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-set-lang]');
+      if (b) applyLang(b.getAttribute('data-set-lang'));
+    });
+    applyLang(detectLang());
+  </script>
+</body>
 </html>

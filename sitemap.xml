@@ -18,6 +18,15 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://yoonly93.github.io/"/>
   </url>
   <url>
+    <loc>https://yoonly93.github.io/lyb/</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yoonly93.github.io/lyb/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yoonly93.github.io/lyb/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yoonly93.github.io/lyb/"/>
+  </url>
+  <url>
     <loc>https://yoonly93.github.io/eyeday/privacy/</loc>
     <lastmod>2026-05-25</lastmod>
     <changefreq>yearly</changefreq>
