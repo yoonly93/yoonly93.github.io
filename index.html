@@ -124,6 +124,13 @@
       max-width: 480px;
       margin-left: auto; margin-right: auto;
     }
+    .store-badges {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
     .badge { display: inline-block; }
     .badge img { height: 52px; display: block; }
 
@@ -763,9 +770,14 @@
     <div class="app-icon"><img src="icon.png" alt="Eyeday App Icon"></div>
     <h1>eyeday</h1>
     <p class="subtitle" data-i="subtitle"></p>
-    <a class="badge" id="appBadge" href="https://apps.apple.com/kr/app/eyeday-%EC%95%88%EC%95%BD-%EC%95%8C%EB%9E%8C-%EC%A0%90%EC%95%88-%EA%B8%B0%EB%A1%9D/id6759497954">
-      <img id="badgeImg" src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ko-kr?size=250x83" alt="Download on the App Store">
-    </a>
+    <div class="store-badges">
+      <a class="badge" id="appBadge" href="https://apps.apple.com/kr/app/eyeday-%EC%95%88%EC%95%BD-%EC%95%8C%EB%9E%8C-%EC%A0%90%EC%95%88-%EA%B8%B0%EB%A1%9D/id6759497954">
+        <img id="badgeImg" src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ko-kr?size=250x83" alt="Download on the App Store">
+      </a>
+      <a class="badge" id="playBadge" href="https://play.google.com/store/apps/details?id=com.eyedrop.reminder&hl=ko">
+        <img id="playBadgeImg" src="https://play.google.com/intl/en_us/badges/static/images/badges/ko_badge_web_generic.png" alt="Google Play에서 다운로드">
+      </a>
+    </div>
   </section>
 
   <!-- ===== Section 1: Edit medicine ===== -->
@@ -1453,6 +1465,19 @@ const UI = {
 };
 
 const BADGES = {"ko":"ko-kr","en":"en-us","ja":"ja-jp","fr":"fr-fr","es":"es-es","ru":"ru-ru","de":"de-de","it":"it-it","pt":"pt-br"};
+const PLAY_BADGES = {"ko":"ko","en":"en","ja":"ja","fr":"fr","es":"es","ru":"ru","de":"de","it":"it","pt":"pt-br"};
+const PLAY_HL = {"ko":"ko","en":"en","ja":"ja","fr":"fr","es":"es","ru":"ru","de":"de","it":"it","pt":"pt-BR"};
+const PLAY_ALT = {
+  ko: "Google Play에서 다운로드",
+  en: "Get it on Google Play",
+  ja: "Google Play で手に入れよう",
+  fr: "Disponible sur Google Play",
+  es: "Disponible en Google Play",
+  ru: "Доступно в Google Play",
+  de: "Jetzt bei Google Play",
+  it: "Disponibile su Google Play",
+  pt: "Disponivel no Google Play"
+};
 const LANGS = ["ko","en","ja","fr","es","ru","de","it","pt"];
 
 function pickInitialLang() {
@@ -1711,6 +1736,15 @@ function applyLang(lang) {
   const bl = BADGES[lang] || 'ko-kr';
   const img = document.getElementById('badgeImg');
   if (img) img.src = `https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/${bl}?size=250x83`;
+  const playLang = PLAY_BADGES[lang] || 'ko';
+  const playHl = PLAY_HL[lang] || 'ko';
+  const playLink = document.getElementById('playBadge');
+  const playImg = document.getElementById('playBadgeImg');
+  if (playLink) playLink.href = `https://play.google.com/store/apps/details?id=com.eyedrop.reminder&hl=${playHl}`;
+  if (playImg) {
+    playImg.src = `https://play.google.com/intl/en_us/badges/static/images/badges/${playLang}_badge_web_generic.png`;
+    playImg.alt = PLAY_ALT[lang] || PLAY_ALT.ko;
+  }
   localStorage.setItem('eyeday_lang', lang);
   const sel = document.getElementById('languageSelect');
   if (sel) sel.value = lang;
