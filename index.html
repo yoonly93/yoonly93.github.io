@@ -131,8 +131,23 @@
       gap: 12px;
       flex-wrap: wrap;
     }
-    .badge { display: inline-block; }
+    .badge { display: inline-flex; align-items: center; text-decoration: none; }
     .badge img { height: 52px; display: block; }
+    .play-badge {
+      height: 52px;
+      min-width: 176px;
+      gap: 10px;
+      padding: 6px 15px 6px 13px;
+      color: #FFFFFF;
+      background: #0F172A;
+      border: 1px solid #111827;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(15,23,42,0.10);
+    }
+    .play-badge svg { width: 25px; height: 28px; flex-shrink: 0; }
+    .play-badge-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.05; }
+    .play-badge-kicker { font-size: 9px; font-weight: 600; letter-spacing: 0; }
+    .play-badge-label { font-size: 18px; font-weight: 700; letter-spacing: 0; white-space: nowrap; }
 
     /* Section layout */
     .section {
@@ -774,8 +789,17 @@
       <a class="badge" id="appBadge" href="https://apps.apple.com/kr/app/eyeday-%EC%95%88%EC%95%BD-%EC%95%8C%EB%9E%8C-%EC%A0%90%EC%95%88-%EA%B8%B0%EB%A1%9D/id6759497954">
         <img id="badgeImg" src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ko-kr?size=250x83" alt="Download on the App Store">
       </a>
-      <a class="badge" id="playBadge" href="https://play.google.com/store/apps/details?id=com.eyedrop.reminder&hl=ko">
-        <img id="playBadgeImg" src="https://play.google.com/intl/en_us/badges/static/images/badges/ko_badge_web_generic.png" alt="Google Play에서 다운로드">
+      <a class="badge play-badge" id="playBadge" href="https://play.google.com/store/apps/details?id=com.eyedrop.reminder&hl=ko" aria-label="Google Play에서 다운로드">
+        <svg viewBox="0 0 32 36" aria-hidden="true" focusable="false">
+          <path fill="#34A853" d="M2.1 1.1c-.5.5-.8 1.3-.8 2.3v29.2c0 1 .3 1.8.9 2.3l.1.1 16.3-16.8v-.4L2.2 1h-.1Z"/>
+          <path fill="#FBBC04" d="m24 23.8-5.5-5.7v-.4L24 12l.1.1 6.5 3.7c1.9 1.1 1.9 2.8 0 3.9l-6.6 4.1Z"/>
+          <path fill="#4285F4" d="m24.1 23.7-5.6-5.8L2.1 34.9c.8.8 2 .9 3.4.1l18.6-11.3Z"/>
+          <path fill="#EA4335" d="M24.1 12.1 5.5.9C4.1.1 2.9.2 2.1 1l16.4 16.9 5.6-5.8Z"/>
+        </svg>
+        <span class="play-badge-text">
+          <span class="play-badge-kicker" id="playBadgeKicker">Google Play에서 다운로드</span>
+          <span class="play-badge-label">Google Play</span>
+        </span>
       </a>
     </div>
   </section>
@@ -1465,7 +1489,6 @@ const UI = {
 };
 
 const BADGES = {"ko":"ko-kr","en":"en-us","ja":"ja-jp","fr":"fr-fr","es":"es-es","ru":"ru-ru","de":"de-de","it":"it-it","pt":"pt-br"};
-const PLAY_BADGES = {"ko":"ko","en":"en","ja":"ja","fr":"fr","es":"es","ru":"ru","de":"de","it":"it","pt":"pt-br"};
 const PLAY_HL = {"ko":"ko","en":"en","ja":"ja","fr":"fr","es":"es","ru":"ru","de":"de","it":"it","pt":"pt-BR"};
 const PLAY_ALT = {
   ko: "Google Play에서 다운로드",
@@ -1736,15 +1759,15 @@ function applyLang(lang) {
   const bl = BADGES[lang] || 'ko-kr';
   const img = document.getElementById('badgeImg');
   if (img) img.src = `https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/${bl}?size=250x83`;
-  const playLang = PLAY_BADGES[lang] || 'ko';
   const playHl = PLAY_HL[lang] || 'ko';
+  const playAlt = PLAY_ALT[lang] || PLAY_ALT.ko;
   const playLink = document.getElementById('playBadge');
-  const playImg = document.getElementById('playBadgeImg');
-  if (playLink) playLink.href = `https://play.google.com/store/apps/details?id=com.eyedrop.reminder&hl=${playHl}`;
-  if (playImg) {
-    playImg.src = `https://play.google.com/intl/en_us/badges/static/images/badges/${playLang}_badge_web_generic.png`;
-    playImg.alt = PLAY_ALT[lang] || PLAY_ALT.ko;
+  const playKicker = document.getElementById('playBadgeKicker');
+  if (playLink) {
+    playLink.href = `https://play.google.com/store/apps/details?id=com.eyedrop.reminder&hl=${playHl}`;
+    playLink.setAttribute('aria-label', playAlt);
   }
+  if (playKicker) playKicker.textContent = playAlt;
   localStorage.setItem('eyeday_lang', lang);
   const sel = document.getElementById('languageSelect');
   if (sel) sel.value = lang;
