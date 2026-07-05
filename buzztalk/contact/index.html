@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>문의하기 - 실검톡</title>
+  <meta name="description" content="실검톡 문의하기 페이지입니다.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <script src="../assets/site.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="/buzztalk/"><strong>실검톡</strong><span>BuzzTalk</span></a>
+      <nav class="nav-links" aria-label="주요 링크">
+        <a href="/buzztalk/privacy/">개인정보처리방침</a>
+        <a href="/buzztalk/terms/">이용약관</a>
+        <a href="/buzztalk/contact/">문의하기</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="wrap">
+      <h1 class="page-title">문의하기</h1>
+      <p class="lead">버그, 제안, 기타 문의를 이메일로 보낼 수 있습니다. 수신 주소는 wildkindground@gmail.com입니다.</p>
+
+      <section class="content">
+        <div class="notice">
+          주민등록번호, 전화번호, 주소, 계정 비밀번호 등 민감한 개인정보를 문의 내용에 포함하지 마세요. 서버 데이터 삭제 요청은 확인에 필요한 최소 정보만 요청합니다.
+        </div>
+
+        <form class="contact-form" data-contact-form>
+          <div class="field">
+            <label for="type">문의 유형</label>
+            <select id="type" name="type">
+              <option>버그</option>
+              <option>제안</option>
+              <option>기타</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="replyTo">답변받을 이메일</label>
+            <input id="replyTo" name="replyTo" type="email" autocomplete="email" placeholder="example@email.com">
+          </div>
+          <div class="field">
+            <label for="appVersion">앱 버전</label>
+            <input id="appVersion" name="appVersion" type="text" placeholder="예: 1.0.0">
+          </div>
+          <div class="field">
+            <label for="device">기기/OS 정보</label>
+            <input id="device" name="device" type="text" placeholder="예: iPhone 15, iOS 18">
+          </div>
+          <div class="field">
+            <label for="body">내용</label>
+            <textarea id="body" name="body" required placeholder="문의 내용을 입력하세요."></textarea>
+          </div>
+          <button class="button" type="submit">이메일 작성하기</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>실검톡 BuzzTalk</span>
+      <nav class="footer-links" aria-label="하단 링크">
+        <a href="/buzztalk/privacy/">개인정보처리방침</a>
+        <a href="/buzztalk/terms/">이용약관</a>
+        <a href="/buzztalk/contact/">문의하기</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
