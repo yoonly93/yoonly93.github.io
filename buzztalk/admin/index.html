@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>운영자 화면 - 실검톡</title>
+  <meta name="description" content="실검톡 신고, 채팅방, 푸시, 금칙어 운영을 위한 관리자 화면 프로토타입입니다.">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body class="admin-body">
+  <header class="site-header admin-header">
+    <div class="wrap nav">
+      <a class="brand" href="/buzztalk/"><strong>실검톡 운영</strong><span>BuzzTalk Admin</span></a>
+      <nav class="nav-links" aria-label="운영 링크">
+        <a href="#reports">신고</a>
+        <a href="#rooms">채팅방</a>
+        <a href="#push">푸시</a>
+        <a href="#logs">운영 로그</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="admin-shell">
+    <aside class="admin-sidebar" aria-label="운영 메뉴">
+      <a href="#dashboard">대시보드</a>
+      <a href="#reports">신고 관리</a>
+      <a href="#rooms">채팅방 관리</a>
+      <a href="#users">사용자 제한</a>
+      <a href="#words">금칙어</a>
+      <a href="#push">푸시 관리</a>
+      <a href="#logs">운영 로그</a>
+    </aside>
+
+    <section class="admin-main">
+      <div class="admin-title" id="dashboard">
+        <div>
+          <p class="eyebrow">MVP 운영 콘솔</p>
+          <h1>신고와 채팅방을 먼저 처리하는 관리자 화면</h1>
+        </div>
+        <span class="status-pill">프로토타입</span>
+      </div>
+
+      <section class="metric-grid" aria-label="운영 지표">
+        <article class="metric-card"><span>미처리 신고</span><strong>18</strong><small>동일 메시지 신고 우선</small></article>
+        <article class="metric-card"><span>활성 방</span><strong>10</strong><small>실시간 검색어 Top 10 기준</small></article>
+        <article class="metric-card"><span>오늘 메시지</span><strong>1,284</strong><small>원문은 분석 이벤트에 전송 금지</small></article>
+        <article class="metric-card"><span>푸시 후보</span><strong>3</strong><small>참여자 10명 이상</small></article>
+      </section>
+
+      <section class="admin-panel" id="reports">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Reports</p>
+            <h2>신고 목록</h2>
+          </div>
+          <div class="segmented">
+            <button type="button">미처리</button>
+            <button type="button">검토 중</button>
+            <button type="button">처리 완료</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>사유</th><th>검색어</th><th>메시지 일부</th><th>신고 수</th><th>상태</th><th>액션</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>개인정보 노출</td><td>이병태 사퇴 권고</td><td>연락처 공유 유도 문구</td><td>7</td><td><span class="status-pill warning">미처리</span></td><td><button class="small-button">검토</button></td></tr>
+              <tr><td>욕설·비방</td><td>박유천 4억 체납</td><td>대상 비방 표현</td><td>4</td><td><span class="status-pill">검토 중</span></td><td><button class="small-button">열기</button></td></tr>
+              <tr><td>광고·스팸</td><td>돌싱글즈 고소 강행</td><td>반복 링크 유도</td><td>3</td><td><span class="status-pill muted">보류</span></td><td><button class="small-button">열기</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-grid">
+        <article class="admin-panel" id="rooms">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Rooms</p>
+              <h2>채팅방 상태</h2>
+            </div>
+          </div>
+          <ul class="admin-list">
+            <li><strong>이병태 사퇴 권고</strong><span>active · 참여 42명 · 푸시 허용</span></li>
+            <li><strong>박유천 4억 체납</strong><span>active · 참여 31명 · 푸시 후보</span></li>
+            <li><strong>돌싱글즈 고소 강행</strong><span>archived · 18시간 후 종료</span></li>
+          </ul>
+        </article>
+
+        <article class="admin-panel" id="push">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Push</p>
+              <h2>푸시 후보</h2>
+            </div>
+          </div>
+          <ul class="admin-list">
+            <li><strong>12:30 발송 창</strong><span>활성 방, 참여자 10명 이상, 당일 중복 없음</span></li>
+            <li><strong>제외 검토</strong><span>사망, 재난, 성범죄, 자해, 중대 범죄 피해 키워드 제외</span></li>
+            <li><strong>문구</strong><span>{검색어}에 대한 대화가 뜨거워요🔥</span></li>
+          </ul>
+          <div class="action-row">
+            <button class="small-button">방 푸시 차단</button>
+            <button class="small-button secondary-small">키워드 제외</button>
+          </div>
+        </article>
+      </section>
+
+      <section class="admin-grid">
+        <article class="admin-panel" id="users">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Users</p>
+              <h2>사용자 제한</h2>
+            </div>
+          </div>
+          <div class="action-stack">
+            <label>제한 사유
+              <select>
+                <option>반복 욕설·비방</option>
+                <option>개인정보 노출</option>
+                <option>광고·스팸</option>
+                <option>기타</option>
+              </select>
+            </label>
+            <label>운영자 메모
+              <textarea placeholder="조치 근거를 남깁니다."></textarea>
+            </label>
+            <div class="action-row">
+              <button class="small-button">24시간 제한</button>
+              <button class="small-button secondary-small">7일 제한</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="admin-panel" id="words">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Banned Words</p>
+              <h2>금칙어 관리</h2>
+            </div>
+          </div>
+          <div class="action-stack">
+            <label>표현
+              <input type="text" placeholder="금칙어 또는 패턴">
+            </label>
+            <label>유형
+              <select>
+                <option>욕설</option>
+                <option>혐오·차별</option>
+                <option>개인정보</option>
+                <option>광고·스팸</option>
+              </select>
+            </label>
+            <button class="small-button">추가</button>
+          </div>
+        </article>
+      </section>
+
+      <section class="admin-panel" id="logs">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Audit</p>
+            <h2>운영 로그</h2>
+          </div>
+        </div>
+        <ul class="timeline">
+          <li><time>22:10</time><span>관리자 · 메시지 숨김 · 개인정보 노출</span></li>
+          <li><time>21:48</time><span>관리자 · 방 푸시 차단 · 민감 키워드</span></li>
+          <li><time>21:32</time><span>관리자 · 신고 기각 · 정책 위반 아님</span></li>
+        </ul>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

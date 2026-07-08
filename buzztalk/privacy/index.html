@@ -25,14 +25,25 @@
       <p class="lead">실검톡은 회원가입 정보는 수집하지 않으며, 일부 설정은 기기에 저장됩니다. 채팅 및 서비스 운영에 필요한 일부 정보는 서버에 저장될 수 있습니다.</p>
 
       <section class="policy-meta" aria-label="문서 정보">
-        <div class="meta-item"><span>버전</span><strong>2026-07-05</strong></div>
+        <div class="meta-item"><span>버전</span><strong>2026-07-08</strong></div>
         <div class="meta-item"><span>시행일</span><strong>2026-07-05</strong></div>
-        <div class="meta-item"><span>변경일</span><strong>2026-07-05</strong></div>
-        <div class="meta-item"><span>변경 요약</span><strong>MVP 최초 초안</strong></div>
+        <div class="meta-item"><span>변경일</span><strong>2026-07-08</strong></div>
+        <div class="meta-item"><span>변경 요약</span><strong>App Store 심사 고지 보강</strong></div>
       </section>
 
       <article class="content">
-        <h2>1. 수집하는 항목</h2>
+        <h2>1. 적용 범위</h2>
+        <p>본 방침은 실검톡 iOS 앱과 실검톡 공식 웹사이트에 적용됩니다. MVP 단계에서 실검톡은 회원가입, 로그인, 계정 복구 기능을 제공하지 않습니다.</p>
+
+        <h2>2. 수집하지 않는 항목</h2>
+        <ul>
+          <li>이름, 생년월일, 주민등록번호 등 회원가입 정보</li>
+          <li>로그인 계정 비밀번호</li>
+          <li>앱 삭제 후 재설치한 사용자를 복구하기 위한 기기 지문</li>
+          <li>재설치 전 사용자를 동일인으로 추적하기 위한 광고 ID</li>
+        </ul>
+
+        <h2>3. 수집하거나 저장할 수 있는 항목</h2>
         <p>실검톡은 익명 기반 키워드 대화 서비스를 제공하기 위해 다음 항목을 수집하거나 서버에 저장할 수 있습니다.</p>
         <ul>
           <li>설치 기반 익명 사용자 ID, 닉네임</li>
@@ -42,10 +53,10 @@
           <li>Firebase Analytics 이벤트 정보, Crashlytics 오류 정보, AdMob 광고 관련 정보</li>
         </ul>
 
-        <h2>2. 기기에 저장되는 항목</h2>
+        <h2>4. 기기에 저장되는 항목</h2>
         <p>일부 설정 정보는 기기에 저장됩니다. 예를 들어 닉네임, 최초 채팅 이용규칙 동의 여부, 알림 끄기 설정, 차단 목록 등은 기기에 저장될 수 있습니다.</p>
 
-        <h2>3. 이용 목적</h2>
+        <h2>5. 이용 목적</h2>
         <ul>
           <li>익명 대화방 운영 및 메시지 송수신</li>
           <li>푸시 알림 발송 및 수신 여부 관리</li>
@@ -54,7 +65,14 @@
           <li>오류 분석, 품질 개선, 성능 측정, 광고 노출 및 광고 성과 측정</li>
         </ul>
 
-        <h2>4. 보관 기간</h2>
+        <h2>6. Analytics와 광고 데이터</h2>
+        <p>실검톡은 서비스 품질 개선, 오류 분석, 사용 흐름 분석, 광고 제공을 위해 Firebase Analytics, Google Analytics, Firebase Crashlytics, Firebase Cloud Messaging, Google AdMob을 사용할 수 있습니다.</p>
+        <p>채팅 메시지 원문, 신고 메시지 스냅샷, 닉네임, 푸시 토큰, 익명 사용자 ID는 Analytics 이벤트 파라미터 또는 user property로 전송하지 않습니다. 검색어 원문도 user property로 저장하지 않습니다.</p>
+
+        <h2>7. 푸시 알림</h2>
+        <p>알림을 허용한 이용자에게 활성 채팅방 안내 푸시를 보낼 수 있습니다. 푸시 발송을 위해 FCM/APNs 토큰, 알림 허용 여부, 발송 이력, 실패 상태가 저장될 수 있습니다. 이용자는 iOS 설정 또는 앱 설정에서 알림을 끌 수 있습니다.</p>
+
+        <h2>8. 보관 기간</h2>
         <ul>
           <li>채팅방과 메시지: 마지막 활성 시점 기준 30일 후 삭제</li>
           <li>신고된 메시지 스냅샷: 신고 생성일 기준 1년 보관 가능</li>
@@ -63,19 +81,35 @@
           <li>Firebase Analytics, Crashlytics, AdMob 관련 데이터: 각 서비스의 정책과 설정에 따름</li>
         </ul>
 
-        <h2>5. 외부 서비스</h2>
-        <p>실검톡은 서비스 운영을 위해 Firebase Analytics, Firebase Cloud Messaging, Firebase Crashlytics, Google Analytics, Google AdMob을 사용할 수 있습니다. 외부 서비스는 각 제공자의 약관과 개인정보 처리방침에 따라 데이터를 처리할 수 있습니다.</p>
+        <h2>9. 외부 서비스 및 처리자</h2>
+        <p>실검톡은 서비스 운영을 위해 Google Firebase, Google Analytics, Google AdMob 등 Google 계열 서비스를 사용할 수 있습니다. 외부 서비스는 각 제공자의 약관과 개인정보 처리방침에 따라 데이터를 처리할 수 있습니다.</p>
+        <ul>
+          <li>Firebase Cloud Messaging: 푸시 알림 발송</li>
+          <li>Firebase Analytics 및 Google Analytics: 앱 이용 흐름 분석</li>
+          <li>Firebase Crashlytics: 앱 오류 및 안정성 분석</li>
+          <li>Google AdMob: 광고 노출, 광고 성과 측정, 광고 품질 관리</li>
+        </ul>
 
-        <h2>6. 이용자의 권리와 선택</h2>
-        <p>이용자는 닉네임 변경, 알림 수신 해제, 차단 사용자 관리, 로컬 데이터 초기화, 서버 측 데이터 삭제 문의를 요청하거나 설정할 수 있습니다.</p>
+        <h2>10. 이용자의 권리와 선택</h2>
+        <p>이용자는 닉네임 변경, 알림 수신 해제, 차단 사용자 관리, 로컬 데이터 초기화를 설정할 수 있습니다. 서버에 저장된 데이터의 삭제 또는 확인이 필요한 경우 문의하기 페이지를 통해 요청할 수 있습니다.</p>
+        <p>익명 서비스 특성상 요청 처리에는 이용자가 제공할 수 있는 최소한의 확인 정보가 필요할 수 있습니다. 본인 확인이 불가능한 경우 일부 요청은 처리되지 않을 수 있습니다.</p>
 
-        <h2>7. 재설치와 익명 ID</h2>
+        <h2>11. 로컬 데이터 초기화와 서버 데이터 삭제</h2>
+        <p>앱의 로컬 데이터 초기화는 기기에 저장된 닉네임, 동의 상태, 차단 목록, 설정 등을 삭제합니다. 이미 서버에 저장된 채팅 메시지, 신고 정보, 운영 로그가 즉시 삭제되는 것은 아닙니다. 서버 데이터 삭제 요청은 문의하기를 통해 접수합니다.</p>
+
+        <h2>12. 재설치와 익명 ID</h2>
         <p>앱 삭제 후 재설치하면 기존 익명 사용자 ID, 차단 목록, 로컬 설정은 복구되지 않을 수 있습니다. 실검톡은 기기 지문, 광고 ID 등을 이용해 재설치 전 사용자를 동일인으로 추적하거나 복구하지 않습니다.</p>
 
-        <h2>8. 문의</h2>
+        <h2>13. 아동 및 민감정보</h2>
+        <p>실검톡은 아동을 대상으로 한 서비스가 아니며, 주민등록번호, 계정 비밀번호, 금융정보, 정확한 주소 등 민감한 개인정보를 채팅이나 문의 내용에 작성하지 않도록 안내합니다.</p>
+
+        <h2>14. 방침 변경</h2>
+        <p>본 방침이 변경되는 경우 시행일, 변경일, 변경 요약을 표시하고 이전 버전을 계속 확인할 수 있도록 제공합니다.</p>
+
+        <h2>15. 문의</h2>
         <p>개인정보 관련 문의는 <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a>으로 접수합니다.</p>
 
-        <h2>9. 이전 버전</h2>
+        <h2>16. 이전 버전</h2>
         <p>이전 개인정보처리방침은 <a href="/buzztalk/privacy/archive/">아카이브</a>에서 확인할 수 있습니다.</p>
       </article>
     </div>

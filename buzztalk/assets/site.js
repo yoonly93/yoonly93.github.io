@@ -4,17 +4,23 @@ function buildMailto(event) {
   event.preventDefault();
   const form = event.currentTarget;
   const type = form.elements.type.value;
+  const customSubject = form.elements.subject.value.trim();
   const replyTo = form.elements.replyTo.value.trim();
   const appVersion = form.elements.appVersion.value.trim();
   const device = form.elements.device.value.trim();
+  const occurredAt = form.elements.occurredAt.value.trim();
   const body = form.elements.body.value.trim();
 
-  const subject = `[실검톡 문의] ${type}`;
+  const subject = `[실검톡 문의] ${type}${customSubject ? ` - ${customSubject}` : ""}`;
   const lines = [
     `문의 유형: ${type}`,
+    `제목: ${customSubject || "미입력"}`,
     `답변받을 이메일: ${replyTo || "미입력"}`,
     `앱 버전: ${appVersion || "미입력"}`,
     `기기/OS: ${device || "미입력"}`,
+    `발생 시각: ${occurredAt || "미입력"}`,
+    "",
+    "민감한 개인정보는 문의 내용에 포함하지 마세요.",
     "",
     "문의 내용:",
     body
