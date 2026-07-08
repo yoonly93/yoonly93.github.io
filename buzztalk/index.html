@@ -6,6 +6,7 @@
   <title>실검톡 BuzzTalk</title>
   <meta name="description" content="실시간 검색어 기반 익명 채팅 서비스 실검톡의 공식 웹사이트입니다.">
   <link rel="stylesheet" href="./assets/styles.css">
+  <script src="./assets/site.js" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -24,20 +25,30 @@
 
   <main>
     <section class="hero">
-      <div class="wrap hero-layout">
+      <div class="wrap hero-stack">
         <div class="hero-copy">
-          <span class="badge">iOS 준비 중</span>
           <h1>실검톡</h1>
-          <p>실시간 검색어를 기반으로 같은 주제에 관심 있는 사람들이 익명으로 대화할 수 있는 한국어 채팅 서비스입니다.</p>
-          <div class="hero-actions" aria-label="주요 작업">
-            <a class="button" href="/buzztalk/privacy/">개인정보처리방침</a>
-            <a class="button secondary-button" href="/buzztalk/contact/">문의하기</a>
+          <p>실시간 검색어를 기반으로 같은 주제에 관심 있는 사람들이 익명으로 대화할 수 있어요.</p>
+          <div class="store-actions" hidden aria-label="앱 다운로드">
+            <a class="store-button" data-ios-store href="#">App Store</a>
+            <a class="store-button secondary-button" data-android-store href="#">Play Store</a>
           </div>
         </div>
-        <figure class="app-preview">
-          <img src="./assets/app-preview.png" alt="실검톡 iOS 실시간 검색어 화면 미리보기">
-          <figcaption>실시간 검색어 1위부터 10위까지의 대화방 진입 화면</figcaption>
-        </figure>
+
+        <section class="trend-demo" aria-label="실시간 검색어 예시">
+          <ol class="trend-demo-list">
+            <li><span class="demo-rank rank-one">1</span><span class="demo-keyword">이병태 사퇴 권고</span><button type="button" class="demo-chat-button" data-store-route aria-label="이병태 사퇴 권고 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
+            <li><span class="demo-rank rank-two">2</span><span class="demo-keyword">박유천 4억 체납</span><button type="button" class="demo-chat-button" data-store-route aria-label="박유천 4억 체납 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
+            <li><span class="demo-rank rank-three">3</span><span class="demo-keyword">돌싱글즈 고소 강행</span><button type="button" class="demo-chat-button" data-store-route aria-label="돌싱글즈 고소 강행 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
+            <li><span class="demo-rank">4</span><span class="demo-keyword">장마 북상</span><button type="button" class="demo-chat-button" data-store-route aria-label="장마 북상 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
+            <li><span class="demo-rank">5</span><span class="demo-keyword">환율 전망</span><button type="button" class="demo-chat-button" data-store-route aria-label="환율 전망 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
+            <li><span class="demo-rank">6</span><span class="demo-keyword">야구 순위</span><button type="button" class="demo-chat-button" data-store-route aria-label="야구 순위 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
+            <li><span class="demo-rank">7</span><span class="demo-keyword">기준금리 동결</span><button type="button" class="demo-chat-button" data-store-route aria-label="기준금리 동결 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
+            <li><span class="demo-rank">8</span><span class="demo-keyword">신작 드라마</span><button type="button" class="demo-chat-button" data-store-route aria-label="신작 드라마 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
+            <li><span class="demo-rank">9</span><span class="demo-keyword">축구 대표팀</span><button type="button" class="demo-chat-button" data-store-route aria-label="축구 대표팀 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
+            <li><span class="demo-rank">10</span><span class="demo-keyword">주말 날씨</span><button type="button" class="demo-chat-button" data-store-route aria-label="주말 날씨 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
+          </ol>
+        </section>
       </div>
     </section>
 
@@ -48,11 +59,7 @@
       </article>
       <article class="card">
         <h2>가입 없는 익명 이용</h2>
-        <p>회원가입 없이 설치 단위 익명 ID와 닉네임으로 서비스를 이용합니다.</p>
-      </article>
-      <article class="card">
-        <h2>신고와 차단</h2>
-        <p>메시지 신고, 사용자 차단, 운영자 숨김 처리를 통해 대화 공간을 관리합니다.</p>
+        <p>회원가입이 필요없습니다.</p>
       </article>
     </section>
 
@@ -63,16 +70,8 @@
       </div>
       <ul class="feature-list">
         <li><strong>실검</strong><span>1위부터 10위까지 검색어와 채팅 진입</span></li>
-        <li><strong>채팅</strong><span>참여한 방 이력, 메시지 신고와 차단</span></li>
-        <li><strong>설정</strong><span>닉네임 수정, 알림 설정, 차단 관리</span></li>
+        <li><strong>채팅</strong><span>실시간 검색어를 통해 진입한 화제에 대해 24시간 동안 이야기를 나눠보세요.</span></li>
       </ul>
-    </section>
-
-    <section class="wrap content">
-      <h2>운영 원칙</h2>
-      <p>실검톡은 회원가입 정보를 수집하지 않습니다. 다만 채팅과 서비스 운영을 위해 익명 사용자 ID, 닉네임, 메시지, 채팅방 정보, 신고 정보, 차단 정보, 푸시 토큰, 앱 사용 이벤트 등이 서버에 저장될 수 있습니다.</p>
-      <p>앱 삭제 후 재설치한 사용자를 기기 지문이나 광고 ID로 복구하거나 추적하지 않습니다.</p>
-      <p>운영자는 신고, 차단, 숨김 처리, 푸시 제외 키워드, 금칙어 변경을 운영 로그에 남기며, 단순 신고 수만으로 자동 제재하지 않습니다.</p>
     </section>
   </main>
 

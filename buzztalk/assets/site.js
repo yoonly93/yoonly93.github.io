@@ -1,4 +1,44 @@
 const CONTACT_EMAIL = "wildkindground@gmail.com";
+const IOS_STORE_URL = "";
+const ANDROID_STORE_URL = "";
+
+function userStoreUrl() {
+  const platform = navigator.userAgent || "";
+  if (/Android/i.test(platform)) {
+    return ANDROID_STORE_URL;
+  }
+  if (/iPhone|iPad|iPod/i.test(platform)) {
+    return IOS_STORE_URL;
+  }
+  return IOS_STORE_URL || ANDROID_STORE_URL;
+}
+
+function setupStoreLinks() {
+  const storeActions = document.querySelector(".store-actions");
+  const iosLink = document.querySelector("[data-ios-store]");
+  const androidLink = document.querySelector("[data-android-store]");
+  const hasIos = IOS_STORE_URL.length > 0;
+  const hasAndroid = ANDROID_STORE_URL.length > 0;
+
+  if (iosLink && hasIos) {
+    iosLink.href = IOS_STORE_URL;
+  }
+  if (androidLink && hasAndroid) {
+    androidLink.href = ANDROID_STORE_URL;
+  }
+  if (storeActions && (hasIos || hasAndroid)) {
+    storeActions.hidden = false;
+  }
+
+  document.querySelectorAll("[data-store-route]").forEach(button => {
+    button.addEventListener("click", () => {
+      const url = userStoreUrl();
+      if (url) {
+        window.location.href = url;
+      }
+    });
+  });
+}
 
 function buildMailto(event) {
   event.preventDefault();
@@ -31,6 +71,7 @@ function buildMailto(event) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  setupStoreLinks();
   const contactForm = document.querySelector("[data-contact-form]");
   if (contactForm) {
     contactForm.addEventListener("submit", buildMailto);
