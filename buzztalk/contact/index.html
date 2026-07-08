@@ -23,25 +23,15 @@
   <main class="page">
     <div class="wrap">
       <h1 class="page-title">문의하기</h1>
-      <p class="lead">버그, 제안, 정책, 데이터 삭제 요청 등 필요한 문의를 이메일로 보낼 수 있습니다. 수신 주소는 wildkindground@gmail.com입니다.</p>
 
       <section class="content">
         <div class="notice">
           주민등록번호, 전화번호, 주소, 계정 비밀번호 등 민감한 개인정보를 문의 내용에 포함하지 마세요. 서버 데이터 삭제 요청은 확인에 필요한 최소 정보만 요청합니다. 익명 서비스 특성상 본인 확인이 어려운 경우 일부 요청은 처리되지 않을 수 있습니다.
         </div>
 
-        <section class="contact-guide" aria-label="문의 처리 안내">
-          <article>
-            <h2>문의 유형</h2>
-            <p>버그, 제안, 기타 항목으로 접수합니다. 데이터 삭제 요청, 신고 처리 문의, 이용 제한 이의 제기는 기타를 선택해 주세요.</p>
-          </article>
-          <article>
-            <h2>처리 안내</h2>
-            <p>문의는 순차적으로 확인합니다. 앱 버전, 기기/OS, 문제가 발생한 대략적인 시간을 함께 적으면 확인이 빠릅니다.</p>
-          </article>
-        </section>
+        <div class="form-banner" data-form-banner hidden></div>
 
-        <form class="contact-form" data-contact-form>
+        <form class="contact-form" data-contact-form novalidate>
           <div class="field">
             <label for="type">문의 유형</label>
             <select id="type" name="type">
@@ -56,7 +46,7 @@
           </div>
           <div class="field">
             <label for="subject">제목</label>
-            <input id="subject" name="subject" type="text" placeholder="예: 신고 처리 문의">
+            <input id="subject" name="subject" type="text" required placeholder="예: 신고 처리 문의">
           </div>
           <div class="field">
             <label for="appVersion">앱 버전</label>
@@ -67,14 +57,10 @@
             <input id="device" name="device" type="text" placeholder="예: iPhone 15, iOS 18">
           </div>
           <div class="field">
-            <label for="occurredAt">발생 시각</label>
-            <input id="occurredAt" name="occurredAt" type="text" placeholder="예: 2026-07-08 21:30경">
-          </div>
-          <div class="field">
             <label for="body">내용</label>
             <textarea id="body" name="body" required placeholder="문의 내용을 입력하세요."></textarea>
           </div>
-          <button class="button" type="submit">이메일 작성하기</button>
+          <button class="button" type="submit" data-submit-button>문의하기</button>
         </form>
       </section>
     </div>

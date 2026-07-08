@@ -1,4 +1,5 @@
-const CONTACT_EMAIL = "wildkindground@gmail.com";
+const WEB3FORMS_ACCESS_KEY = "d20e654a-d834-4c45-8493-c391629252f5";
+const CONTACT_DESTINATION_EMAIL = "wildkindground@gmail.com";
 const IOS_STORE_URL = "";
 const ANDROID_STORE_URL = "";
 
@@ -40,40 +41,73 @@ function setupStoreLinks() {
   });
 }
 
-function buildMailto(event) {
+function showFormBanner(banner, kind, message) {
+  banner.hidden = false;
+  banner.className = `form-banner ${kind}`;
+  banner.textContent = message;
+}
+
+function handleContactSubmit(event) {
   event.preventDefault();
   const form = event.currentTarget;
+  const banner = form.parentElement.querySelector("[data-form-banner]");
+  const submitButton = form.querySelector("[data-submit-button]");
+
   const type = form.elements.type.value;
-  const customSubject = form.elements.subject.value.trim();
   const replyTo = form.elements.replyTo.value.trim();
+  const subject = form.elements.subject.value.trim();
   const appVersion = form.elements.appVersion.value.trim();
   const device = form.elements.device.value.trim();
-  const occurredAt = form.elements.occurredAt.value.trim();
   const body = form.elements.body.value.trim();
 
-  const subject = `[실검톡 문의] ${type}${customSubject ? ` - ${customSubject}` : ""}`;
-  const lines = [
-    `문의 유형: ${type}`,
-    `제목: ${customSubject || "미입력"}`,
-    `답변받을 이메일: ${replyTo || "미입력"}`,
-    `앱 버전: ${appVersion || "미입력"}`,
-    `기기/OS: ${device || "미입력"}`,
-    `발생 시각: ${occurredAt || "미입력"}`,
-    "",
-    "민감한 개인정보는 문의 내용에 포함하지 마세요.",
-    "",
-    "문의 내용:",
-    body
-  ];
+  if (!subject || !body) {
+    showFormBanner(banner, "error", "제목과 내용은 필수 입력입니다.");
+    return;
+  }
 
-  const url = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
-  window.location.href = url;
+  const payload = {
+    access_key: WEB3FORMS_ACCESS_KEY,
+    subject: `[실검톡 문의] ${type} - ${subject}`,
+    from_name: "실검톡 BuzzTalk 문의",
+    email: replyTo || CONTACT_DESTINATION_EMAIL,
+    inquiry_type: type,
+    reply_to: replyTo || "미입력",
+    app_version: appVersion || "미입력",
+    device: device || "미입력",
+    message: body,
+  };
+
+  submitButton.disabled = true;
+  submitButton.textContent = "보내는 중...";
+  banner.hidden = true;
+
+  fetch("https://api.web3forms.com/submit", {
+    method: "POST",
+    headers: {"Content-Type": "application/json", Accept: "application/json"},
+    body: JSON.stringify(payload),
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        showFormBanner(banner, "success", "문의가 접수되었습니다. 감사합니다.");
+        form.reset();
+      } else {
+        showFormBanner(banner, "error", "전송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      }
+    })
+    .catch(() => {
+      showFormBanner(banner, "error", "전송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    })
+    .finally(() => {
+      submitButton.disabled = false;
+      submitButton.textContent = "문의하기";
+    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   setupStoreLinks();
   const contactForm = document.querySelector("[data-contact-form]");
   if (contactForm) {
-    contactForm.addEventListener("submit", buildMailto);
+    contactForm.addEventListener("submit", handleContactSubmit);
   }
 });

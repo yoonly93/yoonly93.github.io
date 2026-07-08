@@ -415,29 +415,23 @@ a {
   margin-top: var(--space-xl);
 }
 
-.contact-guide {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-md);
-  margin-top: var(--space-xl);
-}
-
-.contact-guide article {
+.form-banner {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: var(--space-lg);
-  background: var(--surface-elevated);
+  font-weight: 700;
 }
 
-.contact-guide h2 {
-  margin: 0 0 var(--space-sm);
-  padding: 0;
-  border: 0;
-  font-size: 18px;
+.form-banner.success {
+  border-color: var(--green);
+  background: var(--green-soft);
+  color: var(--green);
 }
 
-.contact-guide p {
-  margin: 0;
+.form-banner.error {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 .field {
@@ -830,7 +824,6 @@ th {
 
   .grid,
   .policy-meta,
-  .contact-guide,
   .hero-layout,
   .split-section,
   .admin-shell,
