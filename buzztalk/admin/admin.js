@@ -99,12 +99,12 @@ loginButton?.addEventListener("click", async () => {
   loginButton.disabled = true;
   showLoginMessage("Google 로그인 창을 확인하세요.");
   try {
-    await withTimeout(
+    const credential = await withTimeout(
       signInWithPopup(auth, provider),
       "로그인 창 응답이 지연되고 있습니다. 팝업 차단을 확인한 뒤 다시 시도해 주세요.",
       LOGIN_POPUP_TIMEOUT_MS
     );
-    // 성공하면 onAuthStateChanged가 화면 전환을 이어받는다.
+    await handleSignedInUser(credential.user);
   } catch (error) {
     console.error("로그인 실패", error);
     loginError.textContent = describeLoginError(error);
@@ -200,20 +200,17 @@ function settleAuthInit() {
   window.clearTimeout(authInitTimeoutId);
 }
 
-onAuthStateChanged(auth, async (user) => {
-  settleAuthInit();
-  if (!user) {
-    teardownConsole();
-    showScreen("login");
-    if (loginError) loginError.textContent = "";
-    if (loginButton) loginButton.disabled = false;
-    return;
-  }
+let authCheckRunId = 0;
+
+async function handleSignedInUser(user) {
+  const runId = ++authCheckRunId;
+  if (!user) return;
 
   showLoginMessage("권한을 확인하는 중입니다.");
   if (loginButton) loginButton.disabled = true;
   try {
     const claims = await getAdminClaims(user);
+    if (runId !== authCheckRunId) return;
     const isAuthorized = claims.admin === true || claims.operator === true;
     if (!isAuthorized) {
       showScreen("forbidden");
@@ -229,10 +226,25 @@ onAuthStateChanged(auth, async (user) => {
     showScreen("console");
     initConsole();
   } catch (error) {
+    if (runId !== authCheckRunId) return;
     console.error("권한 확인 실패", error);
     showLoginMessage("권한 확인 중 오류가 발생했습니다: " + describeError(error));
     if (loginButton) loginButton.disabled = false;
   }
+}
+
+onAuthStateChanged(auth, async (user) => {
+  settleAuthInit();
+  if (!user) {
+    authCheckRunId += 1;
+    teardownConsole();
+    showScreen("login");
+    if (loginError) loginError.textContent = "";
+    if (loginButton) loginButton.disabled = false;
+    return;
+  }
+
+  await handleSignedInUser(user);
 });
 
 // ---------------------------------------------------------------------------
