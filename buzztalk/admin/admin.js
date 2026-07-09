@@ -98,6 +98,7 @@ loginButton?.addEventListener("click", async () => {
 
 getRedirectResult(auth).catch((error) => {
   console.error("리다이렉트 로그인 결과 확인 실패", error);
+  settleAuthInit();
   showScreen("login");
   if (loginError) loginError.textContent = "로그인에 실패했습니다: " + describeError(error);
   if (loginButton) loginButton.disabled = false;
@@ -157,7 +158,29 @@ function teardownConsole() {
 
 showScreen("loading");
 
+// signInWithRedirect 후 리다이렉트 결과 처리가 끝나기 전까지는 onAuthStateChanged가
+// 아예 호출되지 않을 수 있다(브라우저의 서드파티 저장소 제한 등으로 리다이렉트 처리가
+// 걸리는 경우). 그 상태로 두면 "확인 중입니다" 화면에서 영원히 멈춰 보이므로,
+// 일정 시간 안에 인증 상태가 결정되지 않으면 강제로 로그인 화면으로 되돌린다.
+const AUTH_INIT_TIMEOUT_MS = 12000;
+let authInitSettled = false;
+const authInitTimeoutId = setTimeout(() => {
+  if (authInitSettled) return;
+  console.error("로그인 상태 확인이 시간 내에 끝나지 않았습니다.");
+  showScreen("login");
+  if (loginError) {
+    loginError.textContent = "로그인 확인이 지연되고 있습니다. 새로고침 후 다시 시도해 주세요.";
+  }
+  if (loginButton) loginButton.disabled = false;
+}, AUTH_INIT_TIMEOUT_MS);
+
+function settleAuthInit() {
+  authInitSettled = true;
+  clearTimeout(authInitTimeoutId);
+}
+
 onAuthStateChanged(auth, async (user) => {
+  settleAuthInit();
   if (!user) {
     teardownConsole();
     showScreen("login");
