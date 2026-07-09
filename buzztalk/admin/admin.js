@@ -4,8 +4,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/fireba
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   signInAnonymously,
   signOut,
   onAuthStateChanged,
@@ -82,27 +81,40 @@ const loginError = document.getElementById("admin-login-error");
 const signOutButtons = document.querySelectorAll("[data-admin-signout]");
 const adminIdentityEl = document.getElementById("admin-identity");
 
+// GitHub Pages(yoonly93.github.io)와 authDomain(firebaseapp.com)이 서로 다른
+// 도메인이라 signInWithRedirect는 서드파티 저장소 차단 브라우저에서 영원히
+// 멈춘다. 팝업 방식은 postMessage 기반이라 크로스 도메인에서도 동작한다.
 loginButton?.addEventListener("click", async () => {
   loginError.textContent = "";
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: "select_account" });
   loginButton.disabled = true;
   try {
-    await signInWithRedirect(auth, provider);
+    await signInWithPopup(auth, provider);
+    // 성공하면 onAuthStateChanged가 화면 전환을 이어받는다.
   } catch (error) {
     console.error("로그인 실패", error);
-    loginError.textContent = "로그인에 실패했습니다: " + describeError(error);
+    loginError.textContent = describeLoginError(error);
     loginButton.disabled = false;
   }
 });
 
-getRedirectResult(auth).catch((error) => {
-  console.error("리다이렉트 로그인 결과 확인 실패", error);
-  settleAuthInit();
-  showScreen("login");
-  if (loginError) loginError.textContent = "로그인에 실패했습니다: " + describeError(error);
-  if (loginButton) loginButton.disabled = false;
-});
+function describeLoginError(error) {
+  const code = error && typeof error === "object" && "code" in error ? error.code : "";
+  switch (code) {
+    case "auth/popup-blocked":
+      return "브라우저가 로그인 팝업을 차단했습니다. 주소창의 팝업 차단 아이콘에서 이 사이트의 팝업을 허용한 뒤 다시 시도해 주세요.";
+    case "auth/popup-closed-by-user":
+    case "auth/cancelled-popup-request":
+      return "로그인 창이 닫혔습니다. 다시 시도해 주세요.";
+    case "auth/unauthorized-domain":
+      return "이 도메인이 Firebase Auth 승인된 도메인 목록에 없습니다. Firebase 콘솔 > Authentication > Settings에서 도메인을 추가해 주세요.";
+    case "auth/network-request-failed":
+      return "네트워크 오류로 로그인하지 못했습니다. 연결 상태를 확인해 주세요.";
+    default:
+      return "로그인에 실패했습니다: " + describeError(error);
+  }
+}
 
 signOutButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -158,10 +170,9 @@ function teardownConsole() {
 
 showScreen("loading");
 
-// signInWithRedirect 후 리다이렉트 결과 처리가 끝나기 전까지는 onAuthStateChanged가
-// 아예 호출되지 않을 수 있다(브라우저의 서드파티 저장소 제한 등으로 리다이렉트 처리가
-// 걸리는 경우). 그 상태로 두면 "확인 중입니다" 화면에서 영원히 멈춰 보이므로,
-// 일정 시간 안에 인증 상태가 결정되지 않으면 강제로 로그인 화면으로 되돌린다.
+// 인증 상태 확인이 어떤 이유로든(네트워크, SDK 내부 오류 등) 끝나지 않으면
+// "확인 중입니다" 화면에서 영원히 멈춰 보이므로, 일정 시간 안에 인증 상태가
+// 결정되지 않으면 강제로 로그인 화면으로 되돌린다.
 const AUTH_INIT_TIMEOUT_MS = 12000;
 let authInitSettled = false;
 const authInitTimeoutId = setTimeout(() => {
