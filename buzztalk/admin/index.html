@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../assets/styles.css">
 </head>
 <body class="admin-body">
-  <header class="site-header admin-header">
+  <header class="site-header admin-header" id="admin-console-header" hidden>
     <div class="wrap nav">
       <a class="brand" href="/buzztalk/"><strong>실검톡 운영</strong><span>BuzzTalk Admin</span></a>
       <nav class="nav-links" aria-label="운영 링크">
@@ -22,11 +22,11 @@
   </header>
 
   <main>
-    <div id="admin-screen-loading" class="admin-auth-screen">
+    <div id="admin-screen-loading" class="admin-auth-screen" hidden>
       <p class="muted-copy">확인 중입니다…</p>
     </div>
 
-    <div id="admin-screen-login" class="admin-auth-screen" hidden>
+    <div id="admin-screen-login" class="admin-auth-screen">
       <div class="admin-auth-card-wrap">
         <article class="admin-panel admin-auth-card">
           <p class="eyebrow">Admin Login</p>

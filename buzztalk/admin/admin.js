@@ -63,12 +63,16 @@ const screens = {
   forbidden: document.getElementById("admin-screen-forbidden"),
   console: document.getElementById("admin-screen-console"),
 };
+const consoleHeader = document.getElementById("admin-console-header");
 
 function showScreen(name) {
   Object.entries(screens).forEach(([key, el]) => {
     if (!el) return;
     el.hidden = key !== name;
   });
+  if (consoleHeader) {
+    consoleHeader.hidden = name !== "console";
+  }
 }
 
 const loginButton = document.getElementById("admin-login-button");
