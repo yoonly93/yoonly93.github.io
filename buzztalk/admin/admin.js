@@ -83,7 +83,7 @@ const adminIdentityEl = document.getElementById("admin-identity");
 
 // GitHub Pages(yoonly93.github.io)와 authDomain(firebaseapp.com)이 서로 다른
 // 도메인이라 signInWithRedirect는 서드파티 저장소 차단 브라우저에서 영원히
-// 멈춘다. 팝업 방식은 postMessage 기반이라 크로스 도메인에서도 동작한다.
+// 멈출 수 있다. 팝업 방식은 postMessage 기반이라 크로스 도메인에서도 동작한다.
 loginButton?.addEventListener("click", async () => {
   loginError.textContent = "";
   const provider = new GoogleAuthProvider();
@@ -133,9 +133,9 @@ function describeError(error) {
 function withTimeout(promise, message) {
   let timeoutId;
   const timeout = new Promise((_, reject) => {
-    timeoutId = setTimeout(() => reject(new Error(message)), AUTH_CHECK_TIMEOUT_MS);
+    timeoutId = window.setTimeout(() => reject(new Error(message)), AUTH_CHECK_TIMEOUT_MS);
   });
-  return Promise.race([promise, timeout]).finally(() => clearTimeout(timeoutId));
+  return Promise.race([promise, timeout]).finally(() => window.clearTimeout(timeoutId));
 }
 
 async function getAdminClaims(user) {
@@ -168,14 +168,14 @@ function teardownConsole() {
   selectedChatRoomId = null;
 }
 
-showScreen("loading");
+showScreen("login");
 
 // 인증 상태 확인이 어떤 이유로든(네트워크, SDK 내부 오류 등) 끝나지 않으면
 // "확인 중입니다" 화면에서 영원히 멈춰 보이므로, 일정 시간 안에 인증 상태가
 // 결정되지 않으면 강제로 로그인 화면으로 되돌린다.
 const AUTH_INIT_TIMEOUT_MS = 12000;
 let authInitSettled = false;
-const authInitTimeoutId = setTimeout(() => {
+const authInitTimeoutId = window.setTimeout(() => {
   if (authInitSettled) return;
   console.error("로그인 상태 확인이 시간 내에 끝나지 않았습니다.");
   showScreen("login");
@@ -187,7 +187,7 @@ const authInitTimeoutId = setTimeout(() => {
 
 function settleAuthInit() {
   authInitSettled = true;
-  clearTimeout(authInitTimeoutId);
+  window.clearTimeout(authInitTimeoutId);
 }
 
 onAuthStateChanged(auth, async (user) => {
@@ -195,6 +195,7 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) {
     teardownConsole();
     showScreen("login");
+    if (loginButton) loginButton.disabled = false;
     return;
   }
 
@@ -206,6 +207,7 @@ onAuthStateChanged(auth, async (user) => {
       showScreen("forbidden");
       const forbiddenEmail = document.getElementById("admin-forbidden-email");
       if (forbiddenEmail) forbiddenEmail.textContent = user.email || user.uid;
+      if (loginButton) loginButton.disabled = false;
       return;
     }
 
@@ -218,6 +220,7 @@ onAuthStateChanged(auth, async (user) => {
     console.error("권한 확인 실패", error);
     showScreen("login");
     if (loginError) loginError.textContent = "권한 확인 중 오류가 발생했습니다: " + describeError(error);
+    if (loginButton) loginButton.disabled = false;
   }
 });
 
