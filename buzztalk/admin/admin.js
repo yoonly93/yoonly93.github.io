@@ -255,7 +255,7 @@ let latestRooms = [];
 let latestReports = [];
 let selectedReportId = null;
 let reportsTab = "pending"; // pending | hold | done
-let roomSortMode = "participants"; // participants | messages
+let roomSortMode = "recent"; // recent | participants | messages
 let selectedChatRoomId = null;
 let anonymousChatAuthReady = null;
 let staticControlsWired = false;
@@ -293,7 +293,7 @@ function wireStaticControls() {
 
   document.querySelectorAll("[data-room-sort]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      roomSortMode = btn.getAttribute("data-room-sort") || "participants";
+      roomSortMode = btn.getAttribute("data-room-sort") || "recent";
       document.querySelectorAll("[data-room-sort]").forEach((candidate) => {
         candidate.classList.toggle("is-active", candidate === btn);
       });
@@ -402,7 +402,7 @@ function watchRooms() {
     q,
     (snap) => {
       latestRooms = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-      renderDashboardLiveRooms();
+      renderLiveRoomsPanel();
       renderRoomsPanel();
       renderChatRoomPicker();
       renderPushPanel();
@@ -424,7 +424,7 @@ async function refreshRoomsOnce() {
   try {
     const snap = await getDocs(roomsQuery());
     latestRooms = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    renderDashboardLiveRooms();
+    renderLiveRoomsPanel();
     renderRoomsPanel();
     renderChatRoomPicker();
     renderPushPanel();
@@ -444,7 +444,7 @@ function liveTrendRooms() {
     .slice(0, 10);
 }
 
-function renderDashboardLiveRooms() {
+function renderLiveRoomsPanel() {
   const list = document.getElementById("admin-live-room-list");
   if (!list) return;
   const rooms = liveTrendRooms();
@@ -467,10 +467,10 @@ function renderDashboardLiveRooms() {
 function renderRoomsPanel() {
   const list = document.getElementById("admin-rooms-list");
   if (!list) return;
-  const rooms = latestRooms
-    .filter((room) => (room.state === "active" || room.state === "archived"))
-    .filter((room) => (room.participantCount ?? 0) > 0 || (room.messageCount ?? 0) > 0)
-    .sort((a, b) => {
+  // 전체 방 목록 — 최신순은 쿼리 순서(lastActiveAt desc)를 그대로 유지한다.
+  const rooms = [...latestRooms];
+  if (roomSortMode !== "recent") {
+    rooms.sort((a, b) => {
       const primaryKey = roomSortMode === "messages" ? "messageCount" : "participantCount";
       const secondaryKey = roomSortMode === "messages" ? "participantCount" : "messageCount";
       const primaryDiff = (b[primaryKey] ?? 0) - (a[primaryKey] ?? 0);
@@ -479,8 +479,9 @@ function renderRoomsPanel() {
       if (secondaryDiff !== 0) return secondaryDiff;
       return Number(a.rank ?? 9999) - Number(b.rank ?? 9999);
     });
+  }
   if (rooms.length === 0) {
-    list.innerHTML = "<li><span>참여자나 채팅이 있는 활성·보관 방이 없습니다.</span></li>";
+    list.innerHTML = "<li><span>표시할 채팅방이 없습니다.</span></li>";
     return;
   }
   list.innerHTML = rooms

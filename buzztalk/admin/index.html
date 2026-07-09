@@ -47,7 +47,8 @@
       <div class="admin-shell">
         <aside class="admin-sidebar" aria-label="운영 메뉴">
           <a href="#dashboard" data-admin-nav="dashboard" class="is-active">대시보드</a>
-          <a href="#rooms" data-admin-nav="rooms">방 탐색</a>
+          <a href="#live-rooms" data-admin-nav="live-rooms">현재 실검 활성방</a>
+          <a href="#rooms" data-admin-nav="rooms">활성화중인 채팅방</a>
           <a href="#admin-chat" data-admin-nav="admin-chat">익명 채팅</a>
           <a href="#reports" data-admin-nav="reports">신고 관리</a>
           <a href="#users" data-admin-nav="users">사용자 제한</a>
@@ -71,23 +72,24 @@
           <section id="dashboard" data-admin-page="dashboard">
             <section class="metric-grid" aria-label="운영 지표">
               <article class="metric-card"><span>미처리 신고</span><strong id="admin-metric-pending-reports">–</strong><small>동일 메시지 신고 우선</small></article>
-              <article class="metric-card"><span>실시간 방</span><strong id="admin-metric-live-rooms">–</strong><small>현재 Top 10</small></article>
+              <article class="metric-card"><span>실검 활성방</span><strong id="admin-metric-live-rooms">–</strong><small>현재 Top 10</small></article>
               <article class="metric-card"><span>활성 방 메시지 합계</span><strong id="admin-metric-messages">–</strong><small>원문은 분석 이벤트에 전송 금지</small></article>
               <article class="metric-card"><span>푸시 후보</span><strong id="admin-metric-push-candidates">–</strong><small>참여자 10명 이상</small></article>
             </section>
+          </section>
 
-            <section class="admin-panel admin-dashboard-panel">
-              <div class="panel-heading">
-                <div>
-                  <p class="eyebrow">Live Rooms</p>
-                  <h2>현재 실시간 검색어 채팅방</h2>
-                </div>
-                <button type="button" class="small-button secondary-small" id="admin-live-rooms-refresh">업데이트</button>
+          <section class="admin-panel" id="live-rooms" data-admin-page="live-rooms" hidden>
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Live Trend Rooms</p>
+                <h2>현재 실검 활성방 (Top 10)</h2>
               </div>
-              <ul class="admin-list" id="admin-live-room-list">
-                <li><span>불러오는 중…</span></li>
-              </ul>
-            </section>
+              <button type="button" class="small-button secondary-small" id="admin-live-rooms-refresh">업데이트</button>
+            </div>
+            <p class="muted-copy">실시간 검색어 순위에 올라 있는 활성 방입니다. 순위 키워드가 필터(민감어·스코어 미달 등)로 제외되면 해당 순위는 방 없이 비어 있습니다.</p>
+            <ul class="admin-list" id="admin-live-room-list">
+              <li><span>불러오는 중…</span></li>
+            </ul>
           </section>
 
           <section class="admin-panel" id="reports" data-admin-page="reports" hidden>
@@ -132,10 +134,11 @@
               <div class="panel-heading">
                 <div>
                   <p class="eyebrow">Rooms</p>
-                  <h2>활성·보관 방 탐색</h2>
+                  <h2>활성화중인 채팅방</h2>
                 </div>
                 <div class="segmented">
-                  <button type="button" data-room-sort="participants" class="is-active">참여자순</button>
+                  <button type="button" data-room-sort="recent" class="is-active">최신순</button>
+                  <button type="button" data-room-sort="participants">참여자순</button>
                   <button type="button" data-room-sort="messages">채팅수순</button>
                 </div>
               </div>
@@ -268,6 +271,6 @@
     </div>
   </main>
 
-  <script type="module" src="./admin.js"></script>
+  <script type="module" src="./admin.js?v=20260710"></script>
 </body>
 </html>
