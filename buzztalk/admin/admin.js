@@ -36,7 +36,7 @@ const firebaseConfig = {
 };
 
 const FUNCTIONS_REGION = "asia-northeast3";
-const ROOMS_LIST_LIMIT = 30;
+const ROOMS_LIST_LIMIT = 200;
 const REPORTS_LIST_LIMIT = 100;
 const LOGS_LIST_LIMIT = 20;
 const AUTH_CHECK_TIMEOUT_MS = 8000;
@@ -255,6 +255,7 @@ let latestRooms = [];
 let latestReports = [];
 let selectedReportId = null;
 let reportsTab = "pending"; // pending | hold | done
+let roomSortMode = "participants"; // participants | messages
 let selectedChatRoomId = null;
 let anonymousChatAuthReady = null;
 let staticControlsWired = false;
@@ -262,6 +263,7 @@ let staticControlsWired = false;
 function initConsole() {
   teardownConsole();
   wireStaticControls();
+  setAdminPage((window.location.hash || "#dashboard").slice(1));
   watchRooms();
   watchReports();
   watchOperationLogs();
@@ -280,6 +282,27 @@ function wireStaticControls() {
       });
       renderReportsTable();
     });
+  });
+
+  document.querySelectorAll("[data-admin-nav]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      setAdminPage(link.getAttribute("data-admin-nav"));
+    });
+  });
+
+  document.querySelectorAll("[data-room-sort]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      roomSortMode = btn.getAttribute("data-room-sort") || "participants";
+      document.querySelectorAll("[data-room-sort]").forEach((candidate) => {
+        candidate.classList.toggle("is-active", candidate === btn);
+      });
+      renderRoomsPanel();
+    });
+  });
+
+  document.getElementById("admin-live-rooms-refresh")?.addEventListener("click", async () => {
+    await refreshRoomsOnce();
   });
 
   const wordForm = document.getElementById("admin-word-form");
@@ -321,6 +344,22 @@ function wireStaticControls() {
   });
 }
 
+function setAdminPage(pageName) {
+  const pages = [...document.querySelectorAll("[data-admin-page]")].map((section) =>
+    section.getAttribute("data-admin-page")
+  );
+  const nextPage = pages.includes(pageName) ? pageName : "dashboard";
+  document.querySelectorAll("[data-admin-page]").forEach((section) => {
+    section.hidden = section.getAttribute("data-admin-page") !== nextPage;
+  });
+  document.querySelectorAll("[data-admin-nav]").forEach((link) => {
+    link.classList.toggle("is-active", link.getAttribute("data-admin-nav") === nextPage);
+  });
+  if (window.location.hash !== `#${nextPage}`) {
+    window.history.replaceState(null, "", `#${nextPage}`);
+  }
+}
+
 async function submitRestriction(durationHours, formEl) {
   const targetUserId = document.getElementById("admin-restriction-target").value.trim();
   const reason = document.getElementById("admin-restriction-reason").value;
@@ -353,47 +392,140 @@ function setBusy(container, busy) {
 // Rooms (+ 활성 방 지표, 푸시 후보 패널)
 // ---------------------------------------------------------------------------
 
+function roomsQuery() {
+  return query(collection(db, "rooms"), orderBy("lastActiveAt", "desc"), limit(ROOMS_LIST_LIMIT));
+}
+
 function watchRooms() {
-  const q = query(collection(db, "rooms"), orderBy("lastActiveAt", "desc"), limit(ROOMS_LIST_LIMIT));
+  const q = roomsQuery();
   const unsub = onSnapshot(
     q,
     (snap) => {
       latestRooms = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      renderDashboardLiveRooms();
       renderRoomsPanel();
+      renderChatRoomPicker();
       renderPushPanel();
       renderMetrics();
     },
     (error) => {
       console.error("rooms 구독 실패", error);
+      renderListError("admin-live-room-list", error);
       renderListError("admin-rooms-list", error);
+      renderListError("admin-chat-room-list", error);
     }
   );
   activeUnsubscribers.push(unsub);
 }
 
+async function refreshRoomsOnce() {
+  const button = document.getElementById("admin-live-rooms-refresh");
+  if (button) button.disabled = true;
+  try {
+    const snap = await getDocs(roomsQuery());
+    latestRooms = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    renderDashboardLiveRooms();
+    renderRoomsPanel();
+    renderChatRoomPicker();
+    renderPushPanel();
+    renderMetrics();
+  } catch (error) {
+    console.error("rooms 새로고침 실패", error);
+    renderListError("admin-live-room-list", error);
+  } finally {
+    if (button) button.disabled = false;
+  }
+}
+
+function liveTrendRooms() {
+  return latestRooms
+    .filter((room) => room.state === "active" && Number.isFinite(Number(room.rank)) && Number(room.rank) >= 1 && Number(room.rank) <= 10)
+    .sort((a, b) => Number(a.rank) - Number(b.rank))
+    .slice(0, 10);
+}
+
+function renderDashboardLiveRooms() {
+  const list = document.getElementById("admin-live-room-list");
+  if (!list) return;
+  const rooms = liveTrendRooms();
+  if (rooms.length === 0) {
+    list.innerHTML = "<li><span>현재 표시할 실시간 검색어 채팅방이 없습니다.</span></li>";
+    return;
+  }
+  list.innerHTML = rooms
+    .map((room) => `<li class="admin-room-row">
+      <strong>${Number(room.rank)}위 · ${escapeHtml(room.keywordText || room.id)}</strong>
+      <span>참여 ${formatCount(room.participantCount)}명 · 채팅 ${formatCount(room.messageCount)}개 · ${roomStateLabel(room)}</span>
+      <div class="action-row admin-inline-actions">
+        <button type="button" class="small-button secondary-small" data-chat-open="${room.id}">채팅 열기</button>
+      </div>
+    </li>`)
+    .join("");
+  wireChatOpenButtons(list);
+}
+
 function renderRoomsPanel() {
   const list = document.getElementById("admin-rooms-list");
   if (!list) return;
-  if (latestRooms.length === 0) {
-    list.innerHTML = "<li><span>표시할 채팅방이 없습니다.</span></li>";
+  const rooms = latestRooms
+    .filter((room) => (room.state === "active" || room.state === "archived"))
+    .filter((room) => (room.participantCount ?? 0) > 0 || (room.messageCount ?? 0) > 0)
+    .sort((a, b) => {
+      const primaryKey = roomSortMode === "messages" ? "messageCount" : "participantCount";
+      const secondaryKey = roomSortMode === "messages" ? "participantCount" : "messageCount";
+      const primaryDiff = (b[primaryKey] ?? 0) - (a[primaryKey] ?? 0);
+      if (primaryDiff !== 0) return primaryDiff;
+      const secondaryDiff = (b[secondaryKey] ?? 0) - (a[secondaryKey] ?? 0);
+      if (secondaryDiff !== 0) return secondaryDiff;
+      return Number(a.rank ?? 9999) - Number(b.rank ?? 9999);
+    });
+  if (rooms.length === 0) {
+    list.innerHTML = "<li><span>참여자나 채팅이 있는 활성·보관 방이 없습니다.</span></li>";
     return;
   }
-  list.innerHTML = latestRooms
+  list.innerHTML = rooms
     .map((room) => {
-      const stateLabel = { active: "active", archived: "archived", closed: "closed", deleted: "deleted" }[room.state] || room.state || "unknown";
+      const rankLabel = Number.isFinite(Number(room.rank)) ? `${Number(room.rank)}위 · ` : "";
       const pushLabel = room.pushBlockedByOperator ? "푸시 차단" : room.pushAllowed === false ? "푸시 후보" : "푸시 허용";
-      return `<li>
-        <strong>${escapeHtml(room.keywordText || room.roomId || room.id)}</strong>
-        <span>${stateLabel} · 참여 ${room.participantCount ?? 0}명 · ${pushLabel}</span>
+      return `<li class="admin-room-row">
+        <strong>${rankLabel}${escapeHtml(room.keywordText || room.roomId || room.id)}</strong>
+        <span>${roomStateLabel(room)} · 참여 ${formatCount(room.participantCount)}명 · 채팅 ${formatCount(room.messageCount)}개 · ${pushLabel}</span>
         <div class="action-row admin-inline-actions">
-          <button type="button" class="small-button secondary-small" data-chat-open="${room.id}">입장</button>
+          <button type="button" class="small-button secondary-small" data-chat-open="${room.id}">채팅 열기</button>
         </div>
       </li>`;
     })
     .join("");
 
-  list.querySelectorAll("[data-chat-open]").forEach((btn) => {
+  wireChatOpenButtons(list);
+}
+
+function renderChatRoomPicker() {
+  const list = document.getElementById("admin-chat-room-list");
+  if (!list) return;
+  const rooms = liveTrendRooms();
+  if (rooms.length === 0) {
+    list.innerHTML = "<li><span>현재 입장 가능한 실시간 검색어 방이 없습니다.</span></li>";
+    return;
+  }
+  list.innerHTML = rooms
+    .map((room) => `<li class="admin-room-row">
+      <strong>${Number(room.rank)}위 · ${escapeHtml(room.keywordText || room.id)}</strong>
+      <span>참여 ${formatCount(room.participantCount)}명 · 채팅 ${formatCount(room.messageCount)}개</span>
+      <div class="action-row admin-inline-actions">
+        <button type="button" class="small-button ${selectedChatRoomId === room.id ? "" : "secondary-small"}" data-chat-open="${room.id}">
+          ${selectedChatRoomId === room.id ? "선택됨" : "선택"}
+        </button>
+      </div>
+    </li>`)
+    .join("");
+  wireChatOpenButtons(list);
+}
+
+function wireChatOpenButtons(container) {
+  container.querySelectorAll("[data-chat-open]").forEach((btn) => {
     btn.addEventListener("click", () => {
+      setAdminPage("admin-chat");
       openAdminChatRoom(btn.getAttribute("data-chat-open"));
     });
   });
@@ -401,7 +533,7 @@ function renderRoomsPanel() {
 
 function renderMetrics() {
   const activeRooms = latestRooms.filter((r) => r.state === "active");
-  setText("admin-metric-active-rooms", String(activeRooms.length));
+  setText("admin-metric-live-rooms", String(liveTrendRooms().length));
 
   const messageSum = activeRooms.reduce((sum, r) => sum + (typeof r.messageCount === "number" ? r.messageCount : 0), 0);
   setText("admin-metric-messages", messageSum.toLocaleString("ko-KR"));
@@ -504,6 +636,7 @@ function openAdminChatRoom(roomId) {
     `${roomStateLabel(room)} · 참여 ${room?.participantCount ?? 0}명 · 메시지 ${room?.messageCount ?? 0}개`
   );
   setText("admin-chat-nickname-preview", `다음 닉네임 예시: ${makeRandomNickname()}`);
+  renderChatRoomPicker();
   loadChatMessages(roomId);
   document.getElementById("admin-chat")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -582,7 +715,17 @@ async function submitAdminChatMessage() {
 }
 
 function makeRandomNickname() {
-  return String(Math.floor(100000 + Math.random() * 900000));
+  const adjectives = [
+    "파란", "빨간", "노란", "초록", "보라", "하얀", "까만", "분홍", "주황",
+    "조용한", "행복한", "용감한", "엉뚱한", "씩씩한", "다정한", "느긋한", "상큼한", "포근한", "수줍은",
+  ];
+  const nouns = [
+    "여우", "고양이", "강아지", "판다", "토끼", "사자", "호랑이", "부엉이",
+    "다람쥐", "고래", "펭귄", "너구리", "수달", "오리", "늑대", "사슴", "햄스터", "고슴도치",
+  ];
+  const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+  const noun = nouns[Math.floor(Math.random() * nouns.length)];
+  return `${adjective} ${noun}`;
 }
 
 function roomStateLabel(room) {
@@ -940,4 +1083,8 @@ function formatTimestamp(ts, timeOnly) {
     return date.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit", hour12: false });
   }
   return date.toLocaleString("ko-KR", { hour12: false });
+}
+
+function formatCount(value) {
+  return (typeof value === "number" ? value : 0).toLocaleString("ko-KR");
 }
