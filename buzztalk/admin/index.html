@@ -129,23 +129,26 @@
             </div>
           </section>
 
-          <section class="admin-grid" id="rooms" data-admin-page="rooms" hidden>
-            <article class="admin-panel">
-              <div class="panel-heading">
-                <div>
-                  <p class="eyebrow">Rooms</p>
-                  <h2>활성화중인 채팅방</h2>
-                </div>
-                <div class="segmented">
-                  <button type="button" data-room-sort="recent" class="is-active">최신순</button>
-                  <button type="button" data-room-sort="participants">참여자순</button>
-                  <button type="button" data-room-sort="messages">채팅수순</button>
-                </div>
+          <section class="admin-panel" id="rooms" data-admin-page="rooms" hidden>
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Rooms</p>
+                <h2>활성화중인 채팅방</h2>
               </div>
-              <ul class="admin-list" id="admin-rooms-list">
+              <div class="segmented">
+                <button type="button" data-room-sort="recent" class="is-active">최신순</button>
+                <button type="button" data-room-sort="participants">참여자순</button>
+                <button type="button" data-room-sort="messages">채팅수순</button>
+              </div>
+            </div>
+            <div class="admin-split">
+              <ul class="admin-list admin-split-list" id="admin-rooms-list">
                 <li><span>불러오는 중…</span></li>
               </ul>
-            </article>
+              <div class="admin-split-chat" id="admin-rooms-chat-slot" data-chat-slot>
+                <p class="muted-copy" data-chat-placeholder>왼쪽 목록에서 「채팅 열기」를 누르면 대화가 여기에 표시됩니다.</p>
+              </div>
+            </div>
           </section>
 
           <section class="admin-panel" id="push" data-admin-page="push" hidden>
@@ -169,30 +172,32 @@
               </div>
               <span id="admin-chat-status" class="status-pill muted">방을 선택하세요</span>
             </div>
-            <ul class="admin-list admin-chat-room-picker" id="admin-chat-room-list">
-              <li><span>불러오는 중…</span></li>
-            </ul>
-            <div id="admin-chat-room-empty" class="admin-chat-empty">
-              <p class="muted-copy">위 목록에서 채팅방을 선택하면 최근 대화와 입력창이 표시됩니다.</p>
-            </div>
-            <div id="admin-chat-room" class="admin-chat-room" hidden>
-              <div class="admin-chat-head">
-                <div>
-                  <strong id="admin-chat-room-title">-</strong>
-                  <span id="admin-chat-room-meta">-</span>
+            <div class="admin-split">
+              <ul class="admin-list admin-split-list" id="admin-chat-room-list">
+                <li><span>불러오는 중…</span></li>
+              </ul>
+              <div class="admin-split-chat" id="admin-chat-slot" data-chat-slot>
+                <p class="muted-copy" data-chat-placeholder>왼쪽 목록에서 방을 선택하면 대화가 여기에 표시됩니다.</p>
+                <div id="admin-chat-room" class="admin-chat-room" hidden>
+                  <div class="admin-chat-head">
+                    <div>
+                      <strong id="admin-chat-room-title">-</strong>
+                      <span id="admin-chat-room-meta">-</span>
+                    </div>
+                    <button type="button" class="small-button secondary-small" id="admin-chat-refresh">새로고침</button>
+                  </div>
+                  <div class="admin-chat-messages" id="admin-chat-messages" aria-live="polite">
+                    <p class="muted-copy">메시지를 불러오는 중입니다.</p>
+                  </div>
+                  <form class="admin-chat-form" id="admin-chat-form">
+                    <textarea id="admin-chat-input" maxlength="500" placeholder="메시지를 입력하세요" required></textarea>
+                    <div class="admin-chat-form-row">
+                      <span id="admin-chat-nickname-preview">전송 시 닉네임이 자동 생성됩니다.</span>
+                      <button type="submit" class="small-button">익명으로 전송</button>
+                    </div>
+                  </form>
                 </div>
-                <button type="button" class="small-button secondary-small" id="admin-chat-refresh">새로고침</button>
               </div>
-              <div class="admin-chat-messages" id="admin-chat-messages" aria-live="polite">
-                <p class="muted-copy">메시지를 불러오는 중입니다.</p>
-              </div>
-              <form class="admin-chat-form" id="admin-chat-form">
-                <textarea id="admin-chat-input" maxlength="500" placeholder="메시지를 입력하세요" required></textarea>
-                <div class="admin-chat-form-row">
-                  <span id="admin-chat-nickname-preview">전송 시 닉네임이 자동 생성됩니다.</span>
-                  <button type="submit" class="small-button">익명으로 전송</button>
-                </div>
-              </form>
             </div>
           </section>
 
@@ -271,6 +276,6 @@
     </div>
   </main>
 
-  <script type="module" src="./admin.js?v=20260710"></script>
+  <script type="module" src="./admin.js?v=20260710b"></script>
 </body>
 </html>

@@ -483,7 +483,8 @@ function renderLiveRoomsPanel() {
       </div>
     </li>`)
     .join("");
-  wireChatOpenButtons(list);
+  // 실검 활성방 페이지에는 채팅 슬롯이 없으니 익명 채팅 페이지로 이동해 연다.
+  wireChatOpenButtons(list, { navigateTo: "admin-chat" });
 }
 
 function renderRoomsPanel() {
@@ -508,10 +509,9 @@ function renderRoomsPanel() {
   }
   list.innerHTML = rooms
     .map((room) => {
-      const rankLabel = Number.isFinite(Number(room.rank)) ? `${Number(room.rank)}위 · ` : "";
       const pushLabel = room.pushBlockedByOperator ? "푸시 차단" : room.pushAllowed === false ? "푸시 후보" : "푸시 허용";
       return `<li class="admin-room-row">
-        <strong>${rankLabel}${escapeHtml(room.keywordText || room.roomId || room.id)}</strong>
+        <strong>${escapeHtml(room.keywordText || room.roomId || room.id)}</strong>
         <span>${roomStateLabel(room)} · 참여 ${formatCount(room.participantCount)}명 · 채팅 ${formatCount(room.messageCount)}개 · ${pushLabel}</span>
         <div class="action-row admin-inline-actions">
           <button type="button" class="small-button secondary-small" data-chat-open="${room.id}">채팅 열기</button>
@@ -520,7 +520,8 @@ function renderRoomsPanel() {
     })
     .join("");
 
-  wireChatOpenButtons(list);
+  // 같은 페이지 오른쪽 슬롯에 채팅을 연다(페이지 이동 없음).
+  wireChatOpenButtons(list, { slotId: "admin-rooms-chat-slot" });
 }
 
 function renderChatRoomPicker() {
@@ -545,13 +546,34 @@ function renderChatRoomPicker() {
   wireChatOpenButtons(list);
 }
 
-function wireChatOpenButtons(container) {
+// 채팅 패널은 DOM이 하나뿐이라, 여는 페이지의 슬롯으로 옮겨 붙인다.
+// navigateTo가 있으면 그 페이지로 전환한 뒤 연다(전용 슬롯이 없는 목록용).
+function wireChatOpenButtons(container, options = {}) {
+  const slotId = options.slotId || "admin-chat-slot";
   container.querySelectorAll("[data-chat-open]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      setAdminPage("admin-chat");
-      openAdminChatRoom(btn.getAttribute("data-chat-open"));
+      if (options.navigateTo) {
+        setAdminPage(options.navigateTo);
+      }
+      openAdminChatRoom(btn.getAttribute("data-chat-open"), slotId);
     });
   });
+}
+
+function mountChatPanel(slotId) {
+  const chatRoom = document.getElementById("admin-chat-room");
+  const slot = document.getElementById(slotId);
+  if (!chatRoom || !slot) return;
+  if (chatRoom.parentElement !== slot) {
+    slot.appendChild(chatRoom);
+  }
+  document.querySelectorAll("[data-chat-slot]").forEach((candidate) => {
+    const placeholder = candidate.querySelector("[data-chat-placeholder]");
+    if (placeholder) {
+      placeholder.hidden = candidate.contains(chatRoom);
+    }
+  });
+  chatRoom.hidden = false;
 }
 
 function renderMetrics() {
@@ -642,16 +664,13 @@ async function ensureAnonymousChatAuth() {
   return anonymousChatAuthReady;
 }
 
-function openAdminChatRoom(roomId) {
+function openAdminChatRoom(roomId, slotId = "admin-chat-slot") {
   if (!roomId) return;
   selectedChatRoomId = roomId;
   const room =
     latestActiveRooms.find((candidate) => candidate.id === roomId) ||
     latestRooms.find((candidate) => candidate.id === roomId);
-  const empty = document.getElementById("admin-chat-room-empty");
-  const panel = document.getElementById("admin-chat-room");
-  if (empty) empty.hidden = true;
-  if (panel) panel.hidden = false;
+  mountChatPanel(slotId);
 
   setText("admin-chat-status", "익명 세션 준비 중");
   setText("admin-chat-room-title", room?.keywordText || roomId);
@@ -662,7 +681,7 @@ function openAdminChatRoom(roomId) {
   setText("admin-chat-nickname-preview", `다음 닉네임 예시: ${makeRandomNickname()}`);
   renderChatRoomPicker();
   loadChatMessages(roomId);
-  document.getElementById("admin-chat")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  document.getElementById("admin-chat-room")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 async function loadChatMessages(roomId) {

@@ -839,6 +839,28 @@ th {
   margin-bottom: var(--space-lg);
 }
 
+/* 방 목록(왼쪽)과 채팅 뷰(오른쪽)를 나란히 놓는 2단 레이아웃 */
+.admin-split {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: var(--space-lg);
+  align-items: start;
+  margin-top: var(--space-lg);
+}
+
+.admin-split-list {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.admin-split-chat {
+  min-width: 0;
+}
+
+.admin-split-chat .admin-chat-room {
+  margin-top: 0;
+}
+
 .action-stack {
   display: grid;
   gap: var(--space-md);
@@ -1070,6 +1092,14 @@ th {
 }
 
 @media (max-width: 760px) {
+  .admin-split {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-split-list {
+    max-height: 40vh;
+  }
+
   .admin-room-row {
     grid-template-columns: 1fr;
   }
