@@ -252,6 +252,7 @@ onAuthStateChanged(auth, async (user) => {
 // ---------------------------------------------------------------------------
 
 let latestRooms = [];
+let latestActiveRooms = [];
 let latestReports = [];
 let selectedReportId = null;
 let reportsTab = "pending"; // pending | hold | done
@@ -265,6 +266,7 @@ function initConsole() {
   wireStaticControls();
   setAdminPage((window.location.hash || "#dashboard").slice(1));
   watchRooms();
+  watchActiveRooms();
   watchReports();
   watchOperationLogs();
   watchBannedWords();
@@ -396,23 +398,42 @@ function roomsQuery() {
   return query(collection(db, "rooms"), orderBy("lastActiveAt", "desc"), limit(ROOMS_LIST_LIMIT));
 }
 
+// 실검에서 내려갔다 재진입한 방은 lastActiveAt이 갱신되지 않아 위 쿼리의
+// 상위 200개 밖으로 밀려날 수 있으므로, 활성 방은 state 조건으로 따로 구독한다.
+function activeRoomsQuery() {
+  return query(collection(db, "rooms"), where("state", "==", "active"), limit(50));
+}
+
 function watchRooms() {
-  const q = roomsQuery();
   const unsub = onSnapshot(
-    q,
+    roomsQuery(),
     (snap) => {
       latestRooms = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-      renderLiveRoomsPanel();
       renderRoomsPanel();
+    },
+    (error) => {
+      console.error("rooms 구독 실패", error);
+      renderListError("admin-rooms-list", error);
+    }
+  );
+  activeUnsubscribers.push(unsub);
+}
+
+function watchActiveRooms() {
+  const unsub = onSnapshot(
+    activeRoomsQuery(),
+    (snap) => {
+      latestActiveRooms = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      renderLiveRoomsPanel();
       renderChatRoomPicker();
       renderPushPanel();
       renderMetrics();
     },
     (error) => {
-      console.error("rooms 구독 실패", error);
+      console.error("active rooms 구독 실패", error);
       renderListError("admin-live-room-list", error);
-      renderListError("admin-rooms-list", error);
       renderListError("admin-chat-room-list", error);
+      renderListError("admin-push-list", error);
     }
   );
   activeUnsubscribers.push(unsub);
@@ -422,8 +443,9 @@ async function refreshRoomsOnce() {
   const button = document.getElementById("admin-live-rooms-refresh");
   if (button) button.disabled = true;
   try {
-    const snap = await getDocs(roomsQuery());
+    const [snap, activeSnap] = await Promise.all([getDocs(roomsQuery()), getDocs(activeRoomsQuery())]);
     latestRooms = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    latestActiveRooms = activeSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
     renderLiveRoomsPanel();
     renderRoomsPanel();
     renderChatRoomPicker();
@@ -438,8 +460,8 @@ async function refreshRoomsOnce() {
 }
 
 function liveTrendRooms() {
-  return latestRooms
-    .filter((room) => room.state === "active" && Number.isFinite(Number(room.rank)) && Number(room.rank) >= 1 && Number(room.rank) <= 10)
+  return latestActiveRooms
+    .filter((room) => Number.isFinite(Number(room.rank)) && Number(room.rank) >= 1 && Number(room.rank) <= 10)
     .sort((a, b) => Number(a.rank) - Number(b.rank))
     .slice(0, 10);
 }
@@ -533,7 +555,7 @@ function wireChatOpenButtons(container) {
 }
 
 function renderMetrics() {
-  const activeRooms = latestRooms.filter((r) => r.state === "active");
+  const activeRooms = latestActiveRooms;
   setText("admin-metric-live-rooms", String(liveTrendRooms().length));
 
   const messageSum = activeRooms.reduce((sum, r) => sum + (typeof r.messageCount === "number" ? r.messageCount : 0), 0);
@@ -553,8 +575,7 @@ function setText(id, value) {
 function renderPushPanel() {
   const list = document.getElementById("admin-push-list");
   if (!list) return;
-  const activeRooms = latestRooms.filter((r) => r.state === "active");
-  const candidates = activeRooms.filter((r) => (r.participantCount ?? 0) >= 10);
+  const candidates = latestActiveRooms.filter((r) => (r.participantCount ?? 0) >= 10);
 
   if (candidates.length === 0) {
     list.innerHTML = "<li><span>참여자 10명 이상인 활성 방이 없습니다.</span></li>";
@@ -624,7 +645,9 @@ async function ensureAnonymousChatAuth() {
 function openAdminChatRoom(roomId) {
   if (!roomId) return;
   selectedChatRoomId = roomId;
-  const room = latestRooms.find((candidate) => candidate.id === roomId);
+  const room =
+    latestActiveRooms.find((candidate) => candidate.id === roomId) ||
+    latestRooms.find((candidate) => candidate.id === roomId);
   const empty = document.getElementById("admin-chat-room-empty");
   const panel = document.getElementById("admin-chat-room");
   if (empty) empty.hidden = true;
