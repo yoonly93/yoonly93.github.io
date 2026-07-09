@@ -4,7 +4,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/fireba
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInAnonymously,
   signOut,
   onAuthStateChanged,
@@ -39,6 +40,7 @@ const FUNCTIONS_REGION = "asia-northeast3";
 const ROOMS_LIST_LIMIT = 30;
 const REPORTS_LIST_LIMIT = 100;
 const LOGS_LIST_LIMIT = 20;
+const AUTH_CHECK_TIMEOUT_MS = 8000;
 
 const app = initializeApp(firebaseConfig);
 const chatApp = initializeApp(firebaseConfig, "admin-anonymous-chat");
@@ -83,12 +85,22 @@ const adminIdentityEl = document.getElementById("admin-identity");
 loginButton?.addEventListener("click", async () => {
   loginError.textContent = "";
   const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
+  loginButton.disabled = true;
   try {
-    await signInWithPopup(auth, provider);
+    await signInWithRedirect(auth, provider);
   } catch (error) {
     console.error("로그인 실패", error);
     loginError.textContent = "로그인에 실패했습니다: " + describeError(error);
+    loginButton.disabled = false;
   }
+});
+
+getRedirectResult(auth).catch((error) => {
+  console.error("리다이렉트 로그인 결과 확인 실패", error);
+  showScreen("login");
+  if (loginError) loginError.textContent = "로그인에 실패했습니다: " + describeError(error);
+  if (loginButton) loginButton.disabled = false;
 });
 
 signOutButtons.forEach((btn) => {
@@ -103,6 +115,31 @@ function describeError(error) {
     if ("message" in error && error.message) return String(error.message);
   }
   return String(error);
+}
+
+function withTimeout(promise, message) {
+  let timeoutId;
+  const timeout = new Promise((_, reject) => {
+    timeoutId = setTimeout(() => reject(new Error(message)), AUTH_CHECK_TIMEOUT_MS);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timeoutId));
+}
+
+async function getAdminClaims(user) {
+  const cachedTokenResult = await withTimeout(
+    getIdTokenResult(user, false),
+    "권한 확인 시간이 초과되었습니다. 다시 로그인해 주세요."
+  );
+  const cachedClaims = cachedTokenResult.claims || {};
+  if (cachedClaims.admin === true || cachedClaims.operator === true) {
+    return cachedClaims;
+  }
+
+  const refreshedTokenResult = await withTimeout(
+    getIdTokenResult(user, true),
+    "권한 갱신 시간이 초과되었습니다. 다시 로그인해 주세요."
+  );
+  return refreshedTokenResult.claims || {};
 }
 
 let activeUnsubscribers = [];
@@ -129,8 +166,7 @@ onAuthStateChanged(auth, async (user) => {
 
   showScreen("loading");
   try {
-    const tokenResult = await getIdTokenResult(user, true);
-    const claims = tokenResult.claims || {};
+    const claims = await getAdminClaims(user);
     const isAuthorized = claims.admin === true || claims.operator === true;
     if (!isAuthorized) {
       showScreen("forbidden");

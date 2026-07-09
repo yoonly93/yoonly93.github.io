@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>운영자 화면 - 실검톡</title>
-  <meta name="description" content="실검톡 신고, 채팅방, 푸시, 금칙어 운영을 위한 관리자 콘솔입니다.">
+  <meta name="description" content="실검톡 관리자 콘솔입니다.">
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" href="../assets/styles.css">
 </head>
@@ -31,7 +31,7 @@
         <article class="admin-panel admin-auth-card">
           <p class="eyebrow">Admin Login</p>
           <h1>운영자 로그인</h1>
-          <p class="muted-copy">신고, 채팅방, 푸시, 금칙어 운영은 등록된 운영자 계정으로만 접근할 수 있습니다.</p>
+          <p class="muted-copy">등록된 계정으로 로그인해 주세요.</p>
           <button type="button" id="admin-login-button" class="small-button">Google 계정으로 로그인</button>
           <p id="admin-login-error" class="admin-auth-error" role="alert"></p>
         </article>
@@ -43,7 +43,7 @@
         <article class="admin-panel admin-auth-card">
           <p class="eyebrow">Access Denied</p>
           <h1>권한이 없습니다</h1>
-          <p class="muted-copy"><strong id="admin-forbidden-email"></strong> 계정에는 운영자 권한이 없습니다. 운영자 권한이 필요하면 관리자에게 admin 또는 operator 클레임 부여를 요청하세요.</p>
+          <p class="muted-copy"><strong id="admin-forbidden-email"></strong> 계정으로는 접근할 수 없습니다.</p>
           <button type="button" class="small-button secondary-small" data-admin-signout>다른 계정으로 로그인</button>
         </article>
       </div>
