@@ -15,11 +15,6 @@
         <strong>실검톡</strong>
         <span>BuzzTalk</span>
       </a>
-      <nav class="nav-links" aria-label="주요 링크">
-        <a href="/buzztalk/privacy/">개인정보처리방침</a>
-        <a href="/buzztalk/terms/">이용약관</a>
-        <a href="/buzztalk/contact/">문의하기</a>
-      </nav>
     </div>
   </header>
 
@@ -30,8 +25,28 @@
           <h1>실검톡</h1>
           <p>실시간 검색어를 기반으로 같은 주제에 관심 있는 사람들이 익명으로 대화할 수 있어요.</p>
           <div class="store-actions" hidden aria-label="앱 다운로드">
-            <a class="store-button" data-ios-store href="#">App Store</a>
-            <a class="store-button secondary-button" data-android-store href="#">Play Store</a>
+            <a class="store-badge store-badge-apple" data-ios-store href="#" aria-label="App Store에서 다운로드">
+              <svg class="store-badge-icon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+                <path d="M15.8 8.2c-1 0-2 .6-2.7.6-.7 0-1.6-.6-2.6-.6-2.1 0-4.2 1.7-4.2 5 0 3 2.2 7 4.1 7 .8 0 1.1-.5 2.1-.5s1.3.5 2.1.5c1.8 0 3.5-3.2 4-5.4-2.2-.9-2.6-4.1.1-5.3-.7-.9-1.9-1.3-2.9-1.3Z"/>
+                <path d="M14.1 6.6c.6-.7 1-1.6.9-2.6-.9.1-1.9.7-2.4 1.4-.5.6-.9 1.5-.8 2.4 1 .1 1.8-.5 2.3-1.2Z"/>
+              </svg>
+              <span class="store-badge-text">
+                <span class="store-badge-eyebrow">Download on the</span>
+                <span class="store-badge-title">App Store</span>
+              </span>
+            </a>
+            <a class="store-badge store-badge-google" data-android-store href="#" aria-label="Google Play에서 다운로드">
+              <svg class="store-badge-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <polygon points="4,3 6.4,4.35 11,12" fill="#EA4335"/>
+                <polygon points="6.4,4.35 20,12 11,12" fill="#4285F4"/>
+                <polygon points="20,12 4,21 11,12" fill="#FBBC05"/>
+                <polygon points="4,21 4,3 11,12" fill="#34A853"/>
+              </svg>
+              <span class="store-badge-text">
+                <span class="store-badge-eyebrow">GET IT ON</span>
+                <span class="store-badge-title">Google Play</span>
+              </span>
+            </a>
           </div>
         </div>
 
@@ -77,7 +92,10 @@
 
   <footer class="site-footer">
     <div class="wrap footer-inner">
-      <span>실검톡 BuzzTalk</span>
+      <div class="footer-brand">
+        <span>실검톡 BuzzTalk</span>
+        <span class="footer-copyright">© 2026 Posiki</span>
+      </div>
       <nav class="footer-links" aria-label="하단 링크">
         <a href="/buzztalk/privacy/">개인정보처리방침</a>
         <a href="/buzztalk/terms/">이용약관</a>
