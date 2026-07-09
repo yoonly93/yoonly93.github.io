@@ -140,28 +140,52 @@ a {
   gap: var(--space-md);
 }
 
-.store-button,
-.secondary-button {
+.store-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
   width: fit-content;
-  border: 0;
-  border-radius: var(--radius-sm);
-  padding: var(--space-md) var(--space-xl);
-  color: var(--surface);
-  background: var(--text);
-  font: inherit;
-  font-weight: 700;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: #000000;
+  color: #ffffff;
   text-decoration: none;
 }
 
-.secondary-button {
-  border: 1px solid var(--border);
-  color: var(--text);
-  background: var(--surface);
+.store-badge-icon {
+  width: 26px;
+  height: 26px;
+  flex: none;
+}
+
+.store-badge-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.store-badge-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.3px;
+}
+
+.store-badge-title {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.store-badge-google .store-badge-eyebrow {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
 }
 
 .trend-demo {
   width: min(720px, 100%);
-  margin: 0 auto;
+  margin: 0;
 }
 
 .trend-demo-list {
@@ -511,6 +535,17 @@ a {
   font-size: 14px;
 }
 
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.footer-copyright {
+  color: var(--tertiary);
+  font-size: 12px;
+}
+
 .admin-body {
   background: #F3F5F8;
 }
@@ -645,7 +680,8 @@ a {
   font-size: 13px;
 }
 
-.segmented button:first-child {
+.segmented button.is-active,
+.segmented button:first-child:not([data-report-tab]) {
   background: var(--surface);
   color: var(--text);
   box-shadow: var(--shadow-card);
@@ -865,5 +901,154 @@ th {
 
   .content {
     padding: var(--space-xl);
+  }
+}
+
+/* Admin console: auth gate + small additions used only by buzztalk/admin/. */
+.admin-auth-screen {
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - 72px);
+  padding: var(--space-xxl) 0;
+}
+
+.admin-auth-card-wrap {
+  display: grid;
+  justify-content: center;
+}
+
+.admin-auth-card {
+  display: grid;
+  gap: var(--space-md);
+  max-width: 360px;
+  text-align: center;
+  justify-items: center;
+}
+
+.admin-auth-error {
+  margin: 0;
+  min-height: 1em;
+  color: var(--accent);
+  font-size: 13px;
+}
+
+.admin-account {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.admin-inline-actions {
+  margin-top: 0;
+}
+
+.admin-chat-empty {
+  margin-top: var(--space-lg);
+}
+
+.admin-chat-room {
+  display: grid;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.admin-chat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.admin-chat-head > div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.admin-chat-head span,
+.admin-chat-form-row span {
+  color: var(--secondary);
+  font-size: 13px;
+}
+
+.admin-chat-messages {
+  display: grid;
+  align-content: start;
+  gap: var(--space-sm);
+  min-height: 260px;
+  max-height: 460px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  background: var(--bg);
+}
+
+.admin-chat-message {
+  width: min(72%, 620px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  background: var(--surface);
+}
+
+.admin-chat-message.is-mine {
+  justify-self: end;
+  border-color: rgba(31, 89, 199, 0.28);
+  background: var(--blue-soft);
+}
+
+.admin-chat-message.is-hidden {
+  opacity: 0.72;
+}
+
+.admin-chat-message-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  color: var(--secondary);
+  font-size: 12px;
+}
+
+.admin-chat-message p {
+  margin: var(--space-xs) 0 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.admin-chat-form {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.admin-chat-form textarea {
+  width: 100%;
+  min-height: 92px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  resize: vertical;
+}
+
+.admin-chat-form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+@media (max-width: 760px) {
+  .admin-chat-head,
+  .admin-chat-form-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-chat-message {
+    width: 100%;
   }
 }

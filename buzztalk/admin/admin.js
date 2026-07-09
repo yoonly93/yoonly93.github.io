@@ -1,0 +1,843 @@
+// 실검톡 운영 콘솔 — Firebase Auth + Firestore + Cloud Functions에 직접 연결되는
+// 정적 페이지 스크립트 (번들러 없이 브라우저 ES 모듈로 그대로 로드됨).
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInAnonymously,
+  signOut,
+  onAuthStateChanged,
+  getIdTokenResult,
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  query,
+  orderBy,
+  limit,
+  where,
+  getDocs,
+  getCountFromServer,
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import {
+  getFunctions,
+  httpsCallable,
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-functions.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD2xYw8zSB3jVILUFCZfdcmdQRSCfOtJgM",
+  authDomain: "buzztalk-yoonly93.firebaseapp.com",
+  projectId: "buzztalk-yoonly93",
+  storageBucket: "buzztalk-yoonly93.firebasestorage.app",
+  messagingSenderId: "648177060118",
+  appId: "1:648177060118:web:1a37d88eb667ba9b48a837",
+};
+
+const FUNCTIONS_REGION = "asia-northeast3";
+const ROOMS_LIST_LIMIT = 30;
+const REPORTS_LIST_LIMIT = 100;
+const LOGS_LIST_LIMIT = 20;
+
+const app = initializeApp(firebaseConfig);
+const chatApp = initializeApp(firebaseConfig, "admin-anonymous-chat");
+const auth = getAuth(app);
+const chatAuth = getAuth(chatApp);
+const db = getFirestore(app);
+const functions = getFunctions(app, FUNCTIONS_REGION);
+const chatFunctions = getFunctions(chatApp, FUNCTIONS_REGION);
+
+const callApplyAdminAction = httpsCallable(functions, "applyAdminAction");
+const callManageBannedWord = httpsCallable(functions, "manageBannedWord");
+const callApplyUserRestriction = httpsCallable(functions, "applyUserRestriction");
+const callSendAnonymousMessage = httpsCallable(chatFunctions, "sendMessage");
+
+// ---------------------------------------------------------------------------
+// 화면 상태 전환 (로그인 필요 / 권한 없음 / 콘솔)
+// ---------------------------------------------------------------------------
+
+const screens = {
+  loading: document.getElementById("admin-screen-loading"),
+  login: document.getElementById("admin-screen-login"),
+  forbidden: document.getElementById("admin-screen-forbidden"),
+  console: document.getElementById("admin-screen-console"),
+};
+
+function showScreen(name) {
+  Object.entries(screens).forEach(([key, el]) => {
+    if (!el) return;
+    el.hidden = key !== name;
+  });
+}
+
+const loginButton = document.getElementById("admin-login-button");
+const loginError = document.getElementById("admin-login-error");
+const signOutButtons = document.querySelectorAll("[data-admin-signout]");
+const adminIdentityEl = document.getElementById("admin-identity");
+
+loginButton?.addEventListener("click", async () => {
+  loginError.textContent = "";
+  const provider = new GoogleAuthProvider();
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (error) {
+    console.error("로그인 실패", error);
+    loginError.textContent = "로그인에 실패했습니다: " + describeError(error);
+  }
+});
+
+signOutButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    teardownConsole();
+    signOut(auth).catch((error) => console.error("로그아웃 실패", error));
+  });
+});
+
+function describeError(error) {
+  if (error && typeof error === "object") {
+    if ("message" in error && error.message) return String(error.message);
+  }
+  return String(error);
+}
+
+let activeUnsubscribers = [];
+function teardownConsole() {
+  activeUnsubscribers.forEach((unsub) => {
+    try {
+      unsub();
+    } catch (_err) {
+      // 이미 해제된 리스너는 무시한다.
+    }
+  });
+  activeUnsubscribers = [];
+  selectedChatRoomId = null;
+}
+
+showScreen("loading");
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    teardownConsole();
+    showScreen("login");
+    return;
+  }
+
+  showScreen("loading");
+  try {
+    const tokenResult = await getIdTokenResult(user, true);
+    const claims = tokenResult.claims || {};
+    const isAuthorized = claims.admin === true || claims.operator === true;
+    if (!isAuthorized) {
+      showScreen("forbidden");
+      const forbiddenEmail = document.getElementById("admin-forbidden-email");
+      if (forbiddenEmail) forbiddenEmail.textContent = user.email || user.uid;
+      return;
+    }
+
+    if (adminIdentityEl) {
+      adminIdentityEl.textContent = (user.email || user.uid) + (claims.admin ? " · admin" : " · operator");
+    }
+    showScreen("console");
+    initConsole();
+  } catch (error) {
+    console.error("권한 확인 실패", error);
+    showScreen("login");
+    if (loginError) loginError.textContent = "권한 확인 중 오류가 발생했습니다: " + describeError(error);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// 콘솔 초기화 — 로그인 + 권한 확인 후에만 호출된다.
+// ---------------------------------------------------------------------------
+
+let latestRooms = [];
+let latestReports = [];
+let selectedReportId = null;
+let reportsTab = "pending"; // pending | hold | done
+let selectedChatRoomId = null;
+let anonymousChatAuthReady = null;
+let staticControlsWired = false;
+
+function initConsole() {
+  teardownConsole();
+  wireStaticControls();
+  watchRooms();
+  watchReports();
+  watchOperationLogs();
+  watchBannedWords();
+}
+
+function wireStaticControls() {
+  if (staticControlsWired) return;
+  staticControlsWired = true;
+
+  document.querySelectorAll("[data-report-tab]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      reportsTab = btn.getAttribute("data-report-tab");
+      document.querySelectorAll("[data-report-tab]").forEach((b) => {
+        b.classList.toggle("is-active", b === btn);
+      });
+      renderReportsTable();
+    });
+  });
+
+  const wordForm = document.getElementById("admin-word-form");
+  wordForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const expression = document.getElementById("admin-word-expression").value.trim();
+    const category = document.getElementById("admin-word-category").value;
+    if (!expression) return;
+    setBusy(wordForm, true);
+    try {
+      await callManageBannedWord({ op: "add", expression, category });
+      wordForm.reset();
+    } catch (error) {
+      alert("금칙어 추가 실패: " + describeError(error));
+    } finally {
+      setBusy(wordForm, false);
+    }
+  });
+
+  const restrictionForm = document.getElementById("admin-restriction-form");
+  restrictionForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    await submitRestriction(168, restrictionForm);
+  });
+  document.getElementById("admin-restriction-24h")?.addEventListener("click", async () => {
+    await submitRestriction(24, restrictionForm);
+  });
+  document.getElementById("admin-restriction-7d")?.addEventListener("click", async () => {
+    await submitRestriction(168, restrictionForm);
+  });
+
+  document.getElementById("admin-chat-refresh")?.addEventListener("click", () => {
+    if (selectedChatRoomId) loadChatMessages(selectedChatRoomId);
+  });
+
+  document.getElementById("admin-chat-form")?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    await submitAdminChatMessage();
+  });
+}
+
+async function submitRestriction(durationHours, formEl) {
+  const targetUserId = document.getElementById("admin-restriction-target").value.trim();
+  const reason = document.getElementById("admin-restriction-reason").value;
+  const memo = document.getElementById("admin-restriction-memo").value.trim();
+  if (!targetUserId) {
+    alert("대상 사용자 ID를 입력하세요.");
+    return;
+  }
+  setBusy(formEl, true);
+  try {
+    await callApplyUserRestriction({ targetUserId, reason, memo, durationHours });
+    alert(`${targetUserId} 사용자에게 ${durationHours}시간 제한을 적용했습니다.`);
+    document.getElementById("admin-restriction-target").value = "";
+    document.getElementById("admin-restriction-memo").value = "";
+  } catch (error) {
+    alert("사용자 제한 적용 실패: " + describeError(error));
+  } finally {
+    setBusy(formEl, false);
+  }
+}
+
+function setBusy(container, busy) {
+  if (!container) return;
+  container.querySelectorAll("button, input, select, textarea").forEach((el) => {
+    el.disabled = busy;
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Rooms (+ 활성 방 지표, 푸시 후보 패널)
+// ---------------------------------------------------------------------------
+
+function watchRooms() {
+  const q = query(collection(db, "rooms"), orderBy("lastActiveAt", "desc"), limit(ROOMS_LIST_LIMIT));
+  const unsub = onSnapshot(
+    q,
+    (snap) => {
+      latestRooms = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      renderRoomsPanel();
+      renderPushPanel();
+      renderMetrics();
+    },
+    (error) => {
+      console.error("rooms 구독 실패", error);
+      renderListError("admin-rooms-list", error);
+    }
+  );
+  activeUnsubscribers.push(unsub);
+}
+
+function renderRoomsPanel() {
+  const list = document.getElementById("admin-rooms-list");
+  if (!list) return;
+  if (latestRooms.length === 0) {
+    list.innerHTML = "<li><span>표시할 채팅방이 없습니다.</span></li>";
+    return;
+  }
+  list.innerHTML = latestRooms
+    .map((room) => {
+      const stateLabel = { active: "active", archived: "archived", closed: "closed", deleted: "deleted" }[room.state] || room.state || "unknown";
+      const pushLabel = room.pushBlockedByOperator ? "푸시 차단" : room.pushAllowed === false ? "푸시 후보" : "푸시 허용";
+      return `<li>
+        <strong>${escapeHtml(room.keywordText || room.roomId || room.id)}</strong>
+        <span>${stateLabel} · 참여 ${room.participantCount ?? 0}명 · ${pushLabel}</span>
+        <div class="action-row admin-inline-actions">
+          <button type="button" class="small-button secondary-small" data-chat-open="${room.id}">입장</button>
+        </div>
+      </li>`;
+    })
+    .join("");
+
+  list.querySelectorAll("[data-chat-open]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openAdminChatRoom(btn.getAttribute("data-chat-open"));
+    });
+  });
+}
+
+function renderMetrics() {
+  const activeRooms = latestRooms.filter((r) => r.state === "active");
+  setText("admin-metric-active-rooms", String(activeRooms.length));
+
+  const messageSum = activeRooms.reduce((sum, r) => sum + (typeof r.messageCount === "number" ? r.messageCount : 0), 0);
+  setText("admin-metric-messages", messageSum.toLocaleString("ko-KR"));
+
+  const pushCandidates = activeRooms.filter(
+    (r) => (r.participantCount ?? 0) >= 10 && r.pushAllowed !== false && !r.pushBlockedByOperator
+  );
+  setText("admin-metric-push-candidates", String(pushCandidates.length));
+}
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+function renderPushPanel() {
+  const list = document.getElementById("admin-push-list");
+  if (!list) return;
+  const activeRooms = latestRooms.filter((r) => r.state === "active");
+  const candidates = activeRooms.filter((r) => (r.participantCount ?? 0) >= 10);
+
+  if (candidates.length === 0) {
+    list.innerHTML = "<li><span>참여자 10명 이상인 활성 방이 없습니다.</span></li>";
+    return;
+  }
+
+  list.innerHTML = candidates
+    .map((room) => {
+      const blocked = room.pushBlockedByOperator === true;
+      const statusLabel = blocked ? "차단됨" : room.pushAllowed === false ? "허용 안 됨" : "허용";
+      return `<li>
+        <strong>${escapeHtml(room.keywordText || room.id)}</strong>
+        <span>참여 ${room.participantCount ?? 0}명 · 상태: ${statusLabel}</span>
+        <div class="action-row admin-inline-actions">
+          <button type="button" class="small-button ${blocked ? "" : "secondary-small"}" data-push-toggle="${room.id}" data-push-next="${blocked}">
+            ${blocked ? "차단 해제" : "방 푸시 차단"}
+          </button>
+        </div>
+      </li>`;
+    })
+    .join("");
+
+  list.querySelectorAll("[data-push-toggle]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const roomId = btn.getAttribute("data-push-toggle");
+      const nextAllowed = btn.getAttribute("data-push-next") === "true";
+      const reason = nextAllowed ? "" : prompt("푸시 차단 사유를 입력하세요 (선택)") || "";
+      btn.disabled = true;
+      try {
+        await callApplyAdminAction({
+          actionType: "set_room_push_policy",
+          roomId,
+          pushAllowed: nextAllowed,
+          reason,
+        });
+      } catch (error) {
+        alert("푸시 정책 변경 실패: " + describeError(error));
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Anonymous chat participation
+// ---------------------------------------------------------------------------
+
+async function ensureAnonymousChatAuth() {
+  if (chatAuth.currentUser) {
+    return chatAuth.currentUser.uid;
+  }
+  if (!anonymousChatAuthReady) {
+    anonymousChatAuthReady = signInAnonymously(chatAuth)
+      .then((result) => {
+        anonymousChatAuthReady = null;
+        return result.user.uid;
+      })
+      .catch((error) => {
+        anonymousChatAuthReady = null;
+        throw error;
+      });
+  }
+  return anonymousChatAuthReady;
+}
+
+function openAdminChatRoom(roomId) {
+  if (!roomId) return;
+  selectedChatRoomId = roomId;
+  const room = latestRooms.find((candidate) => candidate.id === roomId);
+  const empty = document.getElementById("admin-chat-room-empty");
+  const panel = document.getElementById("admin-chat-room");
+  if (empty) empty.hidden = true;
+  if (panel) panel.hidden = false;
+
+  setText("admin-chat-status", "익명 세션 준비 중");
+  setText("admin-chat-room-title", room?.keywordText || roomId);
+  setText(
+    "admin-chat-room-meta",
+    `${roomStateLabel(room)} · 참여 ${room?.participantCount ?? 0}명 · 메시지 ${room?.messageCount ?? 0}개`
+  );
+  setText("admin-chat-nickname-preview", `다음 닉네임 예시: ${makeRandomNickname()}`);
+  loadChatMessages(roomId);
+  document.getElementById("admin-chat")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+async function loadChatMessages(roomId) {
+  const messagesEl = document.getElementById("admin-chat-messages");
+  if (!messagesEl) return;
+  messagesEl.innerHTML = '<p class="muted-copy">메시지를 불러오는 중입니다.</p>';
+  try {
+    const uid = await ensureAnonymousChatAuth();
+    setText("admin-chat-status", `익명 참여자 ${shortenId(uid)}`);
+    const snap = await getDocs(
+      query(collection(db, "rooms", roomId, "messages"), orderBy("createdAt", "desc"), limit(80))
+    );
+    const messages = snap.docs
+      .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+      .reverse();
+    renderChatMessages(messages, uid);
+  } catch (error) {
+    console.error("채팅 메시지 조회 실패", error);
+    messagesEl.innerHTML = `<p class="muted-copy">${escapeHtml("메시지를 불러오지 못했습니다: " + describeError(error))}</p>`;
+    setText("admin-chat-status", "조회 실패");
+  }
+}
+
+function renderChatMessages(messages, currentAnonymousUid) {
+  const messagesEl = document.getElementById("admin-chat-messages");
+  if (!messagesEl) return;
+  if (messages.length === 0) {
+    messagesEl.innerHTML = '<p class="muted-copy">아직 메시지가 없습니다.</p>';
+    return;
+  }
+  messagesEl.innerHTML = messages
+    .map((message) => {
+      const mine = message.anonymousUserId === currentAnonymousUid;
+      const hidden = message.hidden === true;
+      const body = hidden ? "운영정책에 따라 숨겨진 메시지입니다" : message.text || message.body || "";
+      return `<article class="admin-chat-message ${mine ? "is-mine" : ""} ${hidden ? "is-hidden" : ""}">
+        <div class="admin-chat-message-meta">
+          <strong>${escapeHtml(message.nicknameSnapshot || message.nickname || "익명")}</strong>
+          <time>${formatTimestamp(message.createdAt, true)}</time>
+        </div>
+        <p>${escapeHtml(body)}</p>
+      </article>`;
+    })
+    .join("");
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+async function submitAdminChatMessage() {
+  const form = document.getElementById("admin-chat-form");
+  const input = document.getElementById("admin-chat-input");
+  const body = input?.value.trim() || "";
+  if (!selectedChatRoomId || !body) return;
+
+  const nickname = makeRandomNickname();
+  setBusy(form, true);
+  setText("admin-chat-status", `${nickname} 전송 중`);
+  try {
+    await ensureAnonymousChatAuth();
+    await callSendAnonymousMessage({
+      roomId: selectedChatRoomId,
+      body,
+      nickname,
+    });
+    input.value = "";
+    setText("admin-chat-nickname-preview", `마지막 전송 닉네임: ${nickname} · 다음 전송 때 다시 바뀝니다.`);
+    await loadChatMessages(selectedChatRoomId);
+  } catch (error) {
+    console.error("익명 메시지 전송 실패", error);
+    alert("메시지 전송 실패: " + describeError(error));
+    setText("admin-chat-status", "전송 실패");
+  } finally {
+    setBusy(form, false);
+  }
+}
+
+function makeRandomNickname() {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+function roomStateLabel(room) {
+  if (!room) return "상태 확인 중";
+  return { active: "대화 중", archived: "보관됨", closed: "종료됨", deleted: "삭제됨" }[room.state] || room.state || "상태 없음";
+}
+
+// ---------------------------------------------------------------------------
+// Reports (목록 + 상세 + 액션)
+// ---------------------------------------------------------------------------
+
+function watchReports() {
+  const q = query(collection(db, "reports"), orderBy("createdAt", "desc"), limit(REPORTS_LIST_LIMIT));
+  const unsub = onSnapshot(
+    q,
+    (snap) => {
+      latestReports = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      renderReportsTable();
+      refreshPendingCount();
+    },
+    (error) => {
+      console.error("reports 구독 실패", error);
+      renderListError("admin-reports-body", error, true);
+    }
+  );
+  activeUnsubscribers.push(unsub);
+}
+
+async function refreshPendingCount() {
+  try {
+    const snap = await getCountFromServer(query(collection(db, "reports"), where("status", "==", "pending")));
+    setText("admin-metric-pending-reports", String(snap.data().count));
+  } catch (error) {
+    console.error("미처리 신고 카운트 실패", error);
+  }
+}
+
+function reportMatchesTab(report) {
+  const status = report.status || "pending";
+  if (reportsTab === "pending") return status === "pending";
+  if (reportsTab === "hold") return status === "hold";
+  return status === "resolved" || status === "rejected";
+}
+
+function statusPillFor(status) {
+  if (status === "pending") return '<span class="status-pill warning">미처리</span>';
+  if (status === "hold") return '<span class="status-pill muted">보류</span>';
+  if (status === "resolved") return '<span class="status-pill">처리 완료</span>';
+  if (status === "rejected") return '<span class="status-pill muted">기각</span>';
+  return `<span class="status-pill muted">${escapeHtml(status || "-")}</span>`;
+}
+
+function renderReportsTable() {
+  const body = document.getElementById("admin-reports-body");
+  if (!body) return;
+  const rows = latestReports.filter(reportMatchesTab);
+
+  if (rows.length === 0) {
+    body.innerHTML = '<tr><td colspan="7">해당 상태의 신고가 없습니다.</td></tr>';
+    return;
+  }
+
+  body.innerHTML = rows
+    .map((report) => {
+      const snapshotText = report.messageSnapshot?.text || "";
+      return `<tr data-report-row="${report.id}">
+        <td>${escapeHtml(report.reason || "-")}</td>
+        <td>${escapeHtml(report.roomId || "-")}</td>
+        <td>${escapeHtml(report.targetAnonymousId || "-")}</td>
+        <td>${escapeHtml(truncate(snapshotText, 24))}</td>
+        <td>${report.reportCount ?? 1}</td>
+        <td>${statusPillFor(report.status)}</td>
+        <td><button type="button" class="small-button" data-report-open="${report.id}">${report.id === selectedReportId ? "선택됨" : "검토"}</button></td>
+      </tr>`;
+    })
+    .join("");
+
+  body.querySelectorAll("[data-report-open]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      selectedReportId = btn.getAttribute("data-report-open");
+      renderReportsTable();
+      renderReportDetail();
+    });
+  });
+}
+
+async function renderReportDetail() {
+  const panel = document.getElementById("admin-report-detail-body");
+  const heading = document.getElementById("admin-report-detail-status");
+  if (!panel) return;
+
+  const report = latestReports.find((r) => r.id === selectedReportId);
+  if (!report) {
+    panel.innerHTML = '<p class="muted-copy">왼쪽 목록에서 신고를 선택하면 상세 내용이 표시됩니다.</p>';
+    if (heading) heading.textContent = "";
+    return;
+  }
+
+  if (heading) heading.innerHTML = statusPillFor(report.status);
+
+  const createdAt = formatTimestamp(report.messageSnapshot?.createdAt);
+
+  panel.innerHTML = `
+    <div class="detail-grid">
+      <article class="detail-card">
+        <h3>신고 대상 메시지</h3>
+        <dl class="detail-list">
+          <div><dt>메시지 ID</dt><dd>${escapeHtml(report.messageId || "-")}</dd></div>
+          <div><dt>채팅방</dt><dd>${escapeHtml(report.messageSnapshot?.roomId || report.roomId || "-")}</dd></div>
+          <div><dt>작성 시각</dt><dd>${createdAt}</dd></div>
+          <div><dt>신고 당시 스냅샷</dt><dd>${escapeHtml(report.messageSnapshot?.text || "-")}</dd></div>
+        </dl>
+      </article>
+      <article class="detail-card">
+        <h3>대상 사용자</h3>
+        <dl class="detail-list">
+          <div><dt>익명 사용자 ID</dt><dd>${escapeHtml(report.targetAnonymousId || "-")}</dd></div>
+          <div><dt>현재 닉네임</dt><dd>${escapeHtml(report.messageSnapshot?.nickname || "-")}</dd></div>
+          <div><dt>받은 신고</dt><dd id="admin-report-target-report-count">불러오는 중…</dd></div>
+          <div><dt>이전 조치</dt><dd id="admin-report-target-restrictions">불러오는 중…</dd></div>
+        </dl>
+      </article>
+    </div>
+    <div class="detail-grid">
+      <article class="detail-card">
+        <h3>처리 액션</h3>
+        <div class="action-row wrap-actions">
+          <button type="button" class="small-button" data-report-action="hide">메시지 숨김</button>
+          <button type="button" class="small-button" data-report-action="hide_restrict">숨김 + 24시간 제한</button>
+          <button type="button" class="small-button secondary-small" data-report-action="reject">기각</button>
+          <button type="button" class="small-button secondary-small" data-report-action="hold">보류</button>
+        </div>
+        <p class="muted-copy">기각, 보류, 처리 완료 상태는 운영자 콘솔과 운영 로그에만 남기며 이용자에게 진행상황으로 표시하지 않습니다.</p>
+      </article>
+      <article class="detail-card">
+        <h3>운영자 메모</h3>
+        <textarea class="admin-textarea" id="admin-report-memo" placeholder="판단 근거와 처리 내용을 남깁니다."></textarea>
+      </article>
+    </div>
+  `;
+
+  panel.querySelectorAll("[data-report-action]").forEach((btn) => {
+    btn.addEventListener("click", () => handleReportAction(report, btn.getAttribute("data-report-action")));
+  });
+
+  if (report.targetAnonymousId) {
+    getDocs(collection(db, "users", report.targetAnonymousId, "restrictions"))
+      .then((snap) => {
+        const el = document.getElementById("admin-report-target-restrictions");
+        if (!el) return;
+        el.textContent = snap.empty ? "이전 제한 이력 없음" : `${snap.size}건`;
+      })
+      .catch((error) => {
+        console.error("제한 이력 조회 실패", error);
+        const el = document.getElementById("admin-report-target-restrictions");
+        if (el) el.textContent = "조회 실패";
+      });
+
+    getCountFromServer(query(collection(db, "reports"), where("targetAnonymousId", "==", report.targetAnonymousId)))
+      .then((snap) => {
+        const el = document.getElementById("admin-report-target-report-count");
+        if (el) el.textContent = `총 ${snap.data().count}건`;
+      })
+      .catch((error) => {
+        console.error("누적 신고 수 조회 실패", error);
+        const el = document.getElementById("admin-report-target-report-count");
+        if (el) el.textContent = "조회 실패";
+      });
+  }
+}
+
+async function handleReportAction(report, action) {
+  const memo = document.getElementById("admin-report-memo")?.value.trim() || "";
+  const buttons = document.querySelectorAll(`[data-report-action]`);
+  buttons.forEach((b) => (b.disabled = true));
+
+  try {
+    if (action === "hide" || action === "hide_restrict") {
+      await callApplyAdminAction({
+        actionType: "hide_message",
+        roomId: report.roomId,
+        messageId: report.messageId,
+        reason: report.reason || "",
+      });
+      if (action === "hide_restrict" && report.targetAnonymousId) {
+        await callApplyUserRestriction({
+          targetUserId: report.targetAnonymousId,
+          reason: report.reason || "",
+          memo,
+          durationHours: 24,
+        });
+      }
+      await callApplyAdminAction({
+        actionType: "update_report_status",
+        reportId: report.id,
+        status: "resolved",
+        operatorAction: action === "hide_restrict" ? "hidden_and_restricted" : "hidden",
+        memo,
+      });
+    } else if (action === "reject") {
+      await callApplyAdminAction({
+        actionType: "update_report_status",
+        reportId: report.id,
+        status: "rejected",
+        operatorAction: "dismissed",
+        memo,
+      });
+    } else if (action === "hold") {
+      await callApplyAdminAction({
+        actionType: "update_report_status",
+        reportId: report.id,
+        status: "hold",
+        operatorAction: "",
+        memo,
+      });
+    }
+  } catch (error) {
+    alert("처리 실패: " + describeError(error));
+  } finally {
+    buttons.forEach((b) => (b.disabled = false));
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Operation log
+// ---------------------------------------------------------------------------
+
+function watchOperationLogs() {
+  const q = query(collection(db, "operationLogs"), orderBy("createdAt", "desc"), limit(LOGS_LIST_LIMIT));
+  const unsub = onSnapshot(
+    q,
+    (snap) => {
+      const list = document.getElementById("admin-log-list");
+      if (!list) return;
+      if (snap.empty) {
+        list.innerHTML = "<li><span>운영 로그가 없습니다.</span></li>";
+        return;
+      }
+      list.innerHTML = snap.docs
+        .map((d) => {
+          const log = d.data();
+          const time = formatTimestamp(log.createdAt, true);
+          const summary = `${log.operatorId ? shortenId(log.operatorId) : "operator"} · ${actionLabel(log.actionType)} · ${escapeHtml(log.reason || log.memo || "-")}`;
+          return `<li><time>${time}</time><span>${summary}</span></li>`;
+        })
+        .join("");
+    },
+    (error) => {
+      console.error("operationLogs 구독 실패", error);
+      renderListError("admin-log-list", error);
+    }
+  );
+  activeUnsubscribers.push(unsub);
+}
+
+function actionLabel(actionType) {
+  const map = {
+    hide_message: "메시지 숨김",
+    unhide_message: "메시지 숨김 해제",
+    close_room: "방 종료",
+    reopen_room: "방 재개",
+    set_room_push_policy: "푸시 정책 변경",
+    update_report_status: "신고 상태 변경",
+    add_banned_word: "금칙어 추가",
+    remove_banned_word: "금칙어 삭제",
+    apply_user_restriction: "사용자 제한",
+  };
+  return map[actionType] || actionType || "-";
+}
+
+// ---------------------------------------------------------------------------
+// Banned words
+// ---------------------------------------------------------------------------
+
+function watchBannedWords() {
+  const q = query(collection(db, "bannedWords"), orderBy("createdAt", "desc"));
+  const unsub = onSnapshot(
+    q,
+    (snap) => {
+      const list = document.getElementById("admin-word-list");
+      if (!list) return;
+      if (snap.empty) {
+        list.innerHTML = "<li><span>등록된 금칙어가 없습니다.</span></li>";
+        return;
+      }
+      list.innerHTML = snap.docs
+        .map((d) => {
+          const word = d.data();
+          return `<li>
+            <strong>${escapeHtml(word.expression || "-")}</strong>
+            <span>${escapeHtml(word.category || "-")}</span>
+            <div class="action-row admin-inline-actions">
+              <button type="button" class="small-button secondary-small" data-word-remove="${d.id}">삭제</button>
+            </div>
+          </li>`;
+        })
+        .join("");
+
+      list.querySelectorAll("[data-word-remove]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          if (!confirm("이 금칙어를 삭제할까요?")) return;
+          btn.disabled = true;
+          try {
+            await callManageBannedWord({ op: "remove", wordId: btn.getAttribute("data-word-remove") });
+          } catch (error) {
+            alert("금칙어 삭제 실패: " + describeError(error));
+            btn.disabled = false;
+          }
+        });
+      });
+    },
+    (error) => {
+      console.error("bannedWords 구독 실패", error);
+      renderListError("admin-word-list", error);
+    }
+  );
+  activeUnsubscribers.push(unsub);
+}
+
+// ---------------------------------------------------------------------------
+// 유틸리티
+// ---------------------------------------------------------------------------
+
+function renderListError(elementId, error, isTableBody) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  const message = "데이터를 불러오지 못했습니다: " + describeError(error);
+  el.innerHTML = isTableBody ? `<tr><td colspan="7">${escapeHtml(message)}</td></tr>` : `<li><span>${escapeHtml(message)}</span></li>`;
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  }[ch]));
+}
+
+function truncate(value, max) {
+  const str = String(value ?? "");
+  return str.length > max ? str.slice(0, max) + "…" : str;
+}
+
+function shortenId(id) {
+  return String(id ?? "").slice(0, 8);
+}
+
+function formatTimestamp(ts, timeOnly) {
+  if (!ts) return "-";
+  const date = typeof ts.toDate === "function" ? ts.toDate() : new Date(ts);
+  if (Number.isNaN(date.getTime())) return "-";
+  if (timeOnly) {
+    return date.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit", hour12: false });
+  }
+  return date.toLocaleString("ko-KR", { hour12: false });
+}

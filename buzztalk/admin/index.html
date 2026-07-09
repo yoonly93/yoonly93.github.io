@@ -4,352 +4,251 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>운영자 화면 - 실검톡</title>
-  <meta name="description" content="실검톡 신고, 채팅방, 금칙어 운영을 위한 관리자 화면입니다.">
+  <meta name="description" content="실검톡 신고, 채팅방, 푸시, 금칙어 운영을 위한 관리자 콘솔입니다.">
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" href="../assets/styles.css">
-  <style>
-    .admin-auth { min-height: 72vh; display: grid; place-items: center; padding: 32px; }
-    .admin-auth-card { width: min(480px, 100%); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 28px; box-shadow: var(--shadow-card); }
-    .admin-auth-card h1 { margin: 0 0 8px; font-size: 26px; }
-    .admin-auth-card p { color: var(--secondary); margin: 0 0 20px; }
-    .admin-topbar { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 20px; }
-    .admin-hidden { display: none !important; }
-    .admin-status { color: var(--secondary); font-size: 14px; }
-    .admin-data-list { display: grid; gap: 10px; }
-    .admin-data-item { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; background: var(--surface); }
-    .admin-data-item strong { display: block; }
-    .admin-data-item span, .admin-data-item small { color: var(--secondary); }
-    .admin-form-row { display: grid; gap: 8px; margin-top: 12px; }
-    .admin-form-row input, .admin-form-row select, .admin-form-row textarea { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font: inherit; background: var(--surface); }
-    .admin-detail { position: sticky; top: 16px; }
-    .danger-small { background: var(--accent); color: var(--surface); }
-    .admin-muted { color: var(--secondary); }
-  </style>
 </head>
 <body class="admin-body">
-  <main id="authView" class="admin-auth">
-    <section class="admin-auth-card">
-      <p class="eyebrow">BuzzTalk Admin</p>
-      <h1>운영자 로그인</h1>
-      <p>승인된 Google 계정에 admin 또는 operator 권한이 있어야 콘솔에 들어갈 수 있습니다.</p>
-      <button id="loginButton" class="small-button" type="button">Google 계정으로 로그인</button>
-      <p id="authMessage" class="admin-status"></p>
-    </section>
-  </main>
+  <header class="site-header admin-header">
+    <div class="wrap nav">
+      <a class="brand" href="/buzztalk/"><strong>실검톡 운영</strong><span>BuzzTalk Admin</span></a>
+      <nav class="nav-links" aria-label="운영 링크">
+        <a href="#reports">신고</a>
+        <a href="#rooms">채팅방</a>
+        <a href="#push">푸시</a>
+        <a href="#logs">운영 로그</a>
+      </nav>
+    </div>
+  </header>
 
-  <main id="adminView" class="admin-shell admin-hidden">
-    <aside class="admin-sidebar" aria-label="운영 메뉴">
-      <a href="#dashboard">대시보드</a>
-      <a href="#reports">신고 관리</a>
-      <a href="#rooms">채팅방 관리</a>
-      <a href="#words">금칙어</a>
-      <a href="#logs">운영 로그</a>
-    </aside>
+  <main>
+    <div id="admin-screen-loading" class="admin-auth-screen">
+      <p class="muted-copy">확인 중입니다…</p>
+    </div>
 
-    <section class="admin-main">
-      <div class="admin-topbar">
-        <div>
-          <p class="eyebrow">실검톡 운영 콘솔</p>
-          <h1 class="page-title">신고와 채팅방 운영</h1>
-          <p id="operatorInfo" class="admin-status"></p>
-        </div>
-        <button id="logoutButton" class="small-button secondary-small" type="button">로그아웃</button>
+    <div id="admin-screen-login" class="admin-auth-screen" hidden>
+      <div class="admin-auth-card-wrap">
+        <article class="admin-panel admin-auth-card">
+          <p class="eyebrow">Admin Login</p>
+          <h1>운영자 로그인</h1>
+          <p class="muted-copy">신고, 채팅방, 푸시, 금칙어 운영은 등록된 운영자 계정으로만 접근할 수 있습니다.</p>
+          <button type="button" id="admin-login-button" class="small-button">Google 계정으로 로그인</button>
+          <p id="admin-login-error" class="admin-auth-error" role="alert"></p>
+        </article>
       </div>
+    </div>
 
-      <section class="metric-grid" id="dashboard" aria-label="운영 지표">
-        <article class="metric-card"><span>미처리 신고</span><strong id="pendingReportCount">0</strong><small>진행상황은 이용자에게 노출하지 않음</small></article>
-        <article class="metric-card"><span>활성 방</span><strong id="activeRoomCount">0</strong><small>실시간 검색어 Top 10 기준</small></article>
-        <article class="metric-card"><span>금칙어</span><strong id="bannedWordCount">0</strong><small>서버 관리 목록</small></article>
-        <article class="metric-card"><span>운영 로그</span><strong id="operationLogCount">0</strong><small>최근 50개 기준</small></article>
-      </section>
-
-      <section class="admin-grid">
-        <article class="admin-panel" id="reports">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">Reports</p>
-              <h2>신고 목록</h2>
-            </div>
-            <span id="reportStatus" class="status-pill">대기 중</span>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>상태</th><th>사유</th><th>대상 사용자</th><th>메시지 일부</th><th>액션</th></tr>
-              </thead>
-              <tbody id="reportRows"></tbody>
-            </table>
-          </div>
+    <div id="admin-screen-forbidden" class="admin-auth-screen" hidden>
+      <div class="admin-auth-card-wrap">
+        <article class="admin-panel admin-auth-card">
+          <p class="eyebrow">Access Denied</p>
+          <h1>권한이 없습니다</h1>
+          <p class="muted-copy"><strong id="admin-forbidden-email"></strong> 계정에는 운영자 권한이 없습니다. 운영자 권한이 필요하면 관리자에게 admin 또는 operator 클레임 부여를 요청하세요.</p>
+          <button type="button" class="small-button secondary-small" data-admin-signout>다른 계정으로 로그인</button>
         </article>
+      </div>
+    </div>
 
-        <article class="admin-panel admin-detail" id="reportDetail">
-          <div class="panel-heading">
+    <div id="admin-screen-console" hidden>
+      <div class="admin-shell">
+        <aside class="admin-sidebar" aria-label="운영 메뉴">
+          <a href="#dashboard">대시보드</a>
+          <a href="#reports">신고 관리</a>
+          <a href="#rooms">채팅방 관리</a>
+          <a href="#users">사용자 제한</a>
+          <a href="#words">금칙어</a>
+          <a href="#push">푸시 관리</a>
+          <a href="#logs">운영 로그</a>
+        </aside>
+
+        <section class="admin-main">
+          <div class="admin-title" id="dashboard">
             <div>
-              <p class="eyebrow">Report Detail</p>
-              <h2>신고 상세</h2>
+              <p class="eyebrow">운영 콘솔</p>
+              <h1>신고와 채팅방을 먼저 처리하는 관리자 화면</h1>
             </div>
-          </div>
-          <div id="reportDetailBody" class="admin-data-list">
-            <p class="admin-muted">신고를 선택하세요.</p>
-          </div>
-        </article>
-      </section>
-
-      <section class="admin-grid">
-        <article class="admin-panel" id="rooms">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">Rooms</p>
-              <h2>채팅방 관리</h2>
+            <div class="admin-account">
+              <span id="admin-identity" class="status-pill"></span>
+              <button type="button" class="small-button secondary-small" data-admin-signout>로그아웃</button>
             </div>
           </div>
-          <div id="roomList" class="admin-data-list"></div>
-        </article>
 
-        <article class="admin-panel" id="words">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">Banned Words</p>
-              <h2>금칙어 관리</h2>
+          <section class="metric-grid" aria-label="운영 지표">
+            <article class="metric-card"><span>미처리 신고</span><strong id="admin-metric-pending-reports">–</strong><small>동일 메시지 신고 우선</small></article>
+            <article class="metric-card"><span>활성 방</span><strong id="admin-metric-active-rooms">–</strong><small>실시간 검색어 Top 10 기준</small></article>
+            <article class="metric-card"><span>활성 방 메시지 합계</span><strong id="admin-metric-messages">–</strong><small>원문은 분석 이벤트에 전송 금지</small></article>
+            <article class="metric-card"><span>푸시 후보</span><strong id="admin-metric-push-candidates">–</strong><small>참여자 10명 이상</small></article>
+          </section>
+
+          <section class="admin-panel" id="reports">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Reports</p>
+                <h2>신고 목록</h2>
+              </div>
+              <div class="segmented">
+                <button type="button" data-report-tab="pending" class="is-active">미처리</button>
+                <button type="button" data-report-tab="hold">보류</button>
+                <button type="button" data-report-tab="done">처리 완료</button>
+              </div>
             </div>
-          </div>
-          <div class="admin-form-row">
-            <input id="wordExpression" type="text" placeholder="금칙어 또는 패턴">
-            <select id="wordCategory">
-              <option value="욕설">욕설</option>
-              <option value="혐오·차별">혐오·차별</option>
-              <option value="개인정보">개인정보</option>
-              <option value="광고·스팸">광고·스팸</option>
-              <option value="기타">기타</option>
-            </select>
-            <button id="addWordButton" class="small-button" type="button">추가</button>
-          </div>
-          <div id="wordList" class="admin-data-list" style="margin-top: 16px;"></div>
-        </article>
-      </section>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>사유</th><th>채팅방</th><th>대상 사용자</th><th>메시지 일부</th><th>신고 수</th><th>상태</th><th>액션</th></tr>
+                </thead>
+                <tbody id="admin-reports-body">
+                  <tr><td colspan="7">불러오는 중…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-      <section class="admin-panel" id="logs">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Audit</p>
-            <h2>운영 로그</h2>
-          </div>
-        </div>
-        <ul id="logList" class="timeline"></ul>
-      </section>
-    </section>
+          <section class="admin-panel" id="report-detail">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Report Detail</p>
+                <h2>신고 상세</h2>
+              </div>
+              <span id="admin-report-detail-status"></span>
+            </div>
+            <div id="admin-report-detail-body">
+              <p class="muted-copy">왼쪽 목록에서 신고를 선택하면 상세 내용이 표시됩니다.</p>
+            </div>
+          </section>
+
+          <section class="admin-grid">
+            <article class="admin-panel" id="rooms">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Rooms</p>
+                  <h2>채팅방 상태</h2>
+                </div>
+              </div>
+              <ul class="admin-list" id="admin-rooms-list">
+                <li><span>불러오는 중…</span></li>
+              </ul>
+            </article>
+
+            <article class="admin-panel" id="push">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Push</p>
+                  <h2>푸시 후보</h2>
+                </div>
+              </div>
+              <p class="muted-copy">기준: 활성 방, 참여자 10명 이상. 사망·재난·성범죄·자해·중대 범죄 피해 등 민감 키워드는 발송 시점에 자동 제외됩니다. 문구: {검색어}에 대한 대화가 뜨거워요🔥</p>
+              <ul class="admin-list" id="admin-push-list">
+                <li><span>불러오는 중…</span></li>
+              </ul>
+            </article>
+          </section>
+
+          <section class="admin-panel" id="admin-chat">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Anonymous Chat</p>
+                <h2>익명 채팅 참여</h2>
+              </div>
+              <span id="admin-chat-status" class="status-pill muted">방을 선택하세요</span>
+            </div>
+            <div id="admin-chat-room-empty" class="admin-chat-empty">
+              <p class="muted-copy">채팅방 상태 목록에서 입장 버튼을 누르면 최근 대화와 입력창이 표시됩니다.</p>
+            </div>
+            <div id="admin-chat-room" class="admin-chat-room" hidden>
+              <div class="admin-chat-head">
+                <div>
+                  <strong id="admin-chat-room-title">-</strong>
+                  <span id="admin-chat-room-meta">-</span>
+                </div>
+                <button type="button" class="small-button secondary-small" id="admin-chat-refresh">새로고침</button>
+              </div>
+              <div class="admin-chat-messages" id="admin-chat-messages" aria-live="polite">
+                <p class="muted-copy">메시지를 불러오는 중입니다.</p>
+              </div>
+              <form class="admin-chat-form" id="admin-chat-form">
+                <textarea id="admin-chat-input" maxlength="500" placeholder="메시지를 입력하세요" required></textarea>
+                <div class="admin-chat-form-row">
+                  <span id="admin-chat-nickname-preview">전송 시 닉네임이 자동 생성됩니다.</span>
+                  <button type="submit" class="small-button">익명으로 전송</button>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <section class="admin-grid">
+            <article class="admin-panel" id="users">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Users</p>
+                  <h2>사용자 제한</h2>
+                </div>
+              </div>
+              <div class="action-stack" id="admin-restriction-form">
+                <label>대상 익명 사용자 ID
+                  <input type="text" id="admin-restriction-target" placeholder="예: 8f2a91c4b7e5d001...">
+                </label>
+                <label>제한 사유
+                  <select id="admin-restriction-reason">
+                    <option>반복 욕설·비방</option>
+                    <option>개인정보 노출</option>
+                    <option>광고·스팸</option>
+                    <option>기타</option>
+                  </select>
+                </label>
+                <label>운영자 메모
+                  <textarea id="admin-restriction-memo" placeholder="조치 근거를 남깁니다."></textarea>
+                </label>
+                <div class="action-row">
+                  <button type="button" class="small-button" id="admin-restriction-24h">24시간 제한</button>
+                  <button type="button" class="small-button secondary-small" id="admin-restriction-7d">7일 제한</button>
+                </div>
+              </div>
+            </article>
+
+            <article class="admin-panel" id="words">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Banned Words</p>
+                  <h2>금칙어 관리</h2>
+                </div>
+              </div>
+              <form class="action-stack" id="admin-word-form">
+                <label>표현
+                  <input type="text" id="admin-word-expression" placeholder="금칙어 또는 패턴" required>
+                </label>
+                <label>유형
+                  <select id="admin-word-category">
+                    <option>욕설</option>
+                    <option>혐오·차별</option>
+                    <option>개인정보</option>
+                    <option>광고·스팸</option>
+                  </select>
+                </label>
+                <button type="submit" class="small-button">추가</button>
+              </form>
+              <ul class="admin-list" id="admin-word-list">
+                <li><span>불러오는 중…</span></li>
+              </ul>
+            </article>
+          </section>
+
+          <section class="admin-panel" id="logs">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Audit</p>
+                <h2>운영 로그</h2>
+              </div>
+            </div>
+            <ul class="timeline" id="admin-log-list">
+              <li><span>불러오는 중…</span></li>
+            </ul>
+          </section>
+        </section>
+      </div>
+    </div>
   </main>
 
-  <script type="module">
-    import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import {GoogleAuthProvider, getAuth, getIdTokenResult, onAuthStateChanged, signInWithPopup, signOut} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import {collection, getFirestore, limit, onSnapshot, orderBy, query} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-    import {getFunctions, httpsCallable} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyD2xYw8zSB3jVILUFCZfdcmdQRSCfOtJgM",
-      authDomain: "buzztalk-yoonly93.firebaseapp.com",
-      projectId: "buzztalk-yoonly93",
-      storageBucket: "buzztalk-yoonly93.firebasestorage.app",
-      messagingSenderId: "648177060118",
-      appId: "1:648177060118:web:1a37d88eb667ba9b48a837",
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const functions = getFunctions(app, "asia-northeast3");
-    const provider = new GoogleAuthProvider();
-    const applyAdminAction = httpsCallable(functions, "applyAdminAction");
-    const manageBannedWord = httpsCallable(functions, "manageBannedWord");
-    const applyUserRestriction = httpsCallable(functions, "applyUserRestriction");
-
-    const authView = document.querySelector("#authView");
-    const adminView = document.querySelector("#adminView");
-    const authMessage = document.querySelector("#authMessage");
-    const operatorInfo = document.querySelector("#operatorInfo");
-    const reportRows = document.querySelector("#reportRows");
-    const reportDetailBody = document.querySelector("#reportDetailBody");
-    const roomList = document.querySelector("#roomList");
-    const wordList = document.querySelector("#wordList");
-    const logList = document.querySelector("#logList");
-    const state = {reports: [], rooms: [], words: [], logs: []};
-    const unsubs = [];
-
-    function text(value, fallback = "") {
-      return String(value ?? fallback);
-    }
-
-    function short(value, size = 12) {
-      const source = text(value, "");
-      return source.length > size ? `${source.slice(0, size)}...` : source;
-    }
-
-    function setMetric(id, value) {
-      document.querySelector(id).textContent = String(value);
-    }
-
-    function escapeHtml(value) {
-      return text(value).replace(/[&<>"']/g, (char) => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;",
-      }[char]));
-    }
-
-    function renderReports() {
-      const perUser = new Map();
-      state.reports.forEach((report) => {
-        const userId = text(report.targetAnonymousId, "unknown");
-        perUser.set(userId, (perUser.get(userId) ?? 0) + 1);
-      });
-      setMetric("#pendingReportCount", state.reports.filter((report) => text(report.status, "pending") === "pending").length);
-      document.querySelector("#reportStatus").textContent = `${state.reports.length}건`;
-      reportRows.innerHTML = state.reports.map((report) => {
-        const message = report.messageSnapshot?.text ?? "";
-        const userId = text(report.targetAnonymousId, "unknown");
-        return `<tr>
-          <td>${escapeHtml(text(report.status, "pending"))}</td>
-          <td>${escapeHtml(report.reason)}</td>
-          <td>${escapeHtml(short(userId, 10))} · 누적 ${perUser.get(userId) ?? 0}건</td>
-          <td>${escapeHtml(short(message, 36))}</td>
-          <td><button class="small-button secondary-small" data-report-id="${report.reportId}">열기</button></td>
-        </tr>`;
-      }).join("");
-      reportRows.querySelectorAll("button[data-report-id]").forEach((button) => {
-        button.addEventListener("click", () => selectReport(button.dataset.reportId));
-      });
-    }
-
-    function selectReport(reportId) {
-      const report = state.reports.find((item) => item.reportId === reportId);
-      if (!report) return;
-      const userReports = state.reports.filter((item) => item.targetAnonymousId === report.targetAnonymousId).length;
-      reportDetailBody.innerHTML = `
-        <div class="admin-data-item"><strong>대상 사용자</strong><span>${escapeHtml(report.targetAnonymousId)} · 로드된 신고 ${userReports}건</span></div>
-        <div class="admin-data-item"><strong>방 / 메시지</strong><span>${escapeHtml(report.roomId)} / ${escapeHtml(report.messageId)}</span></div>
-        <div class="admin-data-item"><strong>신고 사유</strong><span>${escapeHtml(report.reason)}</span></div>
-        <div class="admin-data-item"><strong>신고 당시 메시지</strong><span>${escapeHtml(report.messageSnapshot?.text ?? "")}</span></div>
-        <div class="admin-form-row">
-          <textarea id="operatorMemo" placeholder="운영자 메모"></textarea>
-          <button id="hideMessageButton" class="small-button" type="button">메시지 숨김</button>
-          <button id="restrict24Button" class="small-button" type="button">숨김 + 24시간 제한</button>
-          <button id="dismissReportButton" class="small-button secondary-small" type="button">기각</button>
-        </div>`;
-      document.querySelector("#hideMessageButton").addEventListener("click", () => hideMessage(report, false));
-      document.querySelector("#restrict24Button").addEventListener("click", () => hideMessage(report, true));
-      document.querySelector("#dismissReportButton").addEventListener("click", () => updateReport(report, "dismissed", "none"));
-    }
-
-    async function hideMessage(report, restrict) {
-      const memo = document.querySelector("#operatorMemo")?.value ?? "";
-      await applyAdminAction({actionType: "hide_message", roomId: report.roomId, messageId: report.messageId, reason: report.reason, memo});
-      await updateReport(report, "resolved", restrict ? "hide_message_and_restrict" : "hide_message");
-      if (restrict) {
-        await applyUserRestriction({targetUserId: report.targetAnonymousId, reason: report.reason, memo, durationHours: 24});
-      }
-    }
-
-    async function updateReport(report, status, operatorAction) {
-      const memo = document.querySelector("#operatorMemo")?.value ?? "";
-      await applyAdminAction({actionType: "update_report_status", reportId: report.reportId, status, operatorAction, reason: report.reason, memo});
-    }
-
-    function renderRooms() {
-      setMetric("#activeRoomCount", state.rooms.filter((room) => room.state === "active").length);
-      roomList.innerHTML = state.rooms.map((room) => `
-        <div class="admin-data-item">
-          <strong>${escapeHtml(room.rank ?? "-")}. ${escapeHtml(room.keywordText)}</strong>
-          <span>${escapeHtml(room.state)} · 참여 ${escapeHtml(room.participantCount ?? 0)}명 · 메시지 ${escapeHtml(room.messageCount ?? 0)}개 · 뉴스 ${escapeHtml((room.newsLinks ?? []).length)}개</span>
-          <div class="action-row wrap-actions" style="margin-top: 10px;">
-            <button class="small-button secondary-small" data-room-close="${room.roomId}">종료</button>
-            <button class="small-button secondary-small" data-room-open="${room.roomId}">다시 열기</button>
-            <button class="small-button secondary-small" data-room-push="${room.roomId}" data-push="${room.pushAllowed !== false ? "false" : "true"}">${room.pushAllowed !== false ? "푸시 금지" : "푸시 허용"}</button>
-          </div>
-        </div>`).join("");
-      roomList.querySelectorAll("[data-room-close]").forEach((button) => button.addEventListener("click", () => roomAction(button.dataset.roomClose, "close_room")));
-      roomList.querySelectorAll("[data-room-open]").forEach((button) => button.addEventListener("click", () => roomAction(button.dataset.roomOpen, "reopen_room")));
-      roomList.querySelectorAll("[data-room-push]").forEach((button) => button.addEventListener("click", () => roomAction(button.dataset.roomPush, "set_room_push_policy", button.dataset.push === "true")));
-    }
-
-    async function roomAction(roomId, actionType, pushAllowed) {
-      await applyAdminAction({actionType, roomId, pushAllowed, reason: "운영자 조치", memo: ""});
-    }
-
-    function renderWords() {
-      setMetric("#bannedWordCount", state.words.length);
-      wordList.innerHTML = state.words.map((word) => `
-        <div class="admin-data-item">
-          <strong>${escapeHtml(word.expression)}</strong>
-          <span>${escapeHtml(word.category)}</span>
-          <button class="small-button secondary-small" data-word-id="${word.wordId}" type="button">삭제</button>
-        </div>`).join("");
-      wordList.querySelectorAll("[data-word-id]").forEach((button) => button.addEventListener("click", async () => {
-        await manageBannedWord({op: "remove", wordId: button.dataset.wordId, reason: "운영자 삭제"});
-      }));
-    }
-
-    function renderLogs() {
-      setMetric("#operationLogCount", state.logs.length);
-      logList.innerHTML = state.logs.map((log) => `
-        <li><time>${escapeHtml(log.createdAt?.toDate?.().toLocaleString("ko-KR") ?? "")}</time><span>${escapeHtml(log.operatorId)} · ${escapeHtml(log.actionType)} · ${escapeHtml(log.reason ?? "")}</span></li>`).join("");
-    }
-
-    function listen(collectionName, target, renderer, sortField = "createdAt", direction = "desc") {
-      const ref = query(collection(db, collectionName), orderBy(sortField, direction), limit(50));
-      unsubs.push(onSnapshot(ref, (snapshot) => {
-        state[target] = snapshot.docs.map((doc) => ({...doc.data(), [`${target.slice(0, -1)}Id`]: doc.id}));
-        renderer();
-      }, (error) => {
-        authMessage.textContent = `${collectionName} 읽기 실패: ${error.message}`;
-      }));
-    }
-
-    function startConsole(user) {
-      authView.classList.add("admin-hidden");
-      adminView.classList.remove("admin-hidden");
-      operatorInfo.textContent = `${user.email} 계정으로 접속 중`;
-      listen("reports", "reports", renderReports);
-      listen("rooms", "rooms", renderRooms, "rank", "asc");
-      listen("bannedWords", "words", renderWords);
-      listen("operationLogs", "logs", renderLogs);
-    }
-
-    document.querySelector("#loginButton").addEventListener("click", async () => {
-      authMessage.textContent = "로그인 중입니다.";
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (error) {
-        authMessage.textContent = `로그인 실패: ${error.message}`;
-      }
-    });
-
-    document.querySelector("#logoutButton").addEventListener("click", () => {
-      unsubs.splice(0).forEach((unsub) => unsub());
-      signOut(auth);
-    });
-
-    document.querySelector("#addWordButton").addEventListener("click", async () => {
-      const expression = document.querySelector("#wordExpression").value.trim();
-      const category = document.querySelector("#wordCategory").value;
-      if (!expression) return;
-      await manageBannedWord({op: "add", expression, category, reason: "운영자 추가"});
-      document.querySelector("#wordExpression").value = "";
-    });
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        adminView.classList.add("admin-hidden");
-        authView.classList.remove("admin-hidden");
-        authMessage.textContent = "";
-        return;
-      }
-      const token = await getIdTokenResult(user, true);
-      if (token.claims.admin === true || token.claims.operator === true) {
-        startConsole(user);
-      } else {
-        authMessage.textContent = "승인되지 않은 계정입니다. 관리자 권한을 먼저 부여하세요.";
-        await signOut(auth);
-      }
-    });
-  </script>
+  <script type="module" src="./admin.js"></script>
 </body>
 </html>
