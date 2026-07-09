@@ -40,6 +40,7 @@ const ROOMS_LIST_LIMIT = 30;
 const REPORTS_LIST_LIMIT = 100;
 const LOGS_LIST_LIMIT = 20;
 const AUTH_CHECK_TIMEOUT_MS = 8000;
+const LOGIN_POPUP_TIMEOUT_MS = 20000;
 
 const app = initializeApp(firebaseConfig);
 const chatApp = initializeApp(firebaseConfig, "admin-anonymous-chat");
@@ -76,6 +77,13 @@ function showScreen(name) {
   }
 }
 
+function showLoginMessage(message) {
+  showScreen("login");
+  if (loginError) {
+    loginError.textContent = message;
+  }
+}
+
 const loginButton = document.getElementById("admin-login-button");
 const loginError = document.getElementById("admin-login-error");
 const signOutButtons = document.querySelectorAll("[data-admin-signout]");
@@ -89,8 +97,13 @@ loginButton?.addEventListener("click", async () => {
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: "select_account" });
   loginButton.disabled = true;
+  showLoginMessage("Google 로그인 창을 확인하세요.");
   try {
-    await signInWithPopup(auth, provider);
+    await withTimeout(
+      signInWithPopup(auth, provider),
+      "로그인 창 응답이 지연되고 있습니다. 팝업 차단을 확인한 뒤 다시 시도해 주세요.",
+      LOGIN_POPUP_TIMEOUT_MS
+    );
     // 성공하면 onAuthStateChanged가 화면 전환을 이어받는다.
   } catch (error) {
     console.error("로그인 실패", error);
@@ -130,10 +143,10 @@ function describeError(error) {
   return String(error);
 }
 
-function withTimeout(promise, message) {
+function withTimeout(promise, message, ms = AUTH_CHECK_TIMEOUT_MS) {
   let timeoutId;
   const timeout = new Promise((_, reject) => {
-    timeoutId = window.setTimeout(() => reject(new Error(message)), AUTH_CHECK_TIMEOUT_MS);
+    timeoutId = window.setTimeout(() => reject(new Error(message)), ms);
   });
   return Promise.race([promise, timeout]).finally(() => window.clearTimeout(timeoutId));
 }
@@ -178,10 +191,7 @@ let authInitSettled = false;
 const authInitTimeoutId = window.setTimeout(() => {
   if (authInitSettled) return;
   console.error("로그인 상태 확인이 시간 내에 끝나지 않았습니다.");
-  showScreen("login");
-  if (loginError) {
-    loginError.textContent = "로그인 확인이 지연되고 있습니다. 새로고침 후 다시 시도해 주세요.";
-  }
+  showLoginMessage("로그인 확인이 지연되고 있습니다. 새로고침 후 다시 시도해 주세요.");
   if (loginButton) loginButton.disabled = false;
 }, AUTH_INIT_TIMEOUT_MS);
 
@@ -195,11 +205,13 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) {
     teardownConsole();
     showScreen("login");
+    if (loginError) loginError.textContent = "";
     if (loginButton) loginButton.disabled = false;
     return;
   }
 
-  showScreen("loading");
+  showLoginMessage("권한을 확인하는 중입니다.");
+  if (loginButton) loginButton.disabled = true;
   try {
     const claims = await getAdminClaims(user);
     const isAuthorized = claims.admin === true || claims.operator === true;
@@ -218,8 +230,7 @@ onAuthStateChanged(auth, async (user) => {
     initConsole();
   } catch (error) {
     console.error("권한 확인 실패", error);
-    showScreen("login");
-    if (loginError) loginError.textContent = "권한 확인 중 오류가 발생했습니다: " + describeError(error);
+    showLoginMessage("권한 확인 중 오류가 발생했습니다: " + describeError(error));
     if (loginButton) loginButton.disabled = false;
   }
 });
