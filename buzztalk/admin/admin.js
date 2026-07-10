@@ -312,10 +312,11 @@ function wireStaticControls() {
     event.preventDefault();
     const expression = document.getElementById("admin-word-expression").value.trim();
     const category = document.getElementById("admin-word-category").value;
+    const scope = document.getElementById("admin-word-scope")?.value || "all";
     if (!expression) return;
     setBusy(wordForm, true);
     try {
-      await callManageBannedWord({ op: "add", expression, category });
+      await callManageBannedWord({ op: "add", expression, category, scope });
       wordForm.reset();
     } catch (error) {
       alert("금칙어 추가 실패: " + describeError(error));
@@ -1054,12 +1055,14 @@ function watchBannedWords() {
         list.innerHTML = "<li><span>등록된 금칙어가 없습니다.</span></li>";
         return;
       }
+      const scopeLabels = { all: "채팅+닉네임", message: "채팅", nickname: "닉네임" };
       list.innerHTML = snap.docs
         .map((d) => {
           const word = d.data();
+          const scopeLabel = scopeLabels[word.scope] || scopeLabels.all;
           return `<li>
             <strong>${escapeHtml(word.expression || "-")}</strong>
-            <span>${escapeHtml(word.category || "-")}</span>
+            <span>${escapeHtml(word.category || "-")} · 적용: ${scopeLabel}</span>
             <div class="action-row admin-inline-actions">
               <button type="button" class="small-button secondary-small" data-word-remove="${d.id}">삭제</button>
             </div>

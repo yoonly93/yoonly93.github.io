@@ -252,8 +252,16 @@
                     <option>광고·스팸</option>
                   </select>
                 </label>
+                <label>적용 대상
+                  <select id="admin-word-scope">
+                    <option value="all">채팅 + 닉네임</option>
+                    <option value="message">채팅만</option>
+                    <option value="nickname">닉네임만</option>
+                  </select>
+                </label>
                 <button type="submit" class="small-button">추가</button>
               </form>
+              <p class="muted-copy">등록·삭제는 약 1분 안에 앱에 반영됩니다. 닉네임에는 기본 욕설 목록이 항상 함께 적용됩니다.</p>
               <ul class="admin-list" id="admin-word-list">
                 <li><span>불러오는 중…</span></li>
               </ul>
@@ -276,6 +284,6 @@
     </div>
   </main>
 
-  <script type="module" src="./admin.js?v=20260710b"></script>
+  <script type="module" src="./admin.js?v=20260710c"></script>
 </body>
 </html>
