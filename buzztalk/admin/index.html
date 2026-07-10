@@ -47,9 +47,8 @@
       <div class="admin-shell">
         <aside class="admin-sidebar" aria-label="운영 메뉴">
           <a href="#dashboard" data-admin-nav="dashboard" class="is-active">대시보드</a>
-          <a href="#live-rooms" data-admin-nav="live-rooms">현재 실검 활성방</a>
+          <a href="#live-rooms" data-admin-nav="live-rooms">현재 실검방</a>
           <a href="#rooms" data-admin-nav="rooms">활성화중인 채팅방</a>
-          <a href="#admin-chat" data-admin-nav="admin-chat">익명 채팅</a>
           <a href="#reports" data-admin-nav="reports">신고 관리</a>
           <a href="#users" data-admin-nav="users">사용자 제한</a>
           <a href="#words" data-admin-nav="words">금칙어</a>
@@ -82,14 +81,42 @@
             <div class="panel-heading">
               <div>
                 <p class="eyebrow">Live Trend Rooms</p>
-                <h2>현재 실검 활성방 (Top 10)</h2>
+                <h2>현재 실검방 (Top 10)</h2>
               </div>
-              <button type="button" class="small-button secondary-small" id="admin-live-rooms-refresh">업데이트</button>
+              <div class="action-row">
+                <span id="admin-chat-status" class="status-pill muted">방을 선택하세요</span>
+                <button type="button" class="small-button secondary-small" id="admin-live-rooms-refresh">업데이트</button>
+              </div>
             </div>
-            <p class="muted-copy">실시간 검색어 순위에 올라 있는 활성 방입니다. 순위 키워드가 필터(민감어·스코어 미달 등)로 제외되면 해당 순위는 방 없이 비어 있습니다.</p>
-            <ul class="admin-list" id="admin-live-room-list">
-              <li><span>불러오는 중…</span></li>
-            </ul>
+            <p class="muted-copy">실시간 검색어 순위에 올라 있는 활성 방입니다. 순위 키워드가 필터(민감어·스코어 미달 등)로 제외되면 해당 순위는 방 없이 비어 있습니다. 방을 선택하면 오른쪽에서 대화 전체를 보고 익명으로 참여할 수 있습니다.</p>
+            <div class="admin-split">
+              <ul class="admin-list admin-split-list" id="admin-live-room-list">
+                <li><span>불러오는 중…</span></li>
+              </ul>
+              <div class="admin-split-chat" id="admin-live-chat-slot" data-chat-slot>
+                <p class="muted-copy" data-chat-placeholder>왼쪽 목록에서 방을 선택하면 대화가 여기에 표시됩니다.</p>
+                <div id="admin-chat-room" class="admin-chat-room" hidden>
+                  <div class="admin-chat-head">
+                    <div>
+                      <strong id="admin-chat-room-title">-</strong>
+                      <span id="admin-chat-room-meta">-</span>
+                    </div>
+                    <button type="button" class="small-button secondary-small" id="admin-chat-refresh">새로고침</button>
+                  </div>
+                  <div class="admin-chat-news" id="admin-chat-news" hidden></div>
+                  <div class="admin-chat-messages" id="admin-chat-messages" aria-live="polite">
+                    <p class="muted-copy">메시지를 불러오는 중입니다.</p>
+                  </div>
+                  <form class="admin-chat-form" id="admin-chat-form">
+                    <textarea id="admin-chat-input" maxlength="500" placeholder="메시지를 입력하세요" required></textarea>
+                    <div class="admin-chat-form-row">
+                      <span id="admin-chat-nickname-preview">전송 시 닉네임이 자동 생성됩니다.</span>
+                      <button type="submit" class="small-button">익명으로 전송</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
           </section>
 
           <section class="admin-panel" id="reports" data-admin-page="reports" hidden>
@@ -162,43 +189,6 @@
               <ul class="admin-list" id="admin-push-list">
                 <li><span>불러오는 중…</span></li>
               </ul>
-          </section>
-
-          <section class="admin-panel" id="admin-chat" data-admin-page="admin-chat" hidden>
-            <div class="panel-heading">
-              <div>
-                <p class="eyebrow">Anonymous Chat</p>
-                <h2>실시간 검색어 방 익명 채팅</h2>
-              </div>
-              <span id="admin-chat-status" class="status-pill muted">방을 선택하세요</span>
-            </div>
-            <div class="admin-split">
-              <ul class="admin-list admin-split-list" id="admin-chat-room-list">
-                <li><span>불러오는 중…</span></li>
-              </ul>
-              <div class="admin-split-chat" id="admin-chat-slot" data-chat-slot>
-                <p class="muted-copy" data-chat-placeholder>왼쪽 목록에서 방을 선택하면 대화가 여기에 표시됩니다.</p>
-                <div id="admin-chat-room" class="admin-chat-room" hidden>
-                  <div class="admin-chat-head">
-                    <div>
-                      <strong id="admin-chat-room-title">-</strong>
-                      <span id="admin-chat-room-meta">-</span>
-                    </div>
-                    <button type="button" class="small-button secondary-small" id="admin-chat-refresh">새로고침</button>
-                  </div>
-                  <div class="admin-chat-messages" id="admin-chat-messages" aria-live="polite">
-                    <p class="muted-copy">메시지를 불러오는 중입니다.</p>
-                  </div>
-                  <form class="admin-chat-form" id="admin-chat-form">
-                    <textarea id="admin-chat-input" maxlength="500" placeholder="메시지를 입력하세요" required></textarea>
-                    <div class="admin-chat-form-row">
-                      <span id="admin-chat-nickname-preview">전송 시 닉네임이 자동 생성됩니다.</span>
-                      <button type="submit" class="small-button">익명으로 전송</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
           </section>
 
           <section class="admin-grid" data-admin-page="users" hidden>
@@ -284,6 +274,6 @@
     </div>
   </main>
 
-  <script type="module" src="./admin.js?v=20260710c"></script>
+  <script type="module" src="./admin.js?v=20260710d"></script>
 </body>
 </html>

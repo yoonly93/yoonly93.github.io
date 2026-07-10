@@ -178,7 +178,18 @@ function teardownConsole() {
     }
   });
   activeUnsubscribers = [];
+  stopChatMessagesWatch();
   selectedChatRoomId = null;
+}
+
+function stopChatMessagesWatch() {
+  if (!chatMessagesUnsub) return;
+  try {
+    chatMessagesUnsub();
+  } catch (_err) {
+    // 이미 해제된 리스너는 무시한다.
+  }
+  chatMessagesUnsub = null;
 }
 
 showScreen("login");
@@ -258,6 +269,7 @@ let selectedReportId = null;
 let reportsTab = "pending"; // pending | hold | done
 let roomSortMode = "recent"; // recent | participants | messages
 let selectedChatRoomId = null;
+let chatMessagesUnsub = null;
 let anonymousChatAuthReady = null;
 let staticControlsWired = false;
 
@@ -351,7 +363,9 @@ function setAdminPage(pageName) {
   const pages = [...document.querySelectorAll("[data-admin-page]")].map((section) =>
     section.getAttribute("data-admin-page")
   );
-  const nextPage = pages.includes(pageName) ? pageName : "dashboard";
+  // 예전 북마크(#admin-chat)는 통합된 실검방 페이지로 보낸다.
+  const requested = pageName === "admin-chat" ? "live-rooms" : pageName;
+  const nextPage = pages.includes(requested) ? requested : "dashboard";
   document.querySelectorAll("[data-admin-page]").forEach((section) => {
     section.hidden = section.getAttribute("data-admin-page") !== nextPage;
   });
@@ -426,14 +440,12 @@ function watchActiveRooms() {
     (snap) => {
       latestActiveRooms = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       renderLiveRoomsPanel();
-      renderChatRoomPicker();
       renderPushPanel();
       renderMetrics();
     },
     (error) => {
       console.error("active rooms 구독 실패", error);
       renderListError("admin-live-room-list", error);
-      renderListError("admin-chat-room-list", error);
       renderListError("admin-push-list", error);
     }
   );
@@ -449,7 +461,6 @@ async function refreshRoomsOnce() {
     latestActiveRooms = activeSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
     renderLiveRoomsPanel();
     renderRoomsPanel();
-    renderChatRoomPicker();
     renderPushPanel();
     renderMetrics();
   } catch (error) {
@@ -480,12 +491,14 @@ function renderLiveRoomsPanel() {
       <strong>${Number(room.rank)}위 · ${escapeHtml(room.keywordText || room.id)}</strong>
       <span>참여 ${formatCount(room.participantCount)}명 · 채팅 ${formatCount(room.messageCount)}개 · ${roomStateLabel(room)}</span>
       <div class="action-row admin-inline-actions">
-        <button type="button" class="small-button secondary-small" data-chat-open="${room.id}">채팅 열기</button>
+        <button type="button" class="small-button ${selectedChatRoomId === room.id ? "" : "secondary-small"}" data-chat-open="${room.id}">
+          ${selectedChatRoomId === room.id ? "선택됨" : "채팅 열기"}
+        </button>
       </div>
     </li>`)
     .join("");
-  // 실검 활성방 페이지에는 채팅 슬롯이 없으니 익명 채팅 페이지로 이동해 연다.
-  wireChatOpenButtons(list, { navigateTo: "admin-chat" });
+  // 같은 페이지 오른쪽 슬롯에 채팅을 연다(페이지 이동 없음).
+  wireChatOpenButtons(list, { slotId: "admin-live-chat-slot" });
 }
 
 function renderRoomsPanel() {
@@ -525,37 +538,11 @@ function renderRoomsPanel() {
   wireChatOpenButtons(list, { slotId: "admin-rooms-chat-slot" });
 }
 
-function renderChatRoomPicker() {
-  const list = document.getElementById("admin-chat-room-list");
-  if (!list) return;
-  const rooms = liveTrendRooms();
-  if (rooms.length === 0) {
-    list.innerHTML = "<li><span>현재 입장 가능한 실시간 검색어 방이 없습니다.</span></li>";
-    return;
-  }
-  list.innerHTML = rooms
-    .map((room) => `<li class="admin-room-row">
-      <strong>${Number(room.rank)}위 · ${escapeHtml(room.keywordText || room.id)}</strong>
-      <span>참여 ${formatCount(room.participantCount)}명 · 채팅 ${formatCount(room.messageCount)}개</span>
-      <div class="action-row admin-inline-actions">
-        <button type="button" class="small-button ${selectedChatRoomId === room.id ? "" : "secondary-small"}" data-chat-open="${room.id}">
-          ${selectedChatRoomId === room.id ? "선택됨" : "선택"}
-        </button>
-      </div>
-    </li>`)
-    .join("");
-  wireChatOpenButtons(list);
-}
-
 // 채팅 패널은 DOM이 하나뿐이라, 여는 페이지의 슬롯으로 옮겨 붙인다.
-// navigateTo가 있으면 그 페이지로 전환한 뒤 연다(전용 슬롯이 없는 목록용).
 function wireChatOpenButtons(container, options = {}) {
-  const slotId = options.slotId || "admin-chat-slot";
+  const slotId = options.slotId || "admin-live-chat-slot";
   container.querySelectorAll("[data-chat-open]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      if (options.navigateTo) {
-        setAdminPage(options.navigateTo);
-      }
       openAdminChatRoom(btn.getAttribute("data-chat-open"), slotId);
     });
   });
@@ -665,7 +652,7 @@ async function ensureAnonymousChatAuth() {
   return anonymousChatAuthReady;
 }
 
-function openAdminChatRoom(roomId, slotId = "admin-chat-slot") {
+function openAdminChatRoom(roomId, slotId = "admin-live-chat-slot") {
   if (!roomId) return;
   selectedChatRoomId = roomId;
   const room =
@@ -680,25 +667,56 @@ function openAdminChatRoom(roomId, slotId = "admin-chat-slot") {
     `${roomStateLabel(room)} · 참여 ${room?.participantCount ?? 0}명 · 메시지 ${room?.messageCount ?? 0}개`
   );
   setText("admin-chat-nickname-preview", `다음 닉네임 예시: ${makeRandomNickname()}`);
-  renderChatRoomPicker();
+  renderChatNewsPills(room);
+  renderLiveRoomsPanel();
   loadChatMessages(roomId);
   document.getElementById("admin-chat-room")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+// 방 문서의 newsLinks(트렌드 수집기가 붙여 둔 관련 뉴스)를 채팅 상단에 필로 보여준다.
+function renderChatNewsPills(room) {
+  const el = document.getElementById("admin-chat-news");
+  if (!el) return;
+  const links = Array.isArray(room?.newsLinks)
+    ? room.newsLinks.filter((link) => link && typeof link.url === "string" && link.url)
+    : [];
+  if (links.length === 0) {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+  el.hidden = false;
+  el.innerHTML = links
+    .map(
+      (link) =>
+        `<a class="admin-news-pill" href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">📰 ${escapeHtml(link.title || link.url)}</a>`
+    )
+    .join("");
 }
 
 async function loadChatMessages(roomId) {
   const messagesEl = document.getElementById("admin-chat-messages");
   if (!messagesEl) return;
   messagesEl.innerHTML = '<p class="muted-copy">메시지를 불러오는 중입니다.</p>';
+  stopChatMessagesWatch();
   try {
     const uid = await ensureAnonymousChatAuth();
+    if (selectedChatRoomId !== roomId) return;
     setText("admin-chat-status", `익명 참여자 ${shortenId(uid)}`);
-    const snap = await getDocs(
-      query(collection(db, "rooms", roomId, "messages"), orderBy("createdAt", "desc"), limit(80))
+    // 최근 일부가 아니라 방의 전체 대화를 시간순으로 실시간 구독한다.
+    chatMessagesUnsub = onSnapshot(
+      query(collection(db, "rooms", roomId, "messages"), orderBy("createdAt", "asc")),
+      (snap) => {
+        if (selectedChatRoomId !== roomId) return;
+        const messages = snap.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+        renderChatMessages(messages, uid);
+      },
+      (error) => {
+        console.error("채팅 메시지 구독 실패", error);
+        messagesEl.innerHTML = `<p class="muted-copy">${escapeHtml("메시지를 불러오지 못했습니다: " + describeError(error))}</p>`;
+        setText("admin-chat-status", "조회 실패");
+      }
     );
-    const messages = snap.docs
-      .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
-      .reverse();
-    renderChatMessages(messages, uid);
   } catch (error) {
     console.error("채팅 메시지 조회 실패", error);
     messagesEl.innerHTML = `<p class="muted-copy">${escapeHtml("메시지를 불러오지 못했습니다: " + describeError(error))}</p>`;
@@ -748,7 +766,7 @@ async function submitAdminChatMessage() {
     });
     input.value = "";
     setText("admin-chat-nickname-preview", `마지막 전송 닉네임: ${nickname} · 다음 전송 때 다시 바뀝니다.`);
-    await loadChatMessages(selectedChatRoomId);
+    setText("admin-chat-status", "전송 완료");
   } catch (error) {
     console.error("익명 메시지 전송 실패", error);
     alert("메시지 전송 실패: " + describeError(error));
