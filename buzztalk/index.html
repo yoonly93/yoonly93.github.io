@@ -5,25 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>실검톡 BuzzTalk</title>
   <meta name="description" content="실시간 검색어 기반 익명 채팅 서비스 실검톡의 공식 웹사이트입니다.">
+  <link rel="icon" href="./assets/favicon/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/icon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/favicon/icon-192.png">
+  <link rel="apple-touch-icon" href="./assets/favicon/icon-180.png">
   <link rel="stylesheet" href="./assets/styles.css">
   <script src="./assets/site.js" defer></script>
+  <script type="module" src="./assets/trend-live.js"></script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="wrap nav">
-      <a class="brand" href="/buzztalk/">
-        <strong>실검톡</strong>
-        <span>BuzzTalk</span>
-      </a>
-    </div>
-  </header>
-
   <main>
     <section class="hero">
       <div class="wrap hero-stack">
         <div class="hero-copy">
-          <h1>실검톡</h1>
-          <p>실시간 검색어를 기반으로 같은 주제에 관심 있는 사람들이 익명으로 대화할 수 있어요.</p>
+          <h1>실검톡<span class="hero-brand-en">BuzzTalk</span></h1>
+          <p>실시간 검색어를 확인하고, 화제에 대해서 익명으로 바로 이야기를 나눠보세요<br>뉴스보다 빠른 반응, 실시간 검색어로 모이는 익명 오픈 채팅</p>
           <div class="store-actions" hidden aria-label="앱 다운로드">
             <a class="store-badge store-badge-apple" data-ios-store href="#" aria-label="App Store에서 다운로드">
               <svg class="store-badge-icon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
@@ -50,43 +46,35 @@
           </div>
         </div>
 
-        <section class="trend-demo" aria-label="실시간 검색어 예시">
-          <ol class="trend-demo-list">
-            <li><span class="demo-rank rank-one">1</span><span class="demo-keyword">이병태 사퇴 권고</span><button type="button" class="demo-chat-button" data-store-route aria-label="이병태 사퇴 권고 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
-            <li><span class="demo-rank rank-two">2</span><span class="demo-keyword">박유천 4억 체납</span><button type="button" class="demo-chat-button" data-store-route aria-label="박유천 4억 체납 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
-            <li><span class="demo-rank rank-three">3</span><span class="demo-keyword">돌싱글즈 고소 강행</span><button type="button" class="demo-chat-button" data-store-route aria-label="돌싱글즈 고소 강행 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
-            <li><span class="demo-rank">4</span><span class="demo-keyword">장마 북상</span><button type="button" class="demo-chat-button" data-store-route aria-label="장마 북상 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
-            <li><span class="demo-rank">5</span><span class="demo-keyword">환율 전망</span><button type="button" class="demo-chat-button" data-store-route aria-label="환율 전망 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
-            <li><span class="demo-rank">6</span><span class="demo-keyword">야구 순위</span><button type="button" class="demo-chat-button" data-store-route aria-label="야구 순위 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
-            <li><span class="demo-rank">7</span><span class="demo-keyword">기준금리 동결</span><button type="button" class="demo-chat-button" data-store-route aria-label="기준금리 동결 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
-            <li><span class="demo-rank">8</span><span class="demo-keyword">신작 드라마</span><button type="button" class="demo-chat-button" data-store-route aria-label="신작 드라마 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
-            <li><span class="demo-rank">9</span><span class="demo-keyword">축구 대표팀</span><button type="button" class="demo-chat-button" data-store-route aria-label="축구 대표팀 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
-            <li><span class="demo-rank">10</span><span class="demo-keyword">주말 날씨</span><button type="button" class="demo-chat-button" data-store-route aria-label="주말 날씨 대화방으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg></button></li>
+        <section class="trend-live" aria-label="실시간 검색어 1위부터 10위">
+          <div class="trend-live-topbar">
+            <button type="button" class="trend-updated-btn" id="trend-updated-btn" aria-label="실시간 검색어 새로고침">
+              <span id="trend-updated-text">불러오는 중</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+            </button>
+          </div>
+          <ol class="trend-live-list" id="trend-live-list">
+            <li class="trend-row trend-row-skeleton"><span class="skeleton skeleton-rank"></span><span class="skeleton skeleton-title"></span></li>
+            <li class="trend-row trend-row-skeleton"><span class="skeleton skeleton-rank"></span><span class="skeleton skeleton-title"></span></li>
+            <li class="trend-row trend-row-skeleton"><span class="skeleton skeleton-rank"></span><span class="skeleton skeleton-title"></span></li>
           </ol>
         </section>
       </div>
     </section>
 
-    <section class="wrap grid" aria-label="서비스 핵심">
+    <section class="wrap feature-grid" aria-label="서비스 핵심">
       <article class="card">
-        <h2>실시간 검색어 기반</h2>
-        <p>1위부터 10위까지의 검색어를 선택해 해당 주제의 대화방으로 이동합니다.</p>
+        <h2>실시간 검색어</h2>
+        <p>지금 사람들이 무엇을 검색하고 있는지 한눈에 확인하세요. 화제가 되는 뉴스, 정치, 사건, 스포츠, 방송, 연예, 사회 이슈 등 지금 뜨는 주제를 빠르게 볼 수 있습니다.</p>
       </article>
       <article class="card">
-        <h2>가입 없는 익명 이용</h2>
-        <p>회원가입이 필요없습니다.</p>
+        <h2>검색어마다 열리는 실시간 채팅</h2>
+        <p>기사만 봐서는 알 수 없는 사람들의 반응을 실시간으로 확인하세요. 커뮤니티와 SNS를 찾아 헤메기 이전에 실검톡으로 지금 뜨는 뉴스와 이슈에 대해 사람들이 어떤 의견을 나누고 있는지 확인하고 이야기를 나눠보세요.</p>
       </article>
-    </section>
-
-    <section class="wrap split-section" aria-label="앱 기능">
-      <div>
-        <h2>앱에서 제공하는 기능</h2>
-        <p>실검 탭에서 현재 대화 가능한 검색어를 확인하고, 채팅 탭에서 내가 참여한 방을 다시 볼 수 있습니다. 종료된 방은 읽기만 가능하며 새 메시지는 작성할 수 없습니다.</p>
-      </div>
-      <ul class="feature-list">
-        <li><strong>실검</strong><span>1위부터 10위까지 검색어와 채팅 진입</span></li>
-        <li><strong>채팅</strong><span>실시간 검색어를 통해 진입한 화제에 대해 24시간 동안 이야기를 나눠보세요.</span></li>
-      </ul>
+      <article class="card">
+        <h2>가입 없는 익명 채팅</h2>
+        <p>복잡한 회원가입이나 프로필 만들기 없이 바로 시작할 수 있습니다. 익명으로 부담 없이 대화하세요.</p>
+      </article>
     </section>
   </main>
 

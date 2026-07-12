@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>개인정보처리방침 2026-07-05 - 실검톡</title>
+  <link rel="icon" href="../../assets/favicon/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon/icon-32.png">
+  <link rel="apple-touch-icon" href="../../assets/favicon/icon-180.png">
   <link rel="stylesheet" href="../../assets/styles.css">
 </head>
 <body>
@@ -17,7 +20,17 @@
     <div class="wrap">
       <h1 class="page-title">개인정보처리방침 2026-07-05</h1>
       <p class="lead">현재 공개 버전과 동일한 MVP 최초 개인정보처리방침입니다.</p>
-      <p><a href="/buzztalk/privacy/">현재 방침으로 이동</a></p>
+
+      <section class="policy-meta" aria-label="문서 정보">
+        <div class="meta-item">
+          <span>버전</span>
+          <select class="version-select" id="privacy-version-select" aria-label="개인정보처리방침 버전 선택">
+            <option value="/buzztalk/privacy/">2026-07-08 (현재)</option>
+            <option value="/buzztalk/privacy/archive/v2026-07-05.html" selected>2026-07-05</option>
+          </select>
+        </div>
+      </section>
+
       <article class="content">
         <h2>1. 수집하는 항목</h2>
         <p>실검톡은 익명 기반 키워드 대화 서비스를 제공하기 위해 설치 기반 익명 사용자 ID, 닉네임, 기기 및 앱 정보, 푸시 알림 토큰, 알림 설정 여부, 채팅방 정보, 메시지 내용, 신고 정보, 차단 정보, 운영 로그, Firebase Analytics 이벤트 정보, Crashlytics 오류 정보, AdMob 광고 관련 정보를 수집하거나 서버에 저장할 수 있습니다.</p>
@@ -44,5 +57,11 @@
       </nav>
     </div>
   </footer>
+  <script>
+    document.getElementById('privacy-version-select')?.addEventListener('change', (event) => {
+      const url = event.target.value;
+      if (url) window.location.href = url;
+    });
+  </script>
 </body>
 </html>

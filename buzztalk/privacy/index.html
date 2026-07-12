@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>개인정보처리방침 - 실검톡</title>
   <meta name="description" content="실검톡 개인정보처리방침입니다.">
+  <link rel="icon" href="../assets/favicon/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/icon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/favicon/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/favicon/icon-180.png">
   <link rel="stylesheet" href="../assets/styles.css">
 </head>
 <body>
@@ -20,7 +24,13 @@
       <p class="lead">실검톡은 회원가입 정보는 수집하지 않으며, 일부 설정은 기기에 저장됩니다. 채팅 및 서비스 운영에 필요한 일부 정보는 서버에 저장될 수 있습니다.</p>
 
       <section class="policy-meta" aria-label="문서 정보">
-        <div class="meta-item"><span>버전</span><strong>2026-07-08</strong></div>
+        <div class="meta-item">
+          <span>버전</span>
+          <select class="version-select" id="privacy-version-select" aria-label="개인정보처리방침 버전 선택">
+            <option value="/buzztalk/privacy/" selected>2026-07-08 (현재)</option>
+            <option value="/buzztalk/privacy/archive/v2026-07-05.html">2026-07-05</option>
+          </select>
+        </div>
         <div class="meta-item"><span>시행일</span><strong>2026-07-05</strong></div>
         <div class="meta-item"><span>변경일</span><strong>2026-07-08</strong></div>
       </section>
@@ -104,19 +114,7 @@
         <p>개인정보 관련 문의는 <a href="mailto:wildkindground@gmail.com">wildkindground@gmail.com</a>으로 접수합니다.</p>
 
         <h2>16. 이전 버전</h2>
-        <p>이전 개인정보처리방침은 아래 목록 또는 <a href="/buzztalk/privacy/archive/">아카이브</a>에서 확인할 수 있습니다.</p>
-        <details class="policy-history">
-          <summary>이전 개인정보처리방침 보기</summary>
-          <ul class="archive-list compact">
-            <li>
-              <div>
-                <strong>2026-07-05</strong>
-                <p>MVP 최초 개인정보처리방침 초안</p>
-              </div>
-              <a href="/buzztalk/privacy/archive/v2026-07-05.html">전문 보기</a>
-            </li>
-          </ul>
-        </details>
+        <p>이전 개인정보처리방침은 위 버전 선택 또는 <a href="/buzztalk/privacy/archive/">아카이브</a>에서 확인할 수 있습니다.</p>
       </article>
     </div>
   </main>
@@ -134,5 +132,11 @@
       </nav>
     </div>
   </footer>
+  <script>
+    document.getElementById('privacy-version-select')?.addEventListener('change', (event) => {
+      const url = event.target.value;
+      if (url) window.location.href = url;
+    });
+  </script>
 </body>
 </html>
