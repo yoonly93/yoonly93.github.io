@@ -1,5 +1,5 @@
 :root {
-  --bg: #F6F7F9;
+  --bg: #FFFFFF;
   --surface: #FFFFFF;
   --surface-elevated: #FCFCFF;
   --text: #14171F;
@@ -206,7 +206,7 @@ a {
 
 .trend-live {
   width: min(720px, 100%);
-  margin: 0;
+  margin: 0 auto;
 }
 
 .trend-live-topbar {
@@ -416,7 +416,7 @@ a {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-lg);
-  margin: var(--space-xxl) 0;
+  margin: var(--space-xxl) auto;
 }
 
 .card {
