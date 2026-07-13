@@ -44,6 +44,11 @@ body {
   line-height: 1.65;
 }
 
+html.chat-page-open,
+html.chat-page-open body {
+  overflow: hidden;
+}
+
 a {
   color: inherit;
   text-decoration-color: rgba(224, 43, 51, 0.45);
@@ -439,13 +444,54 @@ a {
 
 .chat-panel-header {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  gap: var(--space-sm);
   padding: 14px 16px;
   border-bottom: 1px solid #EFEFF1;
+  background: #FFFFFF;
+}
+
+.chat-panel-back,
+.chat-panel-share {
+  display: none;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #111111;
+  cursor: pointer;
+}
+
+.chat-panel-back svg,
+.chat-panel-share svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chat-panel-share {
+  display: inline-flex;
+}
+
+.chat-panel-heading {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
 }
 
 .chat-panel-rank {
+  flex: none;
   font-size: 13px;
   font-weight: 800;
   color: #FE5357;
@@ -453,7 +499,7 @@ a {
 
 .chat-panel-title {
   min-width: 0;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
   color: #111111;
   overflow: hidden;
@@ -1376,6 +1422,24 @@ th {
 
   .chat-panel {
     height: 480px;
+  }
+
+  .chat-panel-back {
+    display: inline-flex;
+  }
+
+  .trend-chat-layout.is-chat-open .trend-chat-topbar,
+  .trend-chat-layout.is-chat-open .trend-live {
+    display: none;
+  }
+
+  .trend-chat-layout.is-chat-open .chat-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    height: 100dvh;
+    border: 0;
+    border-radius: 0;
   }
 
   .admin-sidebar {

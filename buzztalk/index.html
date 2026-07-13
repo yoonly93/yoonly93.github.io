@@ -63,8 +63,16 @@
 
           <section class="chat-panel" aria-label="실시간 채팅">
             <div class="chat-panel-header">
-              <span class="chat-panel-rank" id="chat-panel-rank"></span>
-              <span class="chat-panel-title" id="chat-panel-title">채팅을 불러오는 중</span>
+              <button type="button" class="chat-panel-back" id="chat-panel-back" aria-label="뒤로가기">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18 9 12l6-6"/></svg>
+              </button>
+              <div class="chat-panel-heading">
+                <span class="chat-panel-rank" id="chat-panel-rank"></span>
+                <span class="chat-panel-title" id="chat-panel-title">채팅을 불러오는 중</span>
+              </div>
+              <button type="button" class="chat-panel-share" id="chat-panel-share" aria-label="채팅방 공유">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v14"/></svg>
+              </button>
             </div>
             <div class="chat-messages" id="chat-messages">
               <p class="chat-messages-empty">채팅을 불러오는 중입니다.</p>

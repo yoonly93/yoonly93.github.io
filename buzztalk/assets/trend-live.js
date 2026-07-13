@@ -70,8 +70,11 @@ const callSubmitReport = httpsCallable(chatFunctions, "submitReport");
 const listEl = document.getElementById("trend-live-list");
 const updatedTextEl = document.getElementById("trend-updated-text");
 const updatedBtn = document.getElementById("trend-updated-btn");
+const layoutEl = document.querySelector(".trend-chat-layout");
 const chatRankEl = document.getElementById("chat-panel-rank");
 const chatTitleEl = document.getElementById("chat-panel-title");
+const chatBackBtn = document.getElementById("chat-panel-back");
+const chatShareBtn = document.getElementById("chat-panel-share");
 const chatMessagesEl = document.getElementById("chat-messages");
 const chatFooterEl = document.getElementById("chat-panel-footer");
 
@@ -83,6 +86,77 @@ let selectedRoomId = null;
 let latestMessages = [];
 let messagesUnsub = null;
 const reportedMessageIds = new Set();
+
+// 모바일에서는 실검 리스트와 채팅창을 같은 화면에 나란히 두지 않고, 대화를 누르면
+// 채팅창이 전체 화면 페이지처럼 열리고 뒤로가기로 리스트 화면으로 돌아온다.
+// 공유 시 앱과 동일한 https://yoonly93.github.io/buzztalk/room/<roomId> 형태 링크를
+// 쓰기 때문에, 그 링크로 들어온 방문자는 곧장 이 채팅 페이지로 딥링크된다.
+const mobileMedia = window.matchMedia("(max-width: 760px)");
+const deepLinkRoomId = new URLSearchParams(location.search).get("room");
+
+function isMobileLayout() {
+  return mobileMedia.matches;
+}
+
+function showChatPage() {
+  layoutEl?.classList.add("is-chat-open");
+  document.documentElement.classList.add("chat-page-open");
+}
+
+function hideChatPage() {
+  layoutEl?.classList.remove("is-chat-open");
+  document.documentElement.classList.remove("chat-page-open");
+}
+
+// 딥링크로 곧장 들어와 채팅 페이지 state를 replaceState한 경우엔 그 이전에
+// 리스트 페이지 히스토리가 없으므로, 뒤로가기 버튼을 누르면 사이트를 벗어나지 않고
+// 리스트 화면으로만 전환한다. pushState로 들어온 경우에만 실제 history.back()을 쓴다.
+let chatPageWasPushed = false;
+
+function navigateToRoomPage(roomId) {
+  if (!isMobileLayout()) return;
+  showChatPage();
+  chatPageWasPushed = true;
+  history.pushState({ buzztalkRoomPage: true }, "", `${location.pathname}?room=${encodeURIComponent(roomId)}`);
+}
+
+chatBackBtn?.addEventListener("click", () => {
+  if (chatPageWasPushed && history.state?.buzztalkRoomPage) {
+    history.back();
+  } else {
+    hideChatPage();
+    history.replaceState({}, "", location.pathname);
+  }
+});
+
+window.addEventListener("popstate", (event) => {
+  if (event.state?.buzztalkRoomPage) {
+    showChatPage();
+  } else {
+    hideChatPage();
+  }
+});
+
+chatShareBtn?.addEventListener("click", async () => {
+  if (!selectedRoomId) return;
+  const room = currentRoom();
+  const shareUrl = `https://yoonly93.github.io/buzztalk/room/${encodeURIComponent(selectedRoomId)}`;
+  const title = room?.keywordText ? `실검톡 '${room.keywordText}' 채팅방` : "실검톡 채팅방";
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, url: shareUrl });
+    } catch (_err) {
+      // 사용자가 공유 시트를 취소한 경우 등은 별도 처리하지 않는다.
+    }
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(shareUrl);
+    showAppToast("채팅방 링크를 복사했습니다");
+  } catch (_err) {
+    showAppToast("링크 복사에 실패했습니다");
+  }
+});
 
 let currentUid = null;
 let currentNickname = null;
@@ -157,8 +231,14 @@ function watchTrendRooms() {
       renderTrendList();
 
       if (!selectedRoomId) {
-        const first = topTrendRooms()[0];
-        if (first) selectRoom(first.id);
+        const targetId = deepLinkRoomId || topTrendRooms()[0]?.id;
+        if (targetId) {
+          selectRoom(targetId);
+          if (deepLinkRoomId && isMobileLayout()) {
+            showChatPage();
+            history.replaceState({ buzztalkRoomPage: true }, "", `${location.pathname}${location.search}`);
+          }
+        }
       } else {
         renderChatHeader();
       }
@@ -251,7 +331,9 @@ listEl?.addEventListener("click", (event) => {
   }
   const selectTarget = event.target.closest("[data-select-room]");
   if (selectTarget) {
-    selectRoom(selectTarget.getAttribute("data-select-room"));
+    const roomId = selectTarget.getAttribute("data-select-room");
+    selectRoom(roomId);
+    navigateToRoomPage(roomId);
   }
 });
 
