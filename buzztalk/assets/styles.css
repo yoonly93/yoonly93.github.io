@@ -262,12 +262,12 @@ a {
   border-radius: 16px;
   padding: 16px;
   background: #FAFAFA;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
 }
 
 .trend-row.is-selected {
-  border-color: #FE5357;
-  background: #FFF5F5;
+  border: 2px solid #EFEFEF;
+  background: #FAFAFA;
 }
 
 .trend-rank {
