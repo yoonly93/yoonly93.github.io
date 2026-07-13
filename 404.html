@@ -60,17 +60,11 @@
   </main>
   <script>
     (function () {
-      var match = window.location.pathname.match(/^\/buzztalk\/room\/[^/]+\/?$/);
+      var match = window.location.pathname.match(/^\/buzztalk\/room\/([^/]+)\/?$/);
       if (!match) {
         return;
       }
-      document.title = '실검톡 채팅방 초대';
-      document.getElementById('heading').textContent = '실검톡 채팅방에 초대받으셨어요!';
-      document.getElementById('message').textContent =
-        '지금은 이 링크로 채팅방을 바로 열 수 없어요. 앱에서 링크를 열면 바로 참여할 수 있는 기능을 준비 중입니다. 우선 실검톡을 소개하는 페이지에서 확인해보세요.';
-      var cta = document.getElementById('cta');
-      cta.href = '/buzztalk/';
-      cta.textContent = '실검톡 알아보기';
+      window.location.replace('/buzztalk/?room=' + match[1]);
     })();
   </script>
 </body>
