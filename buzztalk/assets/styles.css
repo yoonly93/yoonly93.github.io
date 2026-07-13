@@ -208,18 +208,19 @@ a {
   width: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  column-gap: var(--space-xl);
+  row-gap: var(--space-md);
   align-items: start;
-  gap: var(--space-xl);
+}
+
+.trend-chat-topbar {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .trend-live {
   min-width: 0;
-}
-
-.trend-live-topbar {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: var(--space-md);
 }
 
 .trend-updated-btn {
