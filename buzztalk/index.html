@@ -46,19 +46,32 @@
           </div>
         </div>
 
-        <section class="trend-live" aria-label="실시간 검색어 1위부터 10위">
-          <div class="trend-live-topbar">
-            <button type="button" class="trend-updated-btn" id="trend-updated-btn" aria-label="실시간 검색어 새로고침">
-              <span id="trend-updated-text">불러오는 중</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
-            </button>
-          </div>
-          <ol class="trend-live-list" id="trend-live-list">
-            <li class="trend-row trend-row-skeleton"><span class="skeleton skeleton-rank"></span><span class="skeleton skeleton-title"></span></li>
-            <li class="trend-row trend-row-skeleton"><span class="skeleton skeleton-rank"></span><span class="skeleton skeleton-title"></span></li>
-            <li class="trend-row trend-row-skeleton"><span class="skeleton skeleton-rank"></span><span class="skeleton skeleton-title"></span></li>
-          </ol>
-        </section>
+        <div class="trend-chat-layout">
+          <section class="trend-live" aria-label="실시간 검색어 1위부터 10위">
+            <div class="trend-live-topbar">
+              <button type="button" class="trend-updated-btn" id="trend-updated-btn" aria-label="실시간 검색어 새로고침">
+                <span id="trend-updated-text">불러오는 중</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+              </button>
+            </div>
+            <ol class="trend-live-list" id="trend-live-list">
+              <li class="trend-row trend-row-skeleton"><span class="skeleton skeleton-rank"></span><span class="skeleton skeleton-title"></span></li>
+              <li class="trend-row trend-row-skeleton"><span class="skeleton skeleton-rank"></span><span class="skeleton skeleton-title"></span></li>
+              <li class="trend-row trend-row-skeleton"><span class="skeleton skeleton-rank"></span><span class="skeleton skeleton-title"></span></li>
+            </ol>
+          </section>
+
+          <section class="chat-panel" aria-label="실시간 채팅">
+            <div class="chat-panel-header">
+              <span class="chat-panel-rank" id="chat-panel-rank"></span>
+              <span class="chat-panel-title" id="chat-panel-title">채팅을 불러오는 중</span>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+              <p class="chat-messages-empty">채팅을 불러오는 중입니다.</p>
+            </div>
+            <div class="chat-panel-footer" id="chat-panel-footer"></div>
+          </section>
+        </div>
       </div>
     </section>
 

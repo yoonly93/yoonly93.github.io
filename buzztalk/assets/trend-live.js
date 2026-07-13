@@ -1,6 +1,8 @@
 // 실검톡 랜딩 페이지 — 앱과 동일한 Firestore 데이터를 그대로 읽어 실시간 검색어
-// 1위~10위를 보여준다. rooms/trends 컬렉션은 firestore.rules에서 공개 읽기
-// (`allow read: if true`)이므로 로그인 없이 브라우저에서 바로 구독할 수 있다.
+// 1위~10위를 보여주고, 오른쪽 채팅창에서 실제로 대화에 참여할 수 있게 한다.
+// 읽기(rooms/messages/trends)는 firestore.rules상 공개 읽기라 로그인 없이 구독하고,
+// 쓰기(메시지 전송/신고)는 앱과 동일한 sendMessage/submitReport 콜러블을 익명 인증으로
+// 호출한다(admin.js의 익명 채팅 패턴과 동일).
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import {
   getFirestore,
@@ -12,6 +14,14 @@ import {
   orderBy,
   limit,
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import {
+  getAuth,
+  signInAnonymously,
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import {
+  getFunctions,
+  httpsCallable,
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-functions.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD2xYw8zSB3jVILUFCZfdcmdQRSCfOtJgM",
@@ -22,20 +32,69 @@ const firebaseConfig = {
   appId: "1:648177060118:web:1a37d88eb667ba9b48a837",
 };
 
+const FUNCTIONS_REGION = "asia-northeast3";
 const MAX_RANK = 10;
+const NICKNAME_STORAGE_KEY = "buzztalk_web_nickname";
+const AGE_CONFIRM_STORAGE_KEY = "buzztalk_web_age_confirmed";
+
+const NICKNAME_ADJECTIVES = [
+  "파란", "빨간", "노란", "초록", "보라", "하얀", "까만", "분홍", "주황",
+  "조용한", "행복한", "용감한", "엉뚱한", "씩씩한", "다정한", "느긋한", "상큼한", "포근한", "수줍은",
+];
+const NICKNAME_NOUNS = [
+  "여우", "고양이", "강아지", "판다", "토끼", "사자", "호랑이",
+  "다람쥐", "고래", "펭귄", "너구리", "수달", "오리", "늑대", "사슴", "햄스터", "고슴도치",
+];
+
+const REPORT_REASONS = [
+  "욕설·비방·괴롭힘",
+  "혐오·차별",
+  "성적·음란 콘텐츠",
+  "개인정보 노출",
+  "광고·스팸",
+  "불법·위험한 콘텐츠",
+  "권리 침해",
+  "기타",
+];
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+const chatApp = initializeApp(firebaseConfig, "web-chat");
+const chatAuth = getAuth(chatApp);
+const chatFunctions = getFunctions(chatApp, FUNCTIONS_REGION);
+const callSendMessage = httpsCallable(chatFunctions, "sendMessage");
+const callSyncNickname = httpsCallable(chatFunctions, "syncNickname");
+const callSubmitReport = httpsCallable(chatFunctions, "submitReport");
+
 const listEl = document.getElementById("trend-live-list");
 const updatedTextEl = document.getElementById("trend-updated-text");
 const updatedBtn = document.getElementById("trend-updated-btn");
+const chatRankEl = document.getElementById("chat-panel-rank");
+const chatTitleEl = document.getElementById("chat-panel-title");
+const chatMessagesEl = document.getElementById("chat-messages");
+const chatFooterEl = document.getElementById("chat-panel-footer");
 
 let latestRooms = [];
 const chatPreviewByRoomId = new Map();
 const messageUnsubByRoomId = new Map();
 
+let selectedRoomId = null;
+let latestMessages = [];
+let messagesUnsub = null;
+const reportedMessageIds = new Set();
+
+let currentUid = null;
+let currentNickname = null;
+let identityReady = null;
+
 function formatUpdateTime(value) {
+  const date = value && typeof value.toDate === "function" ? value.toDate() : new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit", hour12: false });
+}
+
+function formatMessageTime(value) {
   const date = value && typeof value.toDate === "function" ? value.toDate() : new Date(value);
   if (Number.isNaN(date.getTime())) return "";
   return date.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit", hour12: false });
@@ -96,6 +155,13 @@ function watchTrendRooms() {
       latestRooms = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       syncChatPreviewSubscriptions();
       renderTrendList();
+
+      if (!selectedRoomId) {
+        const first = topTrendRooms()[0];
+        if (first) selectRoom(first.id);
+      } else {
+        renderChatHeader();
+      }
     },
     () => {
       if (listEl) {
@@ -156,15 +222,16 @@ function renderTrendList() {
         ? room.newsLinks.find((link) => link && typeof link.title === "string" && link.title)?.title
         : null;
       const chatPreview = chatPreviewByRoomId.get(room.id);
+      const isSelected = room.id === selectedRoomId;
 
-      return `<li class="trend-row" data-room-id="${escapeHtml(room.id)}">
+      return `<li class="trend-row${isSelected ? " is-selected" : ""}" data-room-id="${escapeHtml(room.id)}">
         <span class="trend-rank" data-rank="${rank}">${rank}</span>
         <div class="trend-body">
           <div class="trend-title">${escapeHtml(keyword)}</div>
           ${newsTitle ? `<button type="button" class="trend-preview" data-app-toast>${escapeHtml(newsTitle)}</button>` : ""}
-          ${chatPreview ? `<button type="button" class="trend-preview trend-preview-chat" data-app-toast><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg><span>${escapeHtml(chatPreview)}</span></button>` : ""}
+          ${chatPreview ? `<button type="button" class="trend-preview trend-preview-chat" data-select-room="${escapeHtml(room.id)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg><span>${escapeHtml(chatPreview)}</span></button>` : ""}
         </div>
-        <button type="button" class="trend-chat-button" data-app-toast aria-label="${escapeHtml(keyword)} 채팅 보기">
+        <button type="button" class="trend-chat-button" data-select-room="${escapeHtml(room.id)}" aria-label="${escapeHtml(keyword)} 채팅 보기">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5A8.48 8.48 0 0 1 21 11v.5Z"/></svg>
         </button>
       </li>`;
@@ -177,10 +244,309 @@ updatedBtn?.addEventListener("click", () => {
 });
 
 listEl?.addEventListener("click", (event) => {
-  if (event.target.closest("[data-app-toast]")) {
+  const toastTarget = event.target.closest("[data-app-toast]");
+  if (toastTarget) {
     showAppToast("앱에서 확인하세요!");
+    return;
+  }
+  const selectTarget = event.target.closest("[data-select-room]");
+  if (selectTarget) {
+    selectRoom(selectTarget.getAttribute("data-select-room"));
   }
 });
+
+// ---------------------------------------------------------------------------
+// 채팅 참여: 익명 인증 + 닉네임
+// ---------------------------------------------------------------------------
+
+function generateRandomNickname() {
+  const adjective = NICKNAME_ADJECTIVES[Math.floor(Math.random() * NICKNAME_ADJECTIVES.length)];
+  const noun = NICKNAME_NOUNS[Math.floor(Math.random() * NICKNAME_NOUNS.length)];
+  return `${adjective} ${noun}`;
+}
+
+// 앱과 동일하게 uid당 닉네임을 한 번만 정하고 계속 재사용한다(익명 인증은
+// 브라우저에 로컬 저장되므로 재방문해도 같은 uid → 같은 닉네임 유지).
+function ensureChatIdentity() {
+  if (identityReady) return identityReady;
+  identityReady = (async () => {
+    if (!chatAuth.currentUser) {
+      await signInAnonymously(chatAuth);
+    }
+    currentUid = chatAuth.currentUser.uid;
+
+    const stored = localStorage.getItem(NICKNAME_STORAGE_KEY);
+    if (stored) {
+      currentNickname = stored;
+      renderMessages();
+      return;
+    }
+
+    const candidate = generateRandomNickname();
+    try {
+      const result = await callSyncNickname({ nickname: candidate });
+      currentNickname = result.data?.nickname || candidate;
+    } catch (_err) {
+      currentNickname = candidate;
+    }
+    localStorage.setItem(NICKNAME_STORAGE_KEY, currentNickname);
+    renderMessages();
+  })();
+  return identityReady;
+}
+
+ensureChatIdentity();
+
+// ---------------------------------------------------------------------------
+// 채팅창: 방 선택 / 메시지 구독 / 렌더링
+// ---------------------------------------------------------------------------
+
+function selectRoom(roomId) {
+  if (!roomId || roomId === selectedRoomId) return;
+  selectedRoomId = roomId;
+  latestMessages = [];
+  reportedMessageIds.clear();
+
+  if (messagesUnsub) {
+    messagesUnsub();
+    messagesUnsub = null;
+  }
+
+  renderTrendList();
+  renderChatHeader();
+  if (chatMessagesEl) {
+    chatMessagesEl.innerHTML = '<p class="chat-messages-empty">채팅을 불러오는 중입니다.</p>';
+  }
+  renderComposer();
+
+  messagesUnsub = onSnapshot(
+    query(collection(db, "rooms", roomId, "messages"), orderBy("createdAt", "asc")),
+    (snap) => {
+      latestMessages = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      renderMessages();
+    },
+    () => {
+      if (chatMessagesEl) {
+        chatMessagesEl.innerHTML = '<p class="chat-messages-empty">채팅을 불러오지 못했습니다.</p>';
+      }
+    }
+  );
+}
+
+function currentRoom() {
+  return latestRooms.find((room) => room.id === selectedRoomId) || null;
+}
+
+function renderChatHeader() {
+  const room = currentRoom();
+  if (!room) return;
+  if (chatRankEl) chatRankEl.textContent = Number.isFinite(Number(room.rank)) ? `${Number(room.rank)}위` : "";
+  if (chatTitleEl) chatTitleEl.textContent = room.keywordText || room.id;
+  renderComposer();
+}
+
+function shouldShowAdAfter(messageNumber) {
+  return messageNumber === 5 || (messageNumber > 5 && (messageNumber - 5) % 10 === 0);
+}
+
+function renderMessages() {
+  if (!chatMessagesEl) return;
+  const room = currentRoom();
+
+  const parts = [];
+
+  if (room?.category && ["sports", "politics", "incident", "economy"].includes(room.category)) {
+    parts.push(`<div class="chat-vote-bubble" data-app-toast>
+      <span class="chat-message-nickname">투표봇</span>
+      <p class="chat-vote-body">이 화제에 대해 어떻게 생각하세요?</p>
+      <div class="chat-vote-actions">
+        <button type="button" class="chat-vote-btn chat-vote-btn-like" data-app-toast>👍 좋아요</button>
+        <button type="button" class="chat-vote-btn chat-vote-btn-dislike" data-app-toast>👎 별로에요</button>
+      </div>
+    </div>`);
+  }
+
+  if (latestMessages.length === 0) {
+    parts.push('<p class="chat-messages-empty">아직 메시지가 없습니다. 첫 메시지를 남겨보세요!</p>');
+  } else {
+    latestMessages.forEach((message, index) => {
+      const mine = currentUid && message.anonymousUserId === currentUid;
+      const hidden = message.hidden === true;
+      const body = hidden ? "운영정책에 따라 숨겨진 메시지입니다" : (message.text || message.body || "");
+      const nickname = message.nicknameSnapshot || message.nickname || "익명";
+      const time = formatMessageTime(message.createdAt);
+      const alreadyReported = reportedMessageIds.has(message.id);
+
+      parts.push(`<div class="chat-message${mine ? " chat-message-mine" : ""}">
+        <span class="chat-message-nickname">${escapeHtml(nickname)}</span>
+        <div class="chat-message-bubble">
+          <p class="chat-message-body">${escapeHtml(body)}</p>
+        </div>
+        <div class="chat-message-meta">
+          <span class="chat-message-time">${time}</span>
+          ${!mine && !hidden ? renderReportControl(message.id, alreadyReported) : ""}
+        </div>
+      </div>`);
+
+      if (shouldShowAdAfter(index + 1)) {
+        parts.push(`<div class="chat-ad-bubble" data-app-toast>
+          <span class="chat-ad-badge">광고</span>
+          <p class="chat-ad-title">실검톡 앱에서 더 많은 이야기를 만나보세요</p>
+          <p class="chat-ad-body">지금 뜨는 검색어를 앱에서 실시간으로 확인해보세요.</p>
+        </div>`);
+      }
+    });
+  }
+
+  chatMessagesEl.innerHTML = parts.join("");
+  chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+}
+
+function renderReportControl(messageId, alreadyReported) {
+  if (alreadyReported) {
+    return '<span class="chat-report-done">신고했습니다</span>';
+  }
+  return `<button type="button" class="chat-report-btn" data-report-toggle="${escapeHtml(messageId)}">신고</button>`;
+}
+
+chatMessagesEl?.addEventListener("click", async (event) => {
+  const toastTarget = event.target.closest("[data-app-toast]");
+  if (toastTarget) {
+    showAppToast("앱에서 확인하세요!");
+    return;
+  }
+
+  const reportToggle = event.target.closest("[data-report-toggle]");
+  if (reportToggle) {
+    openReportForm(reportToggle);
+    return;
+  }
+
+  const reportSubmit = event.target.closest("[data-report-submit]");
+  if (reportSubmit) {
+    await submitReport(reportSubmit);
+  }
+});
+
+function openReportForm(button) {
+  const messageId = button.getAttribute("data-report-toggle");
+  const meta = button.closest(".chat-message-meta");
+  if (!meta || meta.querySelector(".chat-report-form")) return;
+
+  const form = document.createElement("div");
+  form.className = "chat-report-form";
+  form.innerHTML = `
+    <select aria-label="신고 사유 선택">
+      ${REPORT_REASONS.map((reason) => `<option value="${escapeHtml(reason)}">${escapeHtml(reason)}</option>`).join("")}
+    </select>
+    <button type="button" class="chat-report-submit" data-report-submit="${escapeHtml(messageId)}">제출</button>
+  `;
+  button.replaceWith(form);
+}
+
+async function submitReport(button) {
+  const messageId = button.getAttribute("data-report-submit");
+  const select = button.previousElementSibling;
+  const reason = select?.value || REPORT_REASONS[REPORT_REASONS.length - 1];
+  if (!selectedRoomId || !messageId) return;
+
+  button.disabled = true;
+  try {
+    await ensureChatIdentity();
+    await callSubmitReport({ roomId: selectedRoomId, messageId, reason });
+    reportedMessageIds.add(messageId);
+    renderMessages();
+  } catch (error) {
+    showAppToast(error?.message || "신고에 실패했습니다.");
+    button.disabled = false;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 입력창: 연령 자기선언 게이트 → 실제 메시지 입력
+// ---------------------------------------------------------------------------
+
+function renderComposer() {
+  if (!chatFooterEl) return;
+  const room = currentRoom();
+  const canSendToRoom = !room || room.state === "active" || room.state === "archived";
+
+  if (!canSendToRoom) {
+    chatFooterEl.innerHTML = '<p class="chat-composer-disabled">종료된 대화입니다. 메시지를 보낼 수 없습니다.</p>';
+    return;
+  }
+
+  const ageConfirmed = localStorage.getItem(AGE_CONFIRM_STORAGE_KEY) === "1";
+  if (!ageConfirmed) {
+    chatFooterEl.innerHTML = `
+      <div class="chat-age-gate">
+        <label><input type="checkbox" id="chat-age-checkbox"> 만 14세 이상입니다</label>
+        <button type="button" id="chat-age-confirm">채팅 참여하기</button>
+      </div>
+    `;
+    const checkbox = document.getElementById("chat-age-checkbox");
+    const confirmBtn = document.getElementById("chat-age-confirm");
+    checkbox?.addEventListener("change", () => {
+      confirmBtn?.classList.toggle("is-enabled", checkbox.checked);
+    });
+    confirmBtn?.addEventListener("click", () => {
+      if (!checkbox?.checked) return;
+      localStorage.setItem(AGE_CONFIRM_STORAGE_KEY, "1");
+      renderComposer();
+    });
+    return;
+  }
+
+  chatFooterEl.innerHTML = `
+    <div class="chat-composer">
+      <textarea class="chat-composer-input" id="chat-composer-input" placeholder="메시지 입력" rows="1"></textarea>
+      <button type="button" class="chat-composer-send" id="chat-composer-send" aria-label="메시지 보내기">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 9-18 9 4-9-4-9Z"/><path d="M7 12h11"/></svg>
+      </button>
+    </div>
+  `;
+
+  const input = document.getElementById("chat-composer-input");
+  const sendBtn = document.getElementById("chat-composer-send");
+
+  function updateSendState() {
+    const hasText = Boolean(input?.value.trim());
+    sendBtn?.classList.toggle("is-active", hasText);
+  }
+
+  input?.addEventListener("input", updateSendState);
+  input?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleSend();
+    }
+  });
+  sendBtn?.addEventListener("click", handleSend);
+
+  async function handleSend() {
+    const body = input?.value.trim();
+    if (!body || !selectedRoomId) return;
+    sendBtn.disabled = true;
+    input.disabled = true;
+    try {
+      await ensureChatIdentity();
+      await callSendMessage({
+        roomId: selectedRoomId,
+        body,
+        nickname: currentNickname,
+        platform: "web",
+      });
+      input.value = "";
+    } catch (error) {
+      showAppToast(error?.message || "메시지 전송에 실패했습니다.");
+    } finally {
+      sendBtn.disabled = false;
+      input.disabled = false;
+      updateSendState();
+      input?.focus();
+    }
+  }
+}
 
 watchTrendUpdatedAt();
 watchTrendRooms();
