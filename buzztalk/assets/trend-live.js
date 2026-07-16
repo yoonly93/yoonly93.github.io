@@ -89,10 +89,18 @@ const reportedMessageIds = new Set();
 
 // 모바일에서는 실검 리스트와 채팅창을 같은 화면에 나란히 두지 않고, 대화를 누르면
 // 채팅창이 전체 화면 페이지처럼 열리고 뒤로가기로 리스트 화면으로 돌아온다.
-// 공유 시 앱과 동일한 https://yoonly93.github.io/buzztalk/room/<roomId> 형태 링크를
+// 공유 시 앱과 동일한 https://buzztalk.posiki.com/room/<roomId> 형태 링크를
 // 쓰기 때문에, 그 링크로 들어온 방문자는 곧장 이 채팅 페이지로 딥링크된다.
 const mobileMedia = window.matchMedia("(max-width: 760px)");
-const deepLinkRoomId = new URLSearchParams(location.search).get("room");
+const SHARE_BASE_URL = "https://buzztalk.posiki.com";
+const deepLinkRoomId = readDeepLinkRoomId();
+
+function readDeepLinkRoomId() {
+  const fromQuery = new URLSearchParams(location.search).get("room");
+  if (fromQuery) return fromQuery;
+  const match = location.pathname.match(/\/room\/([^/?#]+)/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
 
 function isMobileLayout() {
   return mobileMedia.matches;
@@ -140,7 +148,7 @@ window.addEventListener("popstate", (event) => {
 chatShareBtn?.addEventListener("click", async () => {
   if (!selectedRoomId) return;
   const room = currentRoom();
-  const shareUrl = `https://yoonly93.github.io/buzztalk/room/${encodeURIComponent(selectedRoomId)}`;
+  const shareUrl = `${SHARE_BASE_URL}/room/${encodeURIComponent(selectedRoomId)}`;
   const title = room?.keywordText ? `실검톡 '${room.keywordText}' 채팅방` : "실검톡 채팅방";
   if (navigator.share) {
     try {
@@ -422,7 +430,7 @@ function currentRoom() {
 function renderChatHeader() {
   const room = currentRoom();
   if (!room) return;
-  if (chatRankEl) chatRankEl.textContent = Number.isFinite(Number(room.rank)) ? `${Number(room.rank)}위` : "";
+  if (chatRankEl) chatRankEl.textContent = "";
   if (chatTitleEl) chatTitleEl.textContent = room.keywordText || room.id;
   renderComposer();
 }
@@ -442,8 +450,14 @@ function renderMessages() {
       <span class="chat-message-nickname">투표봇</span>
       <p class="chat-vote-body">이 화제에 대해 어떻게 생각하세요?</p>
       <div class="chat-vote-actions">
-        <button type="button" class="chat-vote-btn chat-vote-btn-like" data-app-toast>👍 좋아요</button>
-        <button type="button" class="chat-vote-btn chat-vote-btn-dislike" data-app-toast>👎 별로에요</button>
+        <button type="button" class="chat-vote-btn chat-vote-btn-like" data-app-toast>
+          <span>좋아요</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>
+        </button>
+        <button type="button" class="chat-vote-btn chat-vote-btn-dislike" data-app-toast>
+          <span>별로에요</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"/></svg>
+        </button>
       </div>
     </div>`);
   }
