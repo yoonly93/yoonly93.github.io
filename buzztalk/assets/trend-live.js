@@ -445,7 +445,7 @@ function renderMessages() {
 
   const parts = [];
 
-  if (room?.category && ["sports", "politics", "incident", "economy"].includes(room.category)) {
+  if (room?.category && ["crime", "celebrity", "politics", "economy"].includes(room.category)) {
     parts.push(`<div class="chat-vote-bubble" data-app-toast>
       <span class="chat-message-nickname">투표봇</span>
       <p class="chat-vote-body">이 화제에 대해 어떻게 생각하세요?</p>
