@@ -1,5 +1,5 @@
 const WEB3FORMS_ACCESS_KEY = "d20e654a-d834-4c45-8493-c391629252f5";
-const CONTACT_DESTINATION_EMAIL = "wildkindground@gmail.com";
+const CONTACT_DESTINATION_EMAIL = "contact@posiki.com";
 const IOS_STORE_URL = "";
 const ANDROID_STORE_URL = "";
 
