@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capa - Contact</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #18181b; line-height: 1.7; padding: 40px 20px; max-width: 640px; margin: 0 auto; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 28px; }
+    .home { color: #71717a; text-decoration: none; font-size: 14px; }
+    select { border: 1px solid #d4d4d8; border-radius: 8px; background: #fff; color: #18181b; font-size: 14px; padding: 8px 32px 8px 10px; }
+    h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .intro { color: #3f3f46; margin: 20px 0; }
+    .note { display: none; color: #71717a; font-size: 13px; margin-bottom: 20px; }
+    .card { border: 1px solid #e4e4e7; border-radius: 8px; padding: 20px; background: #fafafa; margin-top: 24px; }
+    .mail { display: inline-block; margin-top: 12px; color: #18181b; font-weight: 600; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e4e4e7; color: #71717a; font-size: 13px; }
+    .footer a { color: #71717a; margin-right: 12px; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="home" href="index.html">Capa</a>
+    <select id="languageSelect" aria-label="Language">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+    </select>
+  </div>
+
+  <h1 id="title"></h1>
+  <p class="note" id="translationNote"></p>
+  <p class="intro" id="intro"></p>
+  <div class="card">
+    <p id="emailLabel"></p>
+    <a class="mail" href="mailto:contact@posiki.com">contact@posiki.com</a>
+  </div>
+
+  <div class="footer" id="footer"></div>
+
+  <script>
+    var i18n = {
+      ko: {
+        title: '문의하기',
+        intro: 'Capa 이용 중 궁금한 점, 개인정보 관련 요청, 앱 지원 문의가 있으면 아래 이메일로 보내 주세요.',
+        emailLabel: '문의 이메일',
+        note: '',
+        footer: ['개인정보처리방침', '이용약관', '문의하기']
+      },
+      en: {
+        title: 'Contact',
+        intro: 'For Capa support, privacy requests, or other questions, please contact us by email.',
+        emailLabel: 'Email',
+        note: 'This page was automatically translated from Korean. If there is any difference in meaning, the Korean version takes precedence.',
+        footer: ['Privacy Policy', 'Terms of Use', 'Contact']
+      },
+      ja: {
+        title: '\u304a\u554f\u3044\u5408\u308f\u305b',
+        intro: 'Capa\u306e\u30b5\u30dd\u30fc\u30c8\u3001\u30d7\u30e9\u30a4\u30d0\u30b7\u30fc\u306b\u95a2\u3059\u308b\u30ea\u30af\u30a8\u30b9\u30c8\u3001\u305d\u306e\u4ed6\u306e\u3054\u8cea\u554f\u306f\u30e1\u30fc\u30eb\u3067\u3054\u9023\u7d61\u304f\u3060\u3055\u3044\u3002',
+        emailLabel: '\u30e1\u30fc\u30eb',
+        note: '\u3053\u306e\u30da\u30fc\u30b8\u306f\u97d3\u56fd\u8a9e\u7248\u3092\u81ea\u52d5\u7ffb\u8a33\u3057\u305f\u3082\u306e\u3067\u3059\u3002\u610f\u5473\u306b\u9055\u3044\u304c\u3042\u308b\u5834\u5408\u306f\u97d3\u56fd\u8a9e\u7248\u304c\u512a\u5148\u3055\u308c\u307e\u3059\u3002',
+        footer: ['\u30d7\u30e9\u30a4\u30d0\u30b7\u30fc\u30dd\u30ea\u30b7\u30fc', '\u5229\u7528\u898f\u7d04', '\u304a\u554f\u3044\u5408\u308f\u305b']
+      }
+    };
+    function getLang() {
+      var saved = localStorage.getItem('capa-lang');
+      if (saved && i18n[saved]) return saved;
+      var lang = (navigator.language || navigator.userLanguage || 'en').slice(0, 2);
+      return i18n[lang] ? lang : 'en';
+    }
+    function render(lang) {
+      var t = i18n[lang];
+      document.documentElement.lang = lang;
+      document.getElementById('languageSelect').value = lang;
+      document.getElementById('title').textContent = t.title;
+      document.getElementById('intro').textContent = t.intro;
+      document.getElementById('emailLabel').textContent = t.emailLabel;
+      var note = document.getElementById('translationNote');
+      note.textContent = t.note;
+      note.style.display = t.note ? 'block' : 'none';
+      document.getElementById('footer').innerHTML =
+        '<a href="privacy.html">' + t.footer[0] + '</a>' +
+        '<a href="terms.html">' + t.footer[1] + '</a>' +
+        '<a href="contact.html">' + t.footer[2] + '</a>';
+    }
+    document.getElementById('languageSelect').addEventListener('change', function (event) {
+      localStorage.setItem('capa-lang', event.target.value);
+      render(event.target.value);
+    });
+    render(getLang());
+  </script>
+</body>
+</html>

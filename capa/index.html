@@ -18,9 +18,19 @@
       padding: 40px 24px;
     }
     .container { max-width: 480px; text-align: center; }
+    .topbar { width: 100%; max-width: 480px; display: flex; justify-content: flex-end; margin-bottom: 28px; }
+    .language-select {
+      border: 1px solid #d4d4d8;
+      border-radius: 8px;
+      background: #fff;
+      color: #18181b;
+      font-size: 14px;
+      padding: 8px 32px 8px 10px;
+    }
     h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
     .subtitle { font-size: 18px; color: #71717a; margin-bottom: 32px; }
     .desc { font-size: 16px; line-height: 1.7; color: #3f3f46; margin-bottom: 40px; text-align: left; }
+    .translation-note { display: none; margin: -20px 0 32px; color: #71717a; font-size: 13px; line-height: 1.6; text-align: left; }
     .features { text-align: left; margin-bottom: 40px; }
     .feature {
       display: flex;
@@ -44,20 +54,30 @@
       font-weight: 600;
       margin-top: 2px;
     }
-    .privacy {
+    .footer {
       margin-top: 48px;
       font-size: 13px;
       color: #a1a1aa;
+      line-height: 2;
     }
-    .privacy a { color: #71717a; }
+    .footer a { color: #71717a; margin: 0 6px; }
   </style>
 </head>
 <body>
+  <div class="topbar">
+    <select id="languageSelect" class="language-select" aria-label="Language">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+    </select>
+  </div>
   <div class="container">
     <h1>Capa</h1>
     <p class="desc" id="desc"></p>
+    <p class="translation-note" id="translationNote"></p>
     <div class="features" id="features"></div>
-    <div class="privacy">
+    <div class="footer" id="footer"></div>
+    <div class="footer">
       <a href="mailto:contact@posiki.com">contact@posiki.com</a>
     </div>
   </div>
@@ -70,7 +90,13 @@
           '각 원두는 컵노트의 풍미에 따라 고유한 색감의 카드가 됩니다. 뒤집으면 사진, 평점, 테이스팅 노트를 확인할 수 있습니다.',
           '테츠 카츠야, 정인성 등 바리스타 챔피언들의 레시피나 나만의 레시피를 단계별 타이머를 통해 쉽게 내려보세요.',
           '내가 마셔온 커피들을 산지, 품종, 가공법, 컵노트, 평점별로 필터링해서 나의 커피 취향을 한눈에 파악하세요.'
-        ]
+        ],
+        note: '',
+        footer: {
+          privacy: '개인정보처리방침',
+          terms: '이용약관',
+          contact: '문의하기'
+        }
       },
       en: {
         desc: 'Love specialty coffee?<br>Start logging every new bag, every single cup.<br><br>Capa scans your coffee bag and automatically turns the details into a beautiful card. Brew with precision using recipes from champion baristas.',
@@ -79,7 +105,13 @@
           'Each bean becomes a unique card colored by its flavor notes. Flip it over to see your photo, rating, and tasting notes.',
           'Brew step by step with built-in recipes from champion baristas like Tetsu Kasuya and Jung Insung \u2014 or create your own.',
           'Filter your collection by origin, variety, process, cup notes, and rating to discover your coffee taste at a glance.'
-        ]
+        ],
+        note: 'This page was automatically translated from Korean. If there is any difference in meaning, the Korean version takes precedence.',
+        footer: {
+          privacy: 'Privacy Policy',
+          terms: 'Terms of Use',
+          contact: 'Contact'
+        }
       },
       ja: {
         desc: '\u30b9\u30da\u30b7\u30e3\u30eb\u30c6\u30a3\u30b3\u30fc\u30d2\u30fc\u3001\u597d\u304d\u3067\u3059\u304b\uff1f<br>\u65b0\u3057\u3044\u8c46\u3092\u8cb7\u3046\u305f\u3073\u3001\u4e00\u676f\u6dc9\u308c\u308b\u305f\u3073\u306b\u8a18\u9332\u3057\u3066\u307f\u307e\u305b\u3093\u304b\u3002<br><br>Capa\u306f\u30b3\u30fc\u30d2\u30fc\u8c46\u306e\u30d1\u30c3\u30b1\u30fc\u30b8\u3092\u64ae\u308b\u3060\u3051\u3067\u60c5\u5831\u3092\u81ea\u52d5\u3067\u8aad\u307f\u53d6\u308a\u3001\u7f8e\u3057\u3044\u30ab\u30fc\u30c9\u306b\u4ed5\u4e0a\u3052\u307e\u3059\u3002\u30d0\u30ea\u30b9\u30bf\u30c1\u30e3\u30f3\u30d4\u30aa\u30f3\u306e\u30ec\u30b7\u30d4\u3067\u3001\u6b63\u78ba\u306b\u4e00\u676f\u3092\u3002',
@@ -88,28 +120,52 @@
           '\u305d\u308c\u305e\u308c\u306e\u8c46\u306f\u30ab\u30c3\u30d7\u30ce\u30fc\u30c8\u306e\u98a8\u5473\u306b\u5408\u308f\u305b\u305f\u8272\u5408\u3044\u306e\u30ab\u30fc\u30c9\u306b\u306a\u308a\u307e\u3059\u3002\u88cf\u8fd4\u3059\u3068\u5199\u771f\u30fb\u8a55\u4fa1\u30fb\u30c6\u30a4\u30b9\u30c6\u30a3\u30f3\u30b0\u30ce\u30fc\u30c8\u304c\u78ba\u8a8d\u3067\u304d\u307e\u3059\u3002',
           '\u7c95\u8c37\u54f2\u3084\u30c1\u30e7\u30f3\u30fb\u30a4\u30f3\u30bd\u30f3\u306a\u3069\u30d0\u30ea\u30b9\u30bf\u30c1\u30e3\u30f3\u30d4\u30aa\u30f3\u306e\u30ec\u30b7\u30d4\u3084\u81ea\u5206\u3060\u3051\u306e\u30ec\u30b7\u30d4\u3092\u3001\u30b9\u30c6\u30c3\u30d7\u3054\u3068\u306e\u30bf\u30a4\u30de\u30fc\u3067\u624b\u8efd\u306b\u62bd\u51fa\u3067\u304d\u307e\u3059\u3002',
           '\u7523\u5730\u30fb\u54c1\u7a2e\u30fb\u7cbe\u88fd\u65b9\u6cd5\u30fb\u30ab\u30c3\u30d7\u30ce\u30fc\u30c8\u30fb\u8a55\u4fa1\u3067\u30d5\u30a3\u30eb\u30bf\u30ea\u30f3\u30b0\u3057\u3066\u3001\u81ea\u5206\u306e\u30b3\u30fc\u30d2\u30fc\u306e\u597d\u307f\u3092\u3072\u3068\u76ee\u3067\u628a\u63e1\u3057\u307e\u3057\u3087\u3046\u3002'
-        ]
+        ],
+        note: '\u3053\u306e\u30da\u30fc\u30b8\u306f\u97d3\u56fd\u8a9e\u7248\u3092\u81ea\u52d5\u7ffb\u8a33\u3057\u305f\u3082\u306e\u3067\u3059\u3002\u610f\u5473\u306b\u9055\u3044\u304c\u3042\u308b\u5834\u5408\u306f\u97d3\u56fd\u8a9e\u7248\u304c\u512a\u5148\u3055\u308c\u307e\u3059\u3002',
+        footer: {
+          privacy: '\u30d7\u30e9\u30a4\u30d0\u30b7\u30fc\u30dd\u30ea\u30b7\u30fc',
+          terms: '\u5229\u7528\u898f\u7d04',
+          contact: '\u304a\u554f\u3044\u5408\u308f\u305b'
+        }
       }
     };
 
     function getLang() {
+      var params = new URLSearchParams(window.location.search);
+      var requested = params.get('lang');
+      if (requested && i18n[requested]) return requested;
+      var saved = localStorage.getItem('capa-lang');
+      if (saved && i18n[saved]) return saved;
       var lang = (navigator.language || navigator.userLanguage || 'en').slice(0, 2);
       return i18n[lang] ? lang : 'en';
     }
 
-    function render() {
-      var lang = getLang();
+    function render(lang) {
       var t = i18n[lang];
       document.documentElement.lang = lang;
+      document.getElementById('languageSelect').value = lang;
       document.getElementById('desc').innerHTML = t.desc;
+      var note = document.getElementById('translationNote');
+      note.textContent = t.note;
+      note.style.display = t.note ? 'block' : 'none';
       var html = '';
       for (var i = 0; i < t.features.length; i++) {
         html += '<div class="feature"><div class="feature-num">' + (i + 1) + '</div><div>' + t.features[i] + '</div></div>';
       }
       document.getElementById('features').innerHTML = html;
+      document.getElementById('footer').innerHTML =
+        '<a href="privacy.html">' + t.footer.privacy + '</a>' +
+        '<a href="terms.html">' + t.footer.terms + '</a>' +
+        '<a href="contact.html">' + t.footer.contact + '</a>';
     }
 
-    render();
+    document.getElementById('languageSelect').addEventListener('change', function (event) {
+      var lang = event.target.value;
+      localStorage.setItem('capa-lang', lang);
+      render(lang);
+    });
+
+    render(getLang());
   </script>
 </body>
 </html>
