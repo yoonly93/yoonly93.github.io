@@ -9,12 +9,27 @@
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #18181b; line-height: 1.7; padding: 40px 20px; max-width: 640px; margin: 0 auto; }
     .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 28px; }
     .home { color: #71717a; text-decoration: none; font-size: 14px; }
-    select { border: 1px solid #d4d4d8; border-radius: 8px; background: #fff; color: #18181b; font-size: 14px; padding: 8px 32px 8px 10px; }
+    select, input, textarea, button { font: inherit; }
+    select, input, textarea { width: 100%; border: 1px solid #d4d4d8; border-radius: 8px; background: #fff; color: #18181b; font-size: 15px; padding: 11px 12px; }
+    .topbar select { width: auto; min-width: 118px; font-size: 14px; padding: 8px 32px 8px 10px; }
     h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
     .intro { color: #3f3f46; margin: 20px 0; }
     .note { display: none; color: #71717a; font-size: 13px; margin-bottom: 20px; }
-    .card { border: 1px solid #e4e4e7; border-radius: 8px; padding: 20px; background: #fafafa; margin-top: 24px; }
-    .mail { display: inline-block; margin-top: 12px; color: #18181b; font-weight: 600; }
+    .form { border: 1px solid #e4e4e7; border-radius: 8px; padding: 20px; background: #fafafa; margin-top: 24px; }
+    .field { margin-bottom: 16px; }
+    label, .field-label { display: block; color: #3f3f46; font-size: 14px; font-weight: 600; margin-bottom: 7px; }
+    textarea { min-height: 160px; resize: vertical; }
+    .type-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .type-btn { border: 1px solid #d4d4d8; border-radius: 8px; background: #fff; color: #3f3f46; padding: 10px 8px; cursor: pointer; }
+    .type-btn.active { border-color: #18181b; background: #18181b; color: #fff; }
+    .submit { width: 100%; border: 0; border-radius: 8px; background: #18181b; color: #fff; font-weight: 700; padding: 12px 16px; cursor: pointer; }
+    .submit:disabled { background: #a1a1aa; cursor: not-allowed; }
+    .err { display: none; color: #dc2626; font-size: 13px; margin-top: 6px; }
+    .invalid .err { display: block; }
+    .invalid input, .invalid textarea { border-color: #dc2626; }
+    .banner { display: none; border-radius: 8px; font-size: 14px; margin-bottom: 16px; padding: 10px 12px; }
+    .banner.success { display: block; background: #ecfdf5; color: #047857; }
+    .banner.error { display: block; background: #fef2f2; color: #b91c1c; }
     .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e4e4e7; color: #71717a; font-size: 13px; }
     .footer a { color: #71717a; margin-right: 12px; }
   </style>
@@ -26,68 +41,272 @@
       <option value="ko">한국어</option>
       <option value="en">English</option>
       <option value="ja">日本語</option>
+      <option value="de">Deutsch</option>
+      <option value="nl">Nederlands</option>
     </select>
   </div>
 
   <h1 id="title"></h1>
   <p class="note" id="translationNote"></p>
   <p class="intro" id="intro"></p>
-  <div class="card">
-    <p id="emailLabel"></p>
-    <a class="mail" href="mailto:contact@posiki.com">contact@posiki.com</a>
-  </div>
+
+  <form class="form" id="contactForm" novalidate>
+    <div class="banner" id="banner"></div>
+    <div class="field">
+      <div class="field-label" id="typeLabel"></div>
+      <div class="type-group" id="typeGroup">
+        <button type="button" class="type-btn active" data-type="bug" id="typeBug"></button>
+        <button type="button" class="type-btn" data-type="feedback" id="typeFeedback"></button>
+        <button type="button" class="type-btn" data-type="other" id="typeOther"></button>
+      </div>
+    </div>
+    <div class="field" id="emailField">
+      <label for="email" id="emailLabel"></label>
+      <input type="email" id="email" name="email" autocomplete="email">
+      <div class="err" id="emailErr"></div>
+    </div>
+    <div class="field" id="messageField">
+      <label for="message" id="messageLabel"></label>
+      <textarea id="message" name="message"></textarea>
+      <div class="err" id="messageErr"></div>
+    </div>
+    <button class="submit" type="submit" id="submitBtn"></button>
+  </form>
 
   <div class="footer" id="footer"></div>
 
   <script>
+    var WEB3FORMS_ACCESS_KEY = "d1731955-a438-407d-886c-0199a6f1f74e";
+    var CONTACT_EMAIL = "contact@posiki.com";
     var i18n = {
       ko: {
         title: '문의하기',
-        intro: 'Capa 이용 중 궁금한 점, 개인정보 관련 요청, 앱 지원 문의가 있으면 아래 이메일로 보내 주세요.',
-        emailLabel: '문의 이메일',
+        intro: '버그 신고, 의견, 기타 문의를 남겨주세요.',
+        typeLabel: '문의 유형',
+        bug: '버그',
+        feedback: '의견',
+        other: '기타',
+        emailLabel: '본인 이메일 주소',
+        emailPlaceholder: 'you@example.com',
+        messageLabel: '문의 내용',
+        messagePlaceholder: '내용을 입력해주세요',
+        submit: '보내기',
+        sending: '전송 중...',
+        success: '문의가 전송되었습니다. 감사합니다.',
+        error: '전송에 실패했습니다. 잠시 후 다시 시도해주세요.',
+        emailRequired: '이메일 주소를 입력해주세요.',
+        emailInvalid: '올바른 이메일 주소를 입력해주세요.',
+        messageRequired: '문의 내용을 입력해주세요.',
         note: '',
         footer: ['개인정보처리방침', '이용약관', '문의하기']
       },
       en: {
         title: 'Contact',
-        intro: 'For Capa support, privacy requests, or other questions, please contact us by email.',
-        emailLabel: 'Email',
+        intro: 'Report a bug, share feedback, or send another question.',
+        typeLabel: 'Inquiry type',
+        bug: 'Bug',
+        feedback: 'Feedback',
+        other: 'Other',
+        emailLabel: 'Your email address',
+        emailPlaceholder: 'you@example.com',
+        messageLabel: 'Message',
+        messagePlaceholder: 'Write your message',
+        submit: 'Send',
+        sending: 'Sending...',
+        success: 'Your message has been sent. Thank you.',
+        error: 'Failed to send. Please try again later.',
+        emailRequired: 'Please enter your email address.',
+        emailInvalid: 'Please enter a valid email address.',
+        messageRequired: 'Please enter your message.',
         note: 'This page was automatically translated from Korean. If there is any difference in meaning, the Korean version takes precedence.',
         footer: ['Privacy Policy', 'Terms of Use', 'Contact']
       },
       ja: {
-        title: '\u304a\u554f\u3044\u5408\u308f\u305b',
-        intro: 'Capa\u306e\u30b5\u30dd\u30fc\u30c8\u3001\u30d7\u30e9\u30a4\u30d0\u30b7\u30fc\u306b\u95a2\u3059\u308b\u30ea\u30af\u30a8\u30b9\u30c8\u3001\u305d\u306e\u4ed6\u306e\u3054\u8cea\u554f\u306f\u30e1\u30fc\u30eb\u3067\u3054\u9023\u7d61\u304f\u3060\u3055\u3044\u3002',
-        emailLabel: '\u30e1\u30fc\u30eb',
-        note: '\u3053\u306e\u30da\u30fc\u30b8\u306f\u97d3\u56fd\u8a9e\u7248\u3092\u81ea\u52d5\u7ffb\u8a33\u3057\u305f\u3082\u306e\u3067\u3059\u3002\u610f\u5473\u306b\u9055\u3044\u304c\u3042\u308b\u5834\u5408\u306f\u97d3\u56fd\u8a9e\u7248\u304c\u512a\u5148\u3055\u308c\u307e\u3059\u3002',
-        footer: ['\u30d7\u30e9\u30a4\u30d0\u30b7\u30fc\u30dd\u30ea\u30b7\u30fc', '\u5229\u7528\u898f\u7d04', '\u304a\u554f\u3044\u5408\u308f\u305b']
+        title: 'お問い合わせ',
+        intro: 'バグ報告、フィードバック、その他のお問い合わせをお送りください。',
+        typeLabel: 'お問い合わせの種類',
+        bug: 'バグ',
+        feedback: 'フィードバック',
+        other: 'その他',
+        emailLabel: 'メールアドレス',
+        emailPlaceholder: 'you@example.com',
+        messageLabel: 'お問い合わせ内容',
+        messagePlaceholder: '内容をご記入ください',
+        submit: '送信',
+        sending: '送信中...',
+        success: 'お問い合わせを送信しました。ありがとうございます。',
+        error: '送信に失敗しました。しばらくしてから再度お試しください。',
+        emailRequired: 'メールアドレスを入力してください。',
+        emailInvalid: '正しいメールアドレスを入力してください。',
+        messageRequired: 'お問い合わせ内容を入力してください。',
+        note: 'このページは韓国語版を自動翻訳したものです。意味に違いがある場合は韓国語版が優先されます。',
+        footer: ['プライバシーポリシー', '利用規約', 'お問い合わせ']
+      },
+      de: {
+        title: 'Kontakt',
+        intro: 'Melde einen Fehler, teile Feedback oder sende eine andere Anfrage.',
+        typeLabel: 'Art der Anfrage',
+        bug: 'Fehler',
+        feedback: 'Feedback',
+        other: 'Sonstiges',
+        emailLabel: 'Deine E-Mail-Adresse',
+        emailPlaceholder: 'you@example.com',
+        messageLabel: 'Nachricht',
+        messagePlaceholder: 'Schreibe deine Nachricht',
+        submit: 'Senden',
+        sending: 'Wird gesendet...',
+        success: 'Deine Nachricht wurde gesendet. Vielen Dank.',
+        error: 'Senden fehlgeschlagen. Bitte versuche es später erneut.',
+        emailRequired: 'Bitte gib deine E-Mail-Adresse ein.',
+        emailInvalid: 'Bitte gib eine gültige E-Mail-Adresse ein.',
+        messageRequired: 'Bitte gib eine Nachricht ein.',
+        note: 'Diese Seite wurde automatisch aus dem Koreanischen übersetzt. Bei Bedeutungsunterschieden gilt die koreanische Version.',
+        footer: ['Datenschutzerklärung', 'Nutzungsbedingungen', 'Kontakt']
+      },
+      nl: {
+        title: 'Contact',
+        intro: 'Meld een bug, deel feedback of stuur een andere vraag.',
+        typeLabel: 'Soort vraag',
+        bug: 'Bug',
+        feedback: 'Feedback',
+        other: 'Overig',
+        emailLabel: 'Je e-mailadres',
+        emailPlaceholder: 'you@example.com',
+        messageLabel: 'Bericht',
+        messagePlaceholder: 'Schrijf je bericht',
+        submit: 'Verzenden',
+        sending: 'Verzenden...',
+        success: 'Je bericht is verzonden. Bedankt.',
+        error: 'Verzenden mislukt. Probeer het later opnieuw.',
+        emailRequired: 'Voer je e-mailadres in.',
+        emailInvalid: 'Voer een geldig e-mailadres in.',
+        messageRequired: 'Voer je bericht in.',
+        note: 'Deze pagina is automatisch vertaald uit het Koreaans. Bij betekenisverschillen heeft de Koreaanse versie voorrang.',
+        footer: ['Privacybeleid', 'Gebruiksvoorwaarden', 'Contact']
       }
     };
+    var selectedType = 'bug';
+    var currentLang = 'en';
+
+    function $(id) { return document.getElementById(id); }
+    function isValidEmail(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value); }
+    function showBanner(kind, message) { var b = $('banner'); b.className = 'banner ' + kind; b.textContent = message; }
+    function clearBanner() { $('banner').className = 'banner'; $('banner').textContent = ''; }
+
     function getLang() {
+      var params = new URLSearchParams(window.location.search);
+      var requested = params.get('lang');
+      if (requested && i18n[requested]) return requested;
       var saved = localStorage.getItem('capa-lang');
       if (saved && i18n[saved]) return saved;
-      var lang = (navigator.language || navigator.userLanguage || 'en').slice(0, 2);
+      var lang = (navigator.language || navigator.userLanguage || 'en').slice(0, 2).toLowerCase();
       return i18n[lang] ? lang : 'en';
     }
+
     function render(lang) {
-      var t = i18n[lang];
+      var t = i18n[lang] || i18n.en;
+      currentLang = lang;
       document.documentElement.lang = lang;
-      document.getElementById('languageSelect').value = lang;
-      document.getElementById('title').textContent = t.title;
-      document.getElementById('intro').textContent = t.intro;
-      document.getElementById('emailLabel').textContent = t.emailLabel;
-      var note = document.getElementById('translationNote');
+      $('languageSelect').value = lang;
+      $('title').textContent = t.title;
+      $('intro').textContent = t.intro;
+      $('typeLabel').textContent = t.typeLabel;
+      $('typeBug').textContent = t.bug;
+      $('typeFeedback').textContent = t.feedback;
+      $('typeOther').textContent = t.other;
+      $('emailLabel').textContent = t.emailLabel;
+      $('email').placeholder = t.emailPlaceholder;
+      $('messageLabel').textContent = t.messageLabel;
+      $('message').placeholder = t.messagePlaceholder;
+      $('submitBtn').textContent = t.submit;
+      var note = $('translationNote');
       note.textContent = t.note;
       note.style.display = t.note ? 'block' : 'none';
-      document.getElementById('footer').innerHTML =
+      $('footer').innerHTML =
         '<a href="privacy.html">' + t.footer[0] + '</a>' +
         '<a href="terms.html">' + t.footer[1] + '</a>' +
         '<a href="contact.html">' + t.footer[2] + '</a>';
+      localStorage.setItem('capa-lang', lang);
     }
-    document.getElementById('languageSelect').addEventListener('change', function (event) {
-      localStorage.setItem('capa-lang', event.target.value);
-      render(event.target.value);
+
+    $('languageSelect').addEventListener('change', function (event) { render(event.target.value); });
+    $('typeGroup').addEventListener('click', function (event) {
+      var button = event.target.closest('.type-btn');
+      if (!button) return;
+      selectedType = button.getAttribute('data-type');
+      Array.prototype.forEach.call(document.querySelectorAll('.type-btn'), function (item) {
+        item.classList.toggle('active', item === button);
+      });
     });
+
+    $('contactForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var t = i18n[currentLang] || i18n.en;
+      clearBanner();
+      $('emailField').classList.remove('invalid');
+      $('messageField').classList.remove('invalid');
+      $('emailErr').textContent = '';
+      $('messageErr').textContent = '';
+
+      var email = $('email').value.trim();
+      var message = $('message').value.trim();
+      var valid = true;
+      if (!email) {
+        $('emailErr').textContent = t.emailRequired;
+        $('emailField').classList.add('invalid');
+        valid = false;
+      } else if (!isValidEmail(email)) {
+        $('emailErr').textContent = t.emailInvalid;
+        $('emailField').classList.add('invalid');
+        valid = false;
+      }
+      if (!message) {
+        $('messageErr').textContent = t.messageRequired;
+        $('messageField').classList.add('invalid');
+        valid = false;
+      }
+      if (!valid) return;
+
+      var typeText = t[selectedType];
+      var payload = {
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: '[Capa] ' + typeText + ' - ' + email,
+        from_name: 'Capa Contact',
+        email: email,
+        reply_to: email,
+        inquiry_type: typeText,
+        language: currentLang,
+        destination: CONTACT_EMAIL,
+        message: message
+      };
+      $('submitBtn').disabled = true;
+      $('submitBtn').textContent = t.sending;
+
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+          if (data.success) {
+            showBanner('success', t.success);
+            $('contactForm').reset();
+            selectedType = 'bug';
+            Array.prototype.forEach.call(document.querySelectorAll('.type-btn'), function (item) {
+              item.classList.toggle('active', item.getAttribute('data-type') === selectedType);
+            });
+          } else {
+            showBanner('error', t.error);
+          }
+        })
+        .catch(function () { showBanner('error', t.error); })
+        .finally(function () {
+          $('submitBtn').disabled = false;
+          $('submitBtn').textContent = (i18n[currentLang] || i18n.en).submit;
+        });
+    });
+
     render(getLang());
   </script>
 </body>
